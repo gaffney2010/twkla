@@ -385,7 +385,6 @@ Filling in rows with random orthonormal vectors will be necessary every time tha
 A basic fact about linear maps is that they're often invariant for certain axes.  That is, $A\vec v=\lambda\vec v$ for some $\vec v$ and $\lambda$.  This is a somewhat remarkable fact.  If for example my map sends $(1, 0)$ to $(5, 1)$ and $(0, 1)$ to $(1, 5)$, this takes my x-y plane and stretches and smooshes it.  But in the first quadrant, the smooshing upwards and the smooshing upwards cancel out along the line $y=x$, and this axis only gets stretched.  The third quadrant also gets smooshed, but the second and fourth quadrants get pulled apart, causing a similar cancelation effect along the line $y=-x$.  This may be somewhat easy to see, but it turns out that even when you do fairly complicated linear transformations even with many dimensions and very often you'll get some axes somewhere where all the pulling and pushing cancel out.  And these axes are orthogonal.  Because we can do a change of basis, when the eigenvectors span the domain, we need to only give these eigenvectors and their corresponding eigenvalues to fully describe the linear map.  There's no other linear map with those eigenvalues/eigenvectors.
 
 \begin{figure}
-\caption{Transformation $\left(\begin{array}{cc}5&1\\1&5\end{array}\right)$ with eigenvector highlighted.}
 \centering
 \includegraphics[width=0.75\textwidth]{eigenvectors}
 \end{figure}
