@@ -121,7 +121,7 @@ V^T&=&\left(
 \end{array}
 \right)
 \end{array}
-$$\\
+$$
  
 This calculation was done with a computer.  Although the numbers are rounded here, they are all rational, because (we'll see later) that they arise from eigenvalues.  The reader should verify:
 
@@ -156,7 +156,7 @@ $$
 \left(\begin{array}{ccc}1&0&0\\0&\sqrt{1/2}&\sqrt{1/2}\\0&\sqrt{1/2}&-\sqrt{1/2}\end{array}\right)
 \left(\begin{array}{ccc}1&0&0\\0&0&0\\0&0&0\end{array}\right)
 \left(\begin{array}{ccc}1&0&0\\0&\sqrt{1/2}&\sqrt{1/2}\\0&\sqrt{1/2}&-\sqrt{1/2}\end{array}\right)
-$$\\
+$$
 
 Of course, if you follow the multiplication through, you can see that for the outside matrices, everything except the first row and column get ignored.  We must choose orthonormal vectors to continue to guarantee orthogonality, but outside of that constraint, we're free to do whatever.\\
 
@@ -214,7 +214,7 @@ A = UDV^T =
     \horzbar & \langle v _r|& \horzbar
   \end{array}
 \right]
-$$\\
+$$
 
 \noindent
 We can write the diagonal matrix as:
@@ -227,7 +227,7 @@ D = \sum_{i=1}^r \left[\begin{array}{ccccc}
 \vdots & \ddots & \vdots & \ddots & \vdots \\
 0 & \cdots & 0 & \cdots & 0 \\
 \end{array}\right]
-$$\\
+$$
 
 \noindent
 Each summand is the diagonal matrix with all but the $i$-th entry zeroed out.  We distribute the $U$ on the left and $V^T$ on the right, to end up with:
@@ -277,7 +277,7 @@ A &=& \sum_{i=1}^r\left[
   \end{array}
 \right] 
 \end{array}
-$$\\
+$$
 
 \noindent
 When you compare this final form to the definition of the outer product, then you see that it equals $\sum_{i=1}^r\lambda_1| u _i\rangle\langle v _i|$.
