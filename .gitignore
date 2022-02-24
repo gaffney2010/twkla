@@ -3,3 +3,10 @@ twkla/html
 
 # VSCode noise
 .DS_Store
+
+twkla/source/linalg.aux
+twkla/source/linalg.fdb_latexmk
+twkla/source/linalg.fls
+twkla/source/linalg.log
+twkla/source/linalg.pdf
+twkla/source/linalg.synctex.gz
