@@ -1,2 +1,2 @@
 build_html:
-	make4ht -d html source/linalg "mathjax,fn-in,index=2,3"; rm linalg*
+	cp source/style.css html; pandoc -r latex -s --mathjax --toc -o html/linalg.html source/linalg.tex --css style.css
