@@ -183,31 +183,31 @@ $$
  \end{theorem}
 
 \begin{proof}
-To see this, first write the SVD as:
+Say $A$ is $m\times n$ dimensional with $r=\min(m, n)$ as usual.  We write the matrices as though $m<n$, but other cases work out the same way.  Write the SVD of $A$ as:
 
 $$
 A = UDV^T =
 \left[
   \begin{array}{cccc}
     \vertbar & \vertbar & & \vertbar \\
-    | u _1\rangle    & | u _2\rangle   & \cdots & | u _r\rangle    \\
+    |u_1\rangle    & |u_2\rangle   & \cdots & |u_m\rangle    \\
     \vertbar & \vertbar & & \vertbar 
   \end{array}
 \right]
 \left[
 \begin{array}{cccc}
-\lambda_1 & 0 & \cdots & 0 \\
-0 & \lambda_2 & \cdots & 0 \\
-\vdots & \vdots & \ddots & \vdots \\
-0 & 0 & \cdots & \lambda_r \\
+\lambda_1 & 0 & \cdots & 0 & \cdots & 0 \\
+0 & \lambda_2 & \cdots & 0 & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots & \cdots & \vdots \\
+0 & 0 & \cdots & \lambda_r & \cdots & 0 \\
 \end{array}
 \right]
 \left[
   \begin{array}{ccc}
-    \horzbar & \langle v _1| & \horzbar \\
-    \horzbar & \langle v _2|& \horzbar \\
+    \horzbar & \langle v_1| & \horzbar \\
+    \horzbar & \langle v_2|& \horzbar \\
              & \vdots    &          \\
-    \horzbar & \langle v _r|& \horzbar
+    \horzbar & \langle v_n|& \horzbar
   \end{array}
 \right]
 $$
@@ -233,7 +233,7 @@ $$
 A &=& \sum_{i=1}^r\left[
   \begin{array}{cccc}
     \vertbar & \vertbar & & \vertbar \\
-    | u _1\rangle    & | u _2\rangle   & \cdots & | u _r\rangle    \\
+    | u _1\rangle    & | u _2\rangle   & \cdots & | u _m\rangle    \\
     \vertbar & \vertbar & & \vertbar 
   \end{array}
 \right] \left[\begin{array}{ccccc}
@@ -247,13 +247,13 @@ A &=& \sum_{i=1}^r\left[
     \horzbar & \langle v _1| & \horzbar \\
     \horzbar & \langle v _2|& \horzbar \\
              & \vdots    &          \\
-    \horzbar & \langle v _r|& \horzbar
+    \horzbar & \langle v _n|& \horzbar
   \end{array}
 \right] \\
 &=& \sum_{i=1}^r\left[
   \begin{array}{cccc}
     \vertbar & \vertbar & & \vertbar \\
-    | u _1\rangle    & | u _2\rangle   & \cdots & | u _r\rangle    \\
+    | u _1\rangle    & | u _2\rangle   & \cdots & | u _m\rangle    \\
     \vertbar & \vertbar & & \vertbar 
   \end{array}
 \right] \left[
@@ -279,7 +279,9 @@ $$
 When you compare this final form to the definition of the outer product, then you see that it equals $\sum_{i=1}^r\lambda_1| u _i\rangle\langle v _i|$.
 \end{proof}
 
-Because of the orthogonality of $U$ and $V$, the set of vectors $\left\{\langle v _i|\right\}$ form a basis of a subspace of the domain, and the covectors $\left\{| u_i \rangle\right\}$ form a basis of a subspace of the codomain.  (See Exercises \ref{null_space_ex} and \ref{range_ex} for a more precise statement.)  The orthogonality of these vectors is used constantly.
+The reader should pause to appreciate that although the matrix is $m\times n$, only $r=\min(m, n)$ summands are needed.  What happened to the remaining $n-m$ rows of $V^T$?
+
+Because of the orthogonality of $U$ and $V$, the set of vectors $\left\{\langle v _i|\right\}$ form a basis of a subspace of the domain, and the covectors $\left\{| u_i \rangle\right\}$ form a basis of a subspace of the codomain.  (See Exercises \ref{null_space_ex} and \ref{range_ex} for a more precise statement.)  The orthogonality of these vectors is very important; we use that fact constantly throughout the book.
 
 To see why this form is convenient, we'll show a quick proof that will be used later.
 
@@ -294,7 +296,7 @@ A^TA=\sum_i\lambda_i^2|v_i\rangle\langle v_i|
 \end{lemma}
 
 \begin{proof}
-Transposition distributes over sums.  As well, $(AB)^T=B^TA^T$, so we have that each summand $\left(|u_i\rangle\langle v_i|\right)^T=|v_i\rangle\langle u_i|$.  So we can start the $A^TA$ equation as:
+Transposition distributes over sums.  As well $(AB)^T=B^TA^T$, so we have that each summand $\left(|u_i\rangle\langle v_i|\right)^T=|v_i\rangle\langle u_i|$.  So we can start the $A^TA$ equation as:
 
 $$
 \begin{array}{rcl}
@@ -351,7 +353,7 @@ V&=&\left(
 \end{array}
 $$
 
-Notice that we can just slot the vectors and scalars into their corresponding spots.  We end up with the matrix form of the SVD.
+Notice that we can just slot the vectors and scalars into their corresponding spots.  We end up with the matrix form of the SVD.  In Exercise \ref{SVD_confirm}, you'll be asked to confirm these calculations.
 \end{tcolorbox}
 
 There is some caveat about rank here.
@@ -433,6 +435,8 @@ The goal of this book is to build intuition and demonstrate applications.  With 
 1 & 1 & 2 \\ 3 & 5 & 8
 \end{array}
 \right)$ in bra-ket form.  (Note: You should not have to recalculate anything.)
+\item \label{SVD_confirm} Confirm the calculation in Example X by multiplying and adding the bra-ket form of $A$ and by multiplying the matrix form of $A$.  These should be the same.
+\item Given a matrix $A=\left(\begin{array}{ccc}1&0&0\\0&0&0\\0&0&0\end{array}\right)$ and a bra-ket form representation with a single term $\lambda|u\rangle\langle v|$.  Prove that $\lambda=\pm 1$, $|u\rangle=\pm|e_1\rangle$, and $\langle v|=\pm\langle v|$.  (This is a specific case of the almost-uniqueness that we prove in a later section.)
 \item \label{rectangle_to_matrix_form} Given a matrix with SVD in bra-ket form:
 $$
 A=2\left(\begin{array}{c}1\\0\\0\end{array}\right)\left(\begin{array}{cc}1&0\end{array}\right) + 2\left(\begin{array}{c}0\\0\\1\end{array}\right)\left(\begin{array}{cc}0&1\end{array}\right)
