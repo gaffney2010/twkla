@@ -28,21 +28,11 @@
 \begin{document}
 
 \setcounter{chapter}{-1}
-\chapter{Review}
-\section{What's Not Covered}
+\chapter{Introduction}
 
-This book is targeted at an audience who has already had an intro to linear algebra course, but may not have the sense that they've mastered the topic.  The intended audience may not even remember linear algebra well.  For those readers, we do some quick review in this chapter.  Others may feel free to skip to the next chapter.  (The section on bra-ket notation is not usual covered in an intro course, but is also indispensable for the material.)
+This book is targeted at an audience who has already had an intro to linear algebra course, but may not have the sense that they've mastered the topic.  The intended audience may not even remember linear algebra well.  For those readers, we have some review sections in the appendix, and will refer to these throughout.  Others may feel free to skip to the next chapter.  (The section on bra-ket notation is not usual covered in an intro course, but is also indispensable for the material.)
 
-You'd normally spend a lot of time in an intro to linear algebra class doing calculations, including:
-
-\begin{itemize}
-\item Row echelon and reduced row echelon form
-\item Inverses
-\item Eigenvalues and eigenvectors
-\item Cramer's rule
-\end{itemize}
-
-We skip these topics, even in the review section.  This book covers a lot of applications of linear algebra, and we accept that many of the interested readers will be practicioners.  So we don't need to pretend that these things can't be easily calculated with a computer program.  I won't go so far as to say that there's no educational value in doing some of these calculations by hand, but given that you've successfully completed a linear algebra class, I give you permission to forget them.
+You'd normally spend a lot of time in an intro to linear algebra class doing calculations, including reduced row echelon form; inverses; eigenvalues and eigenvectors; and Cramer's rule.  We skip these topics, even in the review section.  This book covers a lot of applications of linear algebra, and we accept that many of the interested readers will be practicioners.  So we don't need to pretend that these things can't be easily calculated with a computer program.  I won't go so far as to say that there's no educational value in doing some of these calculations by hand, but given that you've successfully completed a linear algebra class, I give you permission to forget them.
 
 This book attempts to put linear algebra concepts in a more intuitive context.  As such it covers most topics that could be called linear algebra.  But it doesn't cover everything.  Some very rich and interesting advanced topics that are not covered here include:
 
@@ -74,7 +64,7 @@ For any subspace $W$ and any vector $|v\rangle$, $|v\rangle$ can be written as $
 \chapter{Singular Value Decomposition}
 \section{Statement of SVD}
 
-We start the book with the single most remarkable fact of linear algebra:  For any matrix $A$, there exists a singular value decomposition (SVD).  The SVD of a matrix $A$ is three matrices, $U$, $D$, and $V$, where
+We start the book with the most remarkable fact of linear algebra:  For any matrix $A$, there exists a singular value decomposition (SVD).  The SVD of a matrix $A$ is three matrices, $U$, $D$, and $V$, where
 
 \begin{itemize}
 	\item $U$ and $V$ are orthogonal,
@@ -82,10 +72,12 @@ We start the book with the single most remarkable fact of linear algebra:  For a
 	\item $A=UDV^T$.
 \end{itemize}
 
-If $A$ is $m\times n$, then $U$ is $m\times m$, $V$ is $n\times n$, and $D$ is $m\times n$.  $D$ is zero everywhere expect for potentially $D_{ii}$ where $1\leq i\leq\min(m, n)$.  By convention, we sometimes call $\lambda_i:=D_{ii}$.  As well, we'll sometimes call $r:=\min(m, n)$.
+(See Section \ref{Orthogonal Matrices} for a review on orthogonal matrices.)
+
+If $A$ is dimension $m\times n$, then $U$ is dimension $m\times m$, $V$ is dimension $n\times n$, and $D$ is dimension $m\times n$.  $D$ is zero everywhere expect for potentially $D_{ii}$ for $1\leq i\leq\min(m, n)$.  By convention, we sometimes call $\lambda_i:=D_{ii}$.  As well, we'll sometimes call $r:=\min(m, n)$.
 
 \begin{tcolorbox}[title=Example,colback=blue!5]
-Let's whip up an example real quick to demonstrate.  We start with an array chosen arbitrarily and show that we can decompose it this way.
+Let's whip up an example real quick to demonstrate.  We start with an array chosen arbitrarily and show that there is an SVD.
 
 $$
 \left(
@@ -123,17 +115,17 @@ V^T&=&\left(
 \end{array}
 $$
  
-This calculation was done with a computer.  Although the numbers are rounded here, they are all rational, because (we'll see later) that they arise from eigenvalues.  The reader should verify:
+This calculation was done with a computer; the numbers are rounded here.  The reader should verify that:
 
 \begin{enumerate}
-\item The matrices multiply to the original matrix, and
-\item The two outside matrices, are orthogonal.  That is, the rows are orthonormal.
+\item The matrices $U$, $D$, and $V^T$ multiply to the original matrix.
+\item The two outside matrices are orthogonal.  That is, the rows are orthonormal.
 \end{enumerate}
 
 At this point, this is a neat party trick.  It's not at all clear, but such a decomposition can be found for {\em any} matrix
 \end{tcolorbox}
 
-Something that will be a repeated source of frustration for us is that the SVD is generally not unique for a given a matrix.  For this reason, we usually say that a decomposition is {\em a} SVD and not {\em the} SVD.  We show later in the chapter that SVDs are almost unique.  However in practice, we usually only need {\em any} SVD.
+The SVD is generally not unique for a given a matrix.  This fact causes difficulties.  Because the SVD is not unique, we usually say that a decomposition is {\em a} SVD and not {\em the} SVD.  We show later in the chapter that SVDs are almost unique.  Often we usually only need {\em any} SVD.
 
 \begin{tcolorbox}[title=Example,colback=blue!5]
 To give an example of non-uniqueness, let's look at the matrix:
@@ -158,16 +150,20 @@ $$
 \left(\begin{array}{ccc}1&0&0\\0&\sqrt{1/2}&\sqrt{1/2}\\0&\sqrt{1/2}&-\sqrt{1/2}\end{array}\right)
 $$
 
-Of course, if you follow the multiplication through, you can see that for the outside matrices, everything except the first row and column get ignored.  We must choose orthonormal vectors to continue to guarantee orthogonality, but outside of that constraint, we're free to do whatever.\\
+If you follow the multiplication through, you can see that for the outside matrices, everything except the first row and column get ignored.  We must choose orthonormal vectors for the other two rows and columns in order to satisfy the orthogonality condition of the SVD.  But outside of that constraint, we're free to do whatever we want with these other rows and columns.
+
+\newline
 
 Low-rank matrices are one way that uniqueness can fail, but not the only way.  See Section \ref{almost_uniqueness} for a more complete discussion.
 \end{tcolorbox}
 
-Another way to state that an SVD exists, is to say there exists bases in the domain and range for which $A$ is diagonal.  On its face, this is a simple-yet-powerful theorem that doesn't have the usual qualifiers seen in linear algebra.  It doesn't require complex numbers, and it's one of the few theorems that apply cleanly to rectangular matrices.  But beyond these surface advantages, we'll see that the SVD is widely applicable.  So much so, that we make this a cornerstone of the book.  The SVD is critical to understanding linear algebra, because it expresses something fundamental about linear transformations.
+Soon we'll show that the SVD exists.  Said another way:  We'll show there exists bases in the domain and range for which $A$ is diagonal.  (See Section \ref{Change of Basis} for a review of this concept.)  On its face, this is a simple-yet-powerful theorem that doesn't have the usual qualifiers seen in linear algebra.  It doesn't require complex numbers, and it's one of the few theorems that apply cleanly to rectangular matrices.  But beyond these surface advantages, we'll see that the SVD is widely applicable.  In fact, it's so applicable that we make this a cornerstone of the book.  The SVD is critical to understanding linear algebra, because it expresses something fundamental about linear transformations.
 
 After a brief detour to discuss bra-ket form, we'll spend the rest of this section exploring that fundamentality.  We will view the SVD through two major lenses:  Firstly by viewing matrixes as a collection of eigenvectors and eigenvectors.  Then by viewing matrixes as the product of vectors and covectors.
 
 \subsection{Bra-ket Form}
+
+This section uses Bra-ket Notation heavily.  If you're unfamiliar with this form, please read Section \ref{Bra-ket Notation} before proceeding.
 
 An often more-convenient way to write the SVD is:
 
@@ -1255,5 +1251,12 @@ $$
 \item Suppose that $X$ and $Y$ have the same latent dimensions with different singular values.  That is, $X=\sum_i\lambda_i|u_i\rangle\langle v_i|$ and $Y=\sum_i\mu_i|u_i\rangle\langle v_i|$.  Show that the first axis that CCA produces is $\langle v_1|$.
 \item Suppose that $X$ and $Y$ have SVDs $X=\sum_i\lambda_i^X|u_i^X\rangle\langle v_i^X|$ and $Y=\sum_i\lambda_i^Y|u_i^Y\rangle\langle v_i^Y|$, with $\langle u_i^X|v_j^Y\rangle=0$ and $\langle u_i^Y|v_j^X\rangle=0$ for all $i$ and $j$.  (The superscripts are indices, and not exponents.)  Prove that the resulting CCA axis are the principle components from $X$ and $Y$.  (Hint: Consider the PCA of $(X-Y)$.)
 \end{enumerate}
+
+\chapter{Review}
+
+\section{Orthogonal Matrices}
+\section{Spans and Bases}\label{Spans and Bases}
+\section{Change of Basis}\label{Change of Basis}
+\section{Bra-Ket Notation}\label{Bra-Ket Notation}
 
 \end{document}
