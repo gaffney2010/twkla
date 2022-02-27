@@ -371,25 +371,29 @@ $$
 A=\left(\begin{array}{c}1\\0\\0\end{array}\right)\left(\begin{array}{ccc}1&0&0\end{array}\right) = |e_1\rangle\langle e_1|
 $$
 
-The right-most expression uses the standard basis notation discussed in the Chapter 0.
+The right-most expression uses the convention that $\vec e_i$ is a vector with a $1$ in the $i$-th position and $0$ elsewhere.
 \end{tcolorbox}
 
-In most cases, the bra-ket form of a $3\times3$ matrix will have three summands, but that didn't happen for this example.  We can think of this as having two extra terms with coefficient $\lambda_2=\lambda_3=0$.  In that case, you can get creative with what you choose $|u_2\rangle\langle v_2|$ and $u_3\rangle\langle v_3|$ to be.  So long as you keep them orthonormal, you should be able to return to the matrix form.
-
-Filling in rows with random orthonormal vectors will be necessary every time that you don't have a full-rank matrix.  Because rectangular matrices cannot have full rank, you will also need to fill in.  However, you may find yourself only filling in some dimensions and not others.  (See Exercise \ref{rectangle_to_matrix_form}.)
+In most cases, the bra-ket form of a $3\times3$ matrix will have three summands, but that didn't happen for this example.  We can think of this as having two extra terms with coefficient $\lambda_2=\lambda_3=0$.  In that case, you can get creative with what you choose $|u_2\rangle\langle v_2|$ and $|u_3\rangle\langle v_3|$ to be.  As long as the vectors are orthonormal, this is a valid SVD.  Filling in random vectors like this is necessary to convert back to the matrix form, as we did above.  (See Exercise \ref{rectangle_to_matrix_form}.)
 
 \subsection{Eigenvalues and Eigenvectors}
 
-A basic fact about linear maps is that they're often invariant for certain axes.  That is, $A\vec v=\lambda\vec v$ for some $\vec v$ and $\lambda$.  This is a somewhat remarkable fact.  If for example my map sends $(1, 0)$ to $(5, 1)$ and $(0, 1)$ to $(1, 5)$, this takes my x-y plane and stretches and smooshes it.  But in the first quadrant, the smooshing upwards and the smooshing upwards cancel out along the line $y=x$, and this axis only gets stretched.  The third quadrant also gets smooshed, but the second and fourth quadrants get pulled apart, causing a similar cancelation effect along the line $y=-x$.  This may be somewhat easy to see, but it turns out that even when you do fairly complicated linear transformations even with many dimensions and very often you'll get some axes somewhere where all the pulling and pushing cancel out.  And these axes are orthogonal.  Because we can do a change of basis, when the eigenvectors span the domain, we need to only give these eigenvectors and their corresponding eigenvalues to fully describe the linear map.  There's no other linear map with those eigenvalues/eigenvectors.
+A basic fact about linear maps is that they're often invariant for certain axes.  That is, $A\vec v=\lambda\vec v$ for some $\vec v$ and $\lambda$.  This is a somewhat remarkable fact.  For example, a map, $A$, sends $(1, 0)$ to $(5, 1)$ and $(0, 1)$ to $(1, 5)$.  Imagine picking up the x-y plane at these $(0, 1)$ and $(1, 0)$ and dragging them to their respective targets.  As you drag these points, you stretch some parts of the plane and squeeze other parts.  Yet the squeezing cancels out along the line $y=x$, and this axis only gets stretched out radially.  The second and fourth quadrants get stretched apart, causing a similar cancelation effect along the line $y=-x$.  This example is easy to visualize.  Yet even when you do fairly complicated linear transformations with many dimensions, usually you'll get some axes somewhere where all the pulling and pushing cancel out.  See Section \ref
 
 \begin{figure}
 \centering
 \includegraphics[width=0.75\textwidth]{eigenvectors}
 \end{figure}
 
-The fact that eigenvalues usually exist isn't totally obvious, and it's a fact that people can't shut up about.  If you remember one thing from linear algebra, it's probably eigenvalues.  But you cannot say that eigenvectors exist with some caveats (complex values, degenerate eigenspaces, square matrices).  We discuss these caveats in detail in section X.  However the SVD is analogous to eigenvalues, and requires no caveats.  We'll see throughout this book that for many applications of eigenvalues, the singular values produced by the SVD are sufficient.\footnote{We'll see in Section X that eigenvalues are needed to calculate the SVD, so we haven't obviated them entirely.}
+The fact that eigenvalues usually exist isn't obvious, and it's a fact that people can't shut up about.  If you remember one thing from linear algebra, it's probably eigenvalues.  Eigenvalues and eigenvectors are important.  But talking about eigenvalues is difficult and requires a lot of caveats.  Eigenvalues only exist for square matrices and they are sometimes complex.  Defective matrices don't have a "full set" of eigenvalues.  (Defective matrices are covered much later in the book.)  The SVD doesn't have any of these qualifiers.  We'll see throughout this book that for many applications of eigenvalues, the singular values produced by the SVD are sufficient.  Look to Section \ref{Quick Conclusions} for a couple of immediate examples.
 
-To see why the SVD is analogous to eigenvectors, look at what $UDV^T$ does to a frame of the domain.  First $V^T$ rotates it, then $D$ stretches or squashes (or zeroes out) each axis.  (The standard basis elements are the eigenvectors of $D$.). Then the $U$ rotates the resulting stretched frame.  If anything, it's surprising that you can't get fixed axes by following the eigenvectors before and after the rotation.  We'll see in Section X how this can fail, and we'll talk in Section Y about the scenarios where it doesn't.
+It's not clear yet why the SVD is analogous to eigenvectors.  To demonstrate:  Say a matrix $A$ has a set of eigenvectors, $|v_i\rangle$ that span the domain with corresponding eigenvalues $\left\{\lambda_i\right\}$.  Define a linear map $P$ by the actions $P|e_i\rangle=|v_i\rangle$, and define $D$ as a diagonal matrix with $\lambda_i$ as the $i$-th entry on the diagonal.  Then $A=PDP^{-1}$.  This must be true because it's true for every eigenvector, and ever vector is a linear combination of eigenvectors (because the span):
+
+$$
+PDP^{-1}|v_i\rangle = PD|e_i\rangle = \lambda_iP|e_i\rangle = \lambda_i|v_i\rangle = A|v_i\rangle
+$$
+
+This equality makes sense.  $P^{-1}$ maps the eigenvalues of $A$ to the standard basis; $D$ stretches invariantly along each of the standard basis; and $P$ maps the standard basis back.  The net effect is that the invariant stretching from $D$ gets moved to the eigenvectors.  An SVD, $UDV^{-1}$, on the other hand rotates, stretches along standard basis, then rotates to (potentially) new rotation.  (In the last sentence, we call $V^T=V^{-1}$, which is true for all orthogonal matrices; we also called the orthogonal matrices "rotations" which is a good way to think of orthogonal matrices.)  We can see that $PDP^{-1}$ and $UDV^{-1}$ are just two decompositions of matrices.  The former, called a diagonalization, requires the outside matrices to be inverses, while the SVD requires the outside matrices to be orthogonal.  Diagonalizations exist sometimes, whereas SVD exist all the time.  We'll see in the Section \ref{How to Calculate} that these two concepts are intimately connected.  See Chapter \ref{Symmetric Matrices} for a discussion of then the SVD is also a diagonalization.
 
 \subsection{Vectors and Covectors}
 
@@ -810,7 +814,7 @@ This is a lot of work to show almost uniqueness, but by now we should start to h
 \item Given a matrix $A$, prove that for any value $t$ between the smallest and largest singular value $\lambda_n\leq t\leq\lambda_1$, there are some unit vectors $\langle u|$ and $|v\rangle$ for which $\langle u|A|v\rangle=t$.
 \end{enumerate}
 
-\section{How to Calculate}
+\section{How to Calculate}\label{How to Calculate}
 
 So far we haven't said how to actually calculate an SVD.  How to find the maximal vectors, as we've described.  In this section we show that this calculation amounts to calculating certain eigenvalues and eigenvectors.  In practice, you could calculate the SVD using a computer program.  (See Section \ref{computer_section}.)  Even though we can use computers, knowing how to calculate manually will advance our understanding of the SVD.
 
@@ -866,7 +870,7 @@ Yet another way to see this to write $A=UDV^T$, so that $A^TA=VD^2V^T$.  Because
 \item Given a symmetric matrix $A$ with distinct singular values, prove that every SVD has the form $\sum_i\lambda_i|v_i\rangle\langle v_i|$.
 \end{enumerate}
 
-\section{Quick Conclusions}
+\section{Quick Conclusions}\label{Quick Conclusions}
 
 Though it took a lot of work to build some understanding of the SVD, we will use it throughout the book.  Next chapter, we can discuss a number of applications of the SVD.  For now, I will whet your appetite with some immediate conclusions.
 
