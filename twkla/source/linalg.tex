@@ -281,7 +281,7 @@ When you compare this final form to the definition of the outer product, then yo
 
 The reader should pause to appreciate that although the matrix is $m\times n$, only $r=\min(m, n)$ summands are needed.  What happened to the remaining $n-m$ rows of $V^T$?
 
-Because of the orthogonality of $U$ and $V$, the set of vectors $\left\{\langle v _i|\right\}$ form a basis of a subspace of the domain, and the covectors $\left\{| u_i \rangle\right\}$ form a basis of a subspace of the codomain.  (See Exercises \ref{null_space_ex} and \ref{range_ex} for a more precise statement.)  The orthogonality of these vectors is very important; we use that fact constantly throughout the book.
+Because of the orthogonality of $U$ and $V$, the set of vectors $\left\{\langle v _i|\right\}$ form a basis of a subspace of the domain, and the covectors $\left\{| u_i \rangle\right\}$ form a basis of a subspace of the codomain.  (See Exercises \ref{Ex-SVD Null Space} and \ref{Ex-SVD Range} for a more precise statement.)  The orthogonality of these vectors is very important; we use that fact constantly throughout the book.
 
 To see why this form is convenient, we'll show a quick proof that will be used later.
 
@@ -353,7 +353,7 @@ V&=&\left(
 \end{array}
 $$
 
-Notice that we can just slot the vectors and scalars into their corresponding spots.  We end up with the matrix form of the SVD.  In Exercise \ref{SVD_confirm}, you'll be asked to confirm these calculations.
+Notice that we can just slot the vectors and scalars into their corresponding spots.  We end up with the matrix form of the SVD.  In Exercise \ref{Ex-Confirm SVD}, you'll be asked to confirm these calculations.
 \end{tcolorbox}
 
 There is some caveat about rank here.
@@ -374,7 +374,7 @@ $$
 The right-most expression uses the convention that $\vec e_i$ is a vector with a $1$ in the $i$-th position and $0$ elsewhere.
 \end{tcolorbox}
 
-In most cases, the bra-ket form of a $3\times3$ matrix will have three summands, but that didn't happen for this example.  We can think of this as having two extra terms with coefficient $\lambda_2=\lambda_3=0$.  In that case, you can get creative with what you choose $|u_2\rangle\langle v_2|$ and $|u_3\rangle\langle v_3|$ to be.  As long as the vectors are orthonormal, this is a valid SVD.  Filling in random vectors like this is necessary to convert back to the matrix form, as we did above.  (See Exercise \ref{rectangle_to_matrix_form}.)
+In most cases, the bra-ket form of a $3\times3$ matrix will have three summands, but that didn't happen for this example.  We can think of this as having two extra terms with coefficient $\lambda_2=\lambda_3=0$.  In that case, you can get creative with what you choose $|u_2\rangle\langle v_2|$ and $|u_3\rangle\langle v_3|$ to be.  As long as the vectors are orthonormal, this is a valid SVD.  Filling in random vectors like this is necessary to convert back to the matrix form, as we did above.  (See Exercise \ref{Ex-Rectangular bra-ket to matrix}.)
 
 \subsection{Eigenvalues and Eigenvectors}
 
@@ -385,7 +385,7 @@ A basic fact about linear maps is that they're often invariant for certain axes.
 \includegraphics[width=0.75\textwidth]{eigenvectors}
 \end{figure}
 
-The fact that eigenvalues usually exist isn't obvious, and it's a fact that people can't shut up about.  If you remember one thing from linear algebra, it's probably eigenvalues.  Eigenvalues and eigenvectors are important.  But talking about eigenvalues is difficult and requires a lot of caveats.  Eigenvalues only exist for square matrices and they are sometimes complex.  Defective matrices don't have a "full set" of eigenvalues.  (Defective matrices are covered much later in the book.)  The SVD doesn't have any of these qualifiers.  We'll see throughout this book that for many applications of eigenvalues, the singular values produced by the SVD are sufficient.  Look to Section \ref{Quick Conclusions} for a couple of immediate examples.
+The fact that eigenvalues usually exist isn't obvious, and it's a fact that people can't shut up about.  If you remember one thing from linear algebra, it's probably eigenvalues.  Eigenvalues and eigenvectors are important.  But talking about eigenvalues is difficult and requires a lot of caveats.  Eigenvalues only exist for square matrices and they are sometimes complex.  Defective matrices don't have a "full set" of eigenvalues.  (Defective matrices are covered much later in the book.)  The SVD doesn't have any of these qualifiers.  We'll see throughout this book that for many applications of eigenvalues, the SVD will work instead.  Look to Section \ref{Quick Conclusions} for a couple of immediate examples.
 
 It's not clear yet why the SVD is analogous to eigenvectors.  To demonstrate:  Say a matrix $A$ has a set of eigenvectors, $|v_i\rangle$ that span the domain with corresponding eigenvalues $\left\{\lambda_i\right\}$.  Define a linear map $P$ by the actions $P|e_i\rangle=|v_i\rangle$, and define $D$ as a diagonal matrix with $\lambda_i$ as the $i$-th entry on the diagonal.  Then $A=PDP^{-1}$.  This must be true because it's true for every eigenvector, and ever vector is a linear combination of eigenvectors (because the span):
 
@@ -397,14 +397,14 @@ This equality makes sense.  $P^{-1}$ maps the eigenvalues of $A$ to the standard
 
 \subsection{Vectors and Covectors}
 
-One view of matrices is that they're the product of vectors and covectors.  The columns of $A$ tell us how to act on standard basis vectors.  That is,
+One view of matrices is that they're the product of vectors and covectors.  The columns of $A$ tell us how to act on standard basis vectors.  Call the $i$-th column of $A$ $|A_{*i}\rangle$.  Then,
 
 $$
 A = 
 \left[
   \begin{array}{cccc}
     \vertbar & \vertbar & & \vertbar \\
-    |A_{*1}\rangle  & |A_{*2}\rangle & \cdots & |A_{*n}\rangle\rangle    \\
+    |A_{*1}\rangle  & |A_{*2}\rangle & \cdots & |A_{*n}\rangle \\
     \vertbar & \vertbar & & \vertbar 
   \end{array}
 \right] =
@@ -417,15 +417,40 @@ A =
 \right]
 $$
 
-But any vector $\vec v=\begin{pmatrix} v_1  \\  v_2 \\ \vdots \\ v_n  \end{pmatrix}$ can be written as $|v\rangle = \sum_i v_i|e_i\rangle$.  So to figure out the effect of $A$ on $|v\rangle$, we only need to find the $i$-th component of $|v\rangle$ (i.e. $\langle e_i|v\rangle$ and multiple by $|A_{*1}\rangle$.  That is, $A=\sum_i|A_{*i}\rangle\langle e_i|$.
+Any vector $\vec v=\begin{pmatrix} v_1  \\  v_2 \\ \vdots \\ v_n  \end{pmatrix}$ can be written as $|v\rangle = \sum_i v_i|e_i\rangle$.  So to figure out the effect of $A$ on $|v\rangle$, we only need to find the $i$-th component of $|v\rangle$ and multiple by $|A_{*1}\rangle$.  That is,
 
-But in the course of studying linear algebra, you come to learn that there's nothing really special about the standard basis $\left\{|e_i\rangle\right\}$.  For any basis $\left\{| v _i\rangle\right\}$, we can write the matrix $A$ with this basis on the domain.  Call the columns of this new matrix $\left\{| u _i\rangle\right\}$, and it follows that $A=\sum_i| u _i\rangle\langle v _i|$.  Although $\left\{| v _i\rangle\right\}$ are orthonormal, it's not usually true of the resulting $\left\{| u _i\rangle\right\}$.  The existence of an SVD is the existence of a domain basis $\left\{| v _i\rangle\right\}$ for which the corresponding $\left\{| u _i\rangle\right\}$ are also orthogonal.  Pulling out the norms as $\lambda_i$ gives orthonormality.  Since there's no a priori reason to prefer one basis over another, the basis that SVD provides seems like a natural choice.  We'll see throughout the course of this book that it simplifies many things.
+$$
+\begin{array}{rcl}
+A|v\rangle &=& A\sum_iv_i|e_i\rangle \\
+ &=& \sum_iv_iA|e_i\rangle \\
+ &=& \sum_i|A_{*i}\rangle v_i
+\end{array}
+$$
+
+In the last line, we've written the coefficient after the covector to hint at the next step.  The next step, we observe that $\langle e_i|v\rangle=\sum_j\langle e_i|v_j|e_j\rangle = v_i$, where the last equality follows from the orthonormality of the standard basis.  Now we can write the above equality as
+
+$$
+\begin{array}{rcl}
+A|v\rangle &=& \sum_i|A_{*i}\rangle\langle e_i|v\rangle
+\end{array}
+$$
+
+Comparing both sides, we can now say that $A=\sum_i|A_{*i}\rangle\langle e_i|$.  This rewriting recognizes that $A$ is a sum of vector/covector products.  The covectors $\left\{\langle e_i|\right\}$ project onto the standard axes to get a scalar.  Then the vectors $\left\{|A_{*i}\rangle\right\}$ give direction to each of these scalars.  This is an important way to understand matrices.
+
+But by studying linear algebra, you learn that there's nothing special about the standard basis $\left\{|e_i\rangle\right\}$.  For any basis $\left\{| v _i\rangle\right\}$, we can write the matrix $A$ with this basis on the domain.  (See Section \ref{Change of Bases} for more detailed discussion on bases.)  Call the columns of this new matrix $\left\{| u _i\rangle\right\}$, and it follows that $A=\sum_i| u _i\rangle\langle v _i|$.  Although $\left\{\langle v _i|\right\}$ are orthonormal, it's not usually true of the resulting $\left\{| u _i\rangle\right\}$.  The existence of an SVD is the existence of a domain basis $\left\{\langle v _i|\right\}$ for which the corresponding $\left\{| u _i\rangle\right\}$ are also orthogonal, but not normal.  We can write $|u_i\rangle=\lambda_i|u_i'\rangle$, so that $\left\{u_i'\right\}$ are orthonormal.  The basis $\left\{\langle v _i|\right\}$ that produces orthogonal columns on $A$ is a very special basis.  There's no reason to prefer to represent $A$ in the standard basis or any other basis.  So we might as well choose $\left\{\langle v _i|\right\}$, giving $A=\sum_i\lambda_i|u_i'\rangle\langle v_i|$, the SVD.  We'll see throughout the course of this book that it simplifies many things.
 
 \subsection{Conventions}
 
-The SVD yields a set of scalars $\left\{\lambda_i\right\}$ and vectors $\left\{\vec u_i, \vec v_i\right\}$.  We can and do require that all of these be real.  Throughout the book, we can mostly avoid talking about complex numbers.  An additional restriction that we impose in this book is that all the scalars be positive $\lambda_i>0$.  We can do this because if you had an SVD with a negative $\lambda_i$, then that summand $\lambda_i|u\rangle\langle v|=(-\lambda_i)|-u\rangle\langle v|$.  So we can call that form an SVD, but reject the one with negative coefficients.  As well if some $\lambda_i=0$, then that summand can be omitted.  Finally it will be convenient to order the singular values.  So we'll adopt the convention that these are ordered:  $\lambda_1\geq\lambda_2\geq\cdots\lambda_r$.  We prove in Section 3 that with our conventions, then multiset\footnote{By {\em multiset} we mean a collection where we care about the number of times each element appears, but we don't care about the order.} of scalars is unique to the matrix $A$; that is, it doesn't change based on different representations.  We may call these values the {\em singular values} of $A$.
+The bra-ket form of the SVD yields a set of scalars $\left\{\lambda_i\right\}$ and vectors $\left\{\vec u_i, \vec v_i\right\}$.  We can and do require that all of these be real.  We also require that all the scalars be positive $\lambda_i>0$.  We can require this because:
 
-Finally it will be convenient to order the singular values.  So we'll adopt the convention that these are ordered:  $\lambda_1\geq\lambda_2\geq\cdots\geq\lambda_r$.
+\begin{enumerate}
+\item If an SVD has a negative summand, $\lambda_i|u\rangle\langle v|$, then we get a positive-only SVD by replacing that summand with $(-\lambda_i)|-u\rangle\langle v|$.
+\item If an SVD has a summand with $\lambda_i=0$, then we omit this and don't count it as part of the SVD.
+\end{enumerate}
+
+Finally we adopt the convention that these are ordered:  $\lambda_1\geq\lambda_2\geq\cdots\lambda_r$.
+
+We prove in Section 3 that with our conventions, then multiset\footnote{By {\em multiset} we mean a collection where we care about the number of times each element appears, but we don't care about the order.} of scalars is unique to the matrix $A$; that is, all SVDs of $A$ yield the same multiset.  We call these values the {\em singular values} of $A$.
 
 \subsection{Outro}
 
@@ -439,22 +464,22 @@ The goal of this book is to build intuition and demonstrate applications.  With 
 1 & 1 & 2 \\ 3 & 5 & 8
 \end{array}
 \right)$ in bra-ket form.  (Note: You should not have to recalculate anything.)
-\item \label{SVD_confirm} Confirm the calculation in Example X by multiplying and adding the bra-ket form of $A$ and by multiplying the matrix form of $A$.  These should be the same.
-\item Given a matrix $A=\left(\begin{array}{ccc}1&0&0\\0&0&0\\0&0&0\end{array}\right)$ and a bra-ket form representation with a single term $\lambda|u\rangle\langle v|$.  Prove that $\lambda=\pm 1$, $|u\rangle=\pm|e_1\rangle$, and $\langle v|=\pm\langle v|$.  (This is a specific case of the almost-uniqueness that we prove in a later section.)
-\item \label{rectangle_to_matrix_form} Given a matrix with SVD in bra-ket form:
+\item \label{Ex-Confirm SVD} Confirm the calculation in Example X by multiplying and adding the bra-ket form of $A$ and by multiplying the matrix form of $A$.  These should be the same.
+\item Given a matrix $A=\left(\begin{array}{ccc}1&0&0\\0&0&0\\0&0&0\end{array}\right)$ and a bra-ket form representation with a single term $\lambda|u\rangle\langle v|$.  Prove that $\lambda=\pm 1$, $|u\rangle=\pm|e_1\rangle$, and $\langle v|=\pm\langle e_1|$.  (This is a specific case of the almost-uniqueness that we prove in a later section.)
+\item \label{Ex-Rectangular bra-ket to matrix} Given a matrix with SVD in bra-ket form:
 $$
 A=2\left(\begin{array}{c}1\\0\\0\end{array}\right)\left(\begin{array}{cc}1&0\end{array}\right) + 2\left(\begin{array}{c}0\\0\\1\end{array}\right)\left(\begin{array}{cc}0&1\end{array}\right)
 $$
 Write $A$ in matrix-form SVD two different ways.
-\item A square matrix has an SVD $A=UDV^T$, with $D=\left(\begin{array}{cccc}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_r\end{array}\right)$.  Show that all $\lambda_i\neq0$.  Next argue that $D^{-1}=\left(\begin{array}{cccc}\frac{1}{\lambda_1}&&&\\&\frac{1}{\lambda_2}&&\\&&\ddots&\\&&&\frac{1}{\lambda_r}\end{array}\right)$.  Finally prove that $A^{-1}=VD^{-1}U^T$.
-\item \label{null_space_ex} Given a matrix with SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, prove that $A\vec v=0$ if and only if $\vec v$ is perpendicular to each $\vec v_i$.
-\item \label{range_ex} Given a matrix with SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, prove that a vector $\vec u$ equals $A\vec v$ for some $\vec v$ if and only if $\vec u\in\operatorname{span}\left(\vec u_i\right)$.
 \item The orthonormality of $U$ and $V$ will often be useful.  Given an SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, verify the following.
 \begin{enumerate}
 \item For $|v\rangle = \sum_ia_i|v_i\rangle$, $A|v\rangle=\sum_ia_i\lambda_i|u_i\rangle$.
 \item $\langle u_i|A|v_i\rangle=\lambda_i$.
 \end{enumerate}
+\item \label{Ex-SVD Null Space} Given a matrix with SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, prove that $A\vec v=0$ if and only if $\vec v$ is perpendicular to each $\vec v_i$.
+\item \label{Ex-SVD Range} Given a matrix with SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, prove that a vector $\vec u$ equals $A\vec v$ for some $\vec v$ if and only if $\vec u\in\operatorname{span}\left(\vec u_i\right)$.
 \end{enumerate}
+\item An invertible square matrix has an SVD $A=UDV^T$, with $D=\left(\begin{array}{cccc}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_r\end{array}\right)$.  Show that all $\lambda_i\neq0$.  Next argue that $D^{-1}=\left(\begin{array}{cccc}\frac{1}{\lambda_1}&&&\\&\frac{1}{\lambda_2}&&\\&&\ddots&\\&&&\frac{1}{\lambda_r}\end{array}\right)$.  Finally prove that $A^{-1}=VD^{-1}U^T$.
 
 \section{Existence}
 
@@ -881,7 +906,7 @@ If $A$ is an $m\times n$-dimensional matrix, then $\operatorname{Dim}\left(\oper
  \end{theorem}
 
 \begin{proof}
-Choose some SVD of $A=\sum_{i=1}^r|u_i\rangle\langle v_i|$.  Expand $\left\{|v_i\rangle\right\}_{i=1}^r$ to a basis of the domain by adding vectors $|v_{r+1}\rangle, |v_{r+2}\rangle, ..., |v_n\rangle$.  Clearly $\operatorname{Range}(A)=\operatorname{Span}\left\{\langle u_i|\right\}_{i=1}^r$.  And $\operatorname{NullSpace}(A)=\operatorname{Span}\left\{|v_i\rangle\right\}_{i=r+1}^n$.  (See Exercises \ref{null_space_exercise} and \ref{range_exercise}.)  So the equality follows.
+Choose some SVD of $A=\sum_{i=1}^r|u_i\rangle\langle v_i|$.  Expand $\left\{|v_i\rangle\right\}_{i=1}^r$ to a basis of the domain by adding vectors $|v_{r+1}\rangle, |v_{r+2}\rangle, ..., |v_n\rangle$.  Clearly $\operatorname{Range}(A)=\operatorname{Span}\left\{\langle u_i|\right\}_{i=1}^r$.  And $\operatorname{NullSpace}(A)=\operatorname{Span}\left\{|v_i\rangle\right\}_{i=r+1}^n$.  (See Exercises \ref{Ex-SVD Null Spaceercise} and \ref{Ex-SVD Rangeercise}.)  So the equality follows.
 \end{proof}
 
 \subsection{Determinant}
