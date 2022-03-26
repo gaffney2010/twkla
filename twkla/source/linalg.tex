@@ -685,7 +685,7 @@ The same calculation with primes on all the $M$, $u$, and $v$ variables gives th
 
 \section{Almost Uniqueness}\label{almost_uniqueness}
 
-An annoying fact about the SVD is that it's not unique.  But it turns out to be {\em almost} unique.  In this section, we see that there are limitations.
+An annoying fact about the SVD is that it's not unique.  But it is {\em almost} unique.  In this section, we see that there are limitations.
 
 Let's review briefly.  Given a matrix $A$, we can find a SVD, $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$.  The $\lambda_i$ do not need to be distinct.  For the sake of this section, we write this as 
 
@@ -711,7 +711,7 @@ So that $\lambda_1=2$ and $\lambda_2=1$.  $|u_1\rangle$ gets renamed to $|u_{11}
 
 \end{tcolorbox}
 
-If the SVD was built with our algorithm from the previous section, then $\langle u_{11}|A|v_{11}\rangle=\lambda_1$ maximizes $\langle u|A|v\rangle$.  Of course because $\langle u_{1j}|A|v_{1j}\rangle=\lambda_1$ for any $1\leq j\leq n_i$, the algorithm may just have chosen $u_{1,2}$ or $u_{1,3}$ first, so any reordering of these could have been produced.  In fact we don't need to be restricted to these exact vectors; for {\em any} unit vector $|v\rangle\in\operatorname{span}\left\{|u_{i*}\rangle\right\}$, we can find a $\langle u|$ (given by Lemma \ref{a1lemma}) for which $\langle u|A|v\rangle=\lambda_1$.  It also turns out that any $|v\rangle\not\in\operatorname{span}\left\{|v_{i*}\rangle\right\}$, there is not a $\langle u|$ for which $\langle u|A|v\rangle=\lambda_1$.  These two statements are proven in Corollary \ref{corollary1}.
+If the SVD was built with our algorithm from the previous section, then $\langle u_{11}|A|v_{11}\rangle=\lambda_1$ maximizes $\langle u|A|v\rangle$.  Of course because $\langle u_{1j}|A|v_{1j}\rangle=\lambda_1$ for any $1\leq j\leq n_i$, the algorithm may just have chosen $v_{1,2}$ or $v_{1,3}$ first, so any reordering of these could have been produced.  In fact we don't need to be restricted to these exact vectors; for {\em any} unit vector $|v\rangle\in\operatorname{span}\left\{|v_{i*}\rangle\right\}$, we can find a $\langle u|$ (given by Lemma \ref{tollbooth}) for which $\langle u|A|v\rangle=\lambda_1$.  It also turns out that any $|v\rangle\not\in\operatorname{span}\left\{|v_{i*}\rangle\right\}$, there is {\em not} a $\langle u|$ for which $\langle u|A|v\rangle=\lambda_1$.  These two statements are proven in Corollary \ref{corollary1}.
 
 Together these show that if you follow the algorithm from the previous section of repeatedly finding the maximizing vectors, the only variation you can get is a change of basis in $|v_{i*}\rangle$.  (If $n_i=1$, then this means that we can only vary $\lambda_1|u\rangle\langle v|=\lambda_1|-u\rangle\langle -v|$.)  Actually we've only shown this for for the largest $\lambda=\lambda_1$, but by subtracting off these components and applying the same argument to the resulting difference with a new largest $\lambda=\lambda_2$, we can apply the same argument; this is a trick we'll use repeatedly.
 
@@ -723,10 +723,10 @@ Given an SVD of a matrix, $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, then for a
  \end{theorem}
 
 \begin{proof}
-Rearranging Lemma \ref{a1lemma}, we get that
+Using Lemma \ref{tollbooth}, we get that
 
 $$
-\max_{\|u\|=\|v\|=1}\langle u|A|v\rangle = \max_{\|v\|=1} \frac{\langle v|A^TA|v\rangle}{\left\|A|v\rangle\right|}
+\max_{\|u\|=\|v\|=1}\langle u|A|v\rangle = \max_{\|v\|=1}\frac{\langle v|A^T}{\lambda}A|v\rangle = \max_{\|v\|=1} \frac{\langle v|A^TA|v\rangle}{\left\|A|v\rangle\right\|}
 $$
 
 For any vector $\vec w$, $\left\|\vec w\right\|=\sqrt{\vec w^T\vec w}$.  So,
@@ -753,9 +753,15 @@ So to maximize $\langle v|A^TA|v\rangle$, we use the fact that $A^TA=\sum_i\lamb
 \end{equation}
 
 The inequality on the last line follows because $\lambda_1$ is larger than all the other $\lambda_i$.
+
+Putting it all together, we have:
+
+$$
+\langle u|A|v\rangle\leq\max_{\|u\|=\|v\|=1}\langle u|A|v\rangle=\max_{\|v\|=1}\sqrt{\langle v|A^TA|v\rangle}\leq\sqrt{\lambda_1^2}=\lambda_1
+$$
 \end{proof}
 
-Notice, that by eliminating the $\langle u|$, the problem of maximizing became easier.  After finding $|v\rangle$, we could use Lemma \ref{a1lemma} to find $\langle u|$.  But by symmetry, we could have instead found the $\langle u|$ that maximizes $\langle u|AA^T|u\rangle$.
+Notice, that by eliminating the $\langle u|$, the problem of maximizing became easier.  After finding $|v\rangle$, we could use Lemma \ref{tollbooth} to find $\langle u|$.  But by symmetry, we could have instead found the $\langle u|$ that maximizes $\langle u|AA^T|u\rangle$.
 
 While the theorem gives an upper bound of $\lambda_1$, note that this bound is achievable, namely with $\vec u_1$ and $\vec v_1$.  But we can be a little more specific:
 
@@ -770,26 +776,26 @@ We skip some of the details to this proof.  It amounts to observing that the equ
 Redo the work of Lemma \ref{ata_eq}, but this time with the SVD written as $A=\sum_i\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|$ to get
 
 $$
-A^TA=\sum_i\lambda_i\sum_{j=1}^{n_i}|v_{ij}\rangle\langle v_{ij}|
+A^TA=\sum_i\lambda_i^2\sum_{j=1}^{n_i}|v_{ij}\rangle\langle v_{ij}|
 $$
 
-By the same steps logic as Eq. (\ref{upperbound_eqn}), we get that
+Write $|v\rangle=\sum a_{ij}|v_{ij}\rangle$.  Because $|v\rangle$ is a unit vector, $\sum a_{ij}^2=1$.  By the same steps logic as Eq. (\ref{upperbound_eqn}), we get that
 
 $$
 \langle v|A^TA|v\rangle = \sum_ia_i^2\lambda_i^2
 $$
 
-where $a_i^2=\sum_ja_{ij}^2$, with $a_{ij}$ the coefficient of $|v_{ij}\rangle$ in the decomposition of $|v\rangle$.  Again we have that the coefficients must satisfy $\sum_ia_i^2=1$, but this time the coefficients are distinct, so it's clear that this equals $\lambda_1$ if and only if $a_1=$ and all others are $0$.  But this happens if and only if $|v\rangle\in\operatorname{span}\left\{|v_{1*}\rangle\right\}$.
+where $a_i^2=\sum_ja_{ij}^2$.  Again we have that the coefficients must satisfy $\sum_ia_i^2=1$, but this time the coefficients are distinct, so it's clear that this equals $\lambda_1$ if and only if $a_1=1$ and all others are $0$.  But this happens if and only if $|v\rangle\in\operatorname{span}\left\{|v_{1*}\rangle\right\}$.
 
 \end{proof}
 
-Some words should be said about Theorem \ref{upperbound} and Corollary \ref{corollary1}.  We'll see in a bit that this is used to prove the almost-uniqueness of the SVD.  In many ways, this Theorem \ref{upperbound} are the keystone of the entire chapter; it connects all the concepts.  Though it depends on the existence of an SVD, we now see a motivation for Algorithm \ref{alg1}:  The first singular value $\lambda_1$ is something fundamental about the matrix - it doesn't depend on the SVD representation.  So it make sense that we should try to obtain it, and Theorem \ref{upperbound} shows that you obtain it by pulling by maximizing $\langle u|A|v\rangle$.  The next chapter shows how to calculate the vectors $|v_i\rangle$.  That calculation relies entirely on this trick (first encountered in Theorem \ref{upperbound}) of canceling the $\langle u_i|$ by taking $A^TA$.
+Some words should be said about Theorem \ref{upperbound} and Corollary \ref{corollary1}.  We'll see in a bit that this is used to prove the almost-uniqueness of the SVD.  In many ways, this theorem is the keystone of the entire chapter; it connects all the concepts.  We needed to first prove the existence of an SVD to prove it.  But we now see a motivation for Algorithm \ref{alg1}.  Until now, the singular values seemed like an artifact of the specific SVD representation.  But now we see that the first singular value $\lambda_1$ is something fundamental about the matrix - it's an upper bound that doesn't depend on the SVD representation.  (By repeated subtraction, all singular values are representation-independent.)  So it make sense that we should try to find and use these singular values.  Looking ahead, the next chapter shows how to calculate the vectors $|v_i\rangle$.  That calculation relies entirely on the trick (first encountered in Theorem \ref{upperbound}) of canceling the $\langle u_i|$ by taking $A^TA$.
 
 Theorem \ref{upperbound} and its corollary are also perhaps the most surprising.  It seems sort of like magic.  Maybe you're along for the ride when I said that we'll take $A^TA$ to cancel out the $|u_i\rangle$, but it seems like luck when the you end up with $\sum_ia_i^2$, which just happened to be $1$, by nature of looking at unit vectors.  Maybe there's some magic here.  But at the same time, matrices are sometimes thought of as quadratic operators.  For a vector $\vec x=\left(\begin{array}{c}x_1\\x_2\\\vdots\\x_n\end{array}\right)$ and an $n\times n$ matrix $M$, $\vec x^TM\vec x$ has every power-$2$ term of $x$ with coefficients derived from $M$.  (Check this.)  Given this quadratic nature, maybe it's less surprising that it'd take vector components to their magnitude.
 
 Imagine that your matrix $A$ is a diagonal matrix.  This is already an SVD with $D=A$ and $U=V=I$.  Look at how obvious the logic here is now.  With some $\vec x=\left(\begin{array}{c}x_1\\x_2\\\vdots\\x_n\end{array}\right)$, $\langle x|D|x\rangle=\sum_i\lambda_ix_i^2$.  If you wanted the first singular value, $\lambda_1$, the largest value, then you need to do something to get $A_{11}$.  Of course $A_{11}=\langle e_1|A|e_1\rangle$ would do the trick.  When $U$ and $V$ aren't the identity then you should do $\langle e_1|U^T$ and $V|e_1\rangle$ to cancel.  The existence of the SVD just says that aside from these little twists, $U$ and $V^T$, all matrices are just these canonical quadratic forms.
 
-With that digression behind us, we can now actually prove almost uniqueness.  All the hard work has been done already.  This theorem brings together lots of ideas, so take your time with it.
+With that digression behind us, we can now actually prove almost-uniqueness.  All the hard work has been done already.  This theorem brings together lots of ideas, so take your time with it.
 
 \begin{theorem}
 Given two SVDs of a matrix $A=\sum_i\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|=\sum_i\lambda_i'\sum_{j=1}^{n_i'}|u_{ij}'\rangle\langle v_{ij}'|$, then for each $i$:
@@ -836,7 +842,7 @@ Now we have the two SVDs of $A-\lambda_1\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_
 
 This tells you is that no matter how you obtain the SVD, it will be in basically the same form.  It will have the same singular values with the same multiplicity, and the only difference is that there may be a different basis chosen for the vectors.
 
-This is a lot of work to show almost uniqueness, but by now we should start to have some intuition for what the SVD is.  Firstly, the singular values are something fundamental about the matrix, and not something that depends on the SVD representation.  Secondly, our algorithm from the previous section is a rational thing to try.  The largest singular value defines a space where these values can occur, but then after you subtract out that dimension, you get a big jump down to the next singular value.
+This is a lot of work to show almost-uniqueness, but by now we should start to have some intuition for what the SVD is.  Firstly, the singular values are something fundamental about the matrix, and not something that depends on the SVD representation.  Secondly, our algorithm from the previous section is a rational thing to try.  The largest singular value defines a space where these values can occur, but then after you subtract out that dimension, you get a big jump down to the next singular value.
 
 {\bfseries\scshape\Large Exercises}
 
