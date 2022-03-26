@@ -679,6 +679,7 @@ The same calculation with primes on all the $M$, $u$, and $v$ variables gives th
 \begin{enumerate}[\thechapter.\thesection .1]
 \item \label{finish_projection} Given unit vectors $\vec u$ and $\vec v$.  Prove that if $\langle u|v\rangle\neq0$, then $\left\Vert\left(I-|u\rangle\langle u|\right)|v\rangle\right\Vert < 1$.  (Hint:  For any vector $\vec v $, $\Vert \vec v \Vert<1$ if and only $\langle  v | v \rangle<1$.)
 \item \label{outer_product_identity} Given a basis $\left\{\vec v_i\right\}_{i=1}^n$ of $\mathbb R^n$, prove that $I=\sum_{i=1}^n|v_i\rangle\langle v_i|$.  That is, show for any $\vec v$, $\left(\sum_i|v_i\rangle\langle v_i|\right)|v\rangle=|v\rangle$.
+\item Given a matrix with a SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, let $\left\{A_i\right\}$ be the matrices given by Algorithm \ref{alg1}.  Lemma \ref{tollbooth} implies that $A_{i-1}|v_i\rangle=\lambda_i|u_i\rangle$.  Show that $A|v_i\rangle=\lambda_i|u_i\rangle$.
 \item Given a matrix with a SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, show that $A=\sum_iA|v_i\rangle\langle v_i|$.  (For fun, prove this two different ways.)
 \end{enumerate}
 
