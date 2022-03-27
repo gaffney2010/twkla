@@ -856,7 +856,7 @@ This is a lot of work to show almost-uniqueness, but by now we should start to h
 
 \section{How to Calculate}\label{How to Calculate}
 
-So far we haven't said how to actually calculate an SVD.  How to find the maximal vectors, as we've described.  In this section we show that this calculation amounts to calculating certain eigenvalues and eigenvectors.  In practice, you could calculate the SVD using a computer program.  (See Section \ref{computer_section}.)  Even though we can use computers, knowing how to calculate manually will advance our understanding of the SVD.
+So far we haven't said how to actually calculate an SVD.  Algorithm \ref{alg1} says to repeatedly find maximal vectors, but we haven't said how to do this.  In this section we show that this calculation amounts to calculating certain eigenvalues and eigenvectors.  In practice, you could calculate the SVD using a computer program.  (See Section \ref{computer_section}.)  Yet knowing how to calculate manually will advance our understanding of the SVD.
 
 Before going on, we need a small fact about calculus.  I'll state a lemma here without proof.  Calculus is outside the scope of this book, but I provide some discussion in Appendix X.
 
@@ -869,7 +869,7 @@ $$
 $$
 \end{lemma}
 
-The right hand side of this equation is a vector whose entries equal $\frac{\partial\langle v|B|v\rangle}{\partial v_i}$.  This lemma seems simple.  (It's analogous to $d(bx^2)=2x$.). Indeed, it could be demonstrated with basic calculus, but the calculation is slightly more difficult than you may guess.
+The left-hand side of this equation is a vector whose entries equal $\frac{\partial\langle v|B|v\rangle}{\partial v_i}$.  This lemma seems simple.  (It's analogous to $d(bx^2)=2x$.). Indeed, it could be demonstrated with basic calculus, but the calculation is slightly more difficult than you may guess.
 
 We saw in the last section that we could find $|v_1\rangle$ in $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$ as the unit vector $|v\rangle$ that maximizes $\langle v|A^TA|v\rangle$.  To calculate this max, we can do some calculus, but we have to be careful to restrict to unit vectors ($\langle v|v\rangle=1$).  To enforce this, we use Lagrange multipliers.  (We call the Lagrange multiplier $\varepsilon$ instead of the usual $\lambda$ to avoid confusion with singular values.)
 
@@ -885,7 +885,7 @@ $$
 
 That is, $|v\rangle_1$ is an eigenvector of $A^TA$.  Though this doesn't tell us which eigenvector, we can check all eigenvectors until we get a maximum.  Similarly $|u_1\rangle$ is an eigenvector of $AA^T$.
 
-If the eigenvalue corresponding to $|v_1\rangle$ is $\varepsilon_1$, then $\langle v_1|A^TA|v_1\rangle=\varepsilon_1$.  From the discussion in the proof of Theorem X,
+If the eigenvalue corresponding to $|v_1\rangle$ is $\varepsilon_1$, then $\langle v_1|A^TA|v_1\rangle=\varepsilon_1$.  From the discussion in the proof of Theorem \ref{upperbound},
 
 $$
 \lambda_1=\langle u_1|A|v_1\rangle=\sqrt{\langle v_1|A^TA|v_1\rangle}=\sqrt{\varepsilon_1}
