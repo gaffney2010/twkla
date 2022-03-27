@@ -1,6 +1,10 @@
 # Output
 twkla/html
 
+# Extra output
+twkla/pdf/linalg.aux
+twkla/pdf/linalg.log
+
 # VSCode noise
 .DS_Store
 
@@ -10,3 +14,5 @@ twkla/source/linalg.fls
 twkla/source/linalg.log
 twkla/source/linalg.pdf
 twkla/source/linalg.synctex.gz
+
+twkla/texput.log

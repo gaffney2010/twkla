@@ -150,9 +150,7 @@ $$
 \left(\begin{array}{ccc}1&0&0\\0&\sqrt{1/2}&\sqrt{1/2}\\0&\sqrt{1/2}&-\sqrt{1/2}\end{array}\right)
 $$
 
-If you follow the multiplication through, you can see that for the outside matrices, everything except the first row and column get ignored.  We must choose orthonormal vectors for the other two rows and columns in order to satisfy the orthogonality condition of the SVD.  But outside of that constraint, we're free to do whatever we want with these other rows and columns.
-
-\newline
+If you follow the multiplication through, you can see that for the outside matrices, everything except the first row and column get ignored.  We must choose orthonormal vectors for the other two rows and columns in order to satisfy the orthogonality condition of the SVD.  But outside of that constraint, we're free to do whatever we want with these other rows and columns.\newline\newline
 
 Low-rank matrices are one way that uniqueness can fail, but not the only way.  See Section \ref{almost_uniqueness} for a more complete discussion.
 \end{tcolorbox}
@@ -195,7 +193,7 @@ A = UDV^T =
   \end{array}
 \right]
 \left[
-\begin{array}{cccc}
+\begin{array}{cccccc}
 \lambda_1 & 0 & \cdots & 0 & \cdots & 0 \\
 0 & \lambda_2 & \cdots & 0 & \cdots & 0 \\
 \vdots & \vdots & \ddots & \vdots & \cdots & \vdots \\
@@ -393,7 +391,7 @@ $$
 PDP^{-1}|v_i\rangle = PD|e_i\rangle = \lambda_iP|e_i\rangle = \lambda_i|v_i\rangle = A|v_i\rangle
 $$
 
-This equality makes sense.  $P^{-1}$ maps the eigenvalues of $A$ to the standard basis; $D$ stretches invariantly along each of the standard basis; and $P$ maps the standard basis back.  The net effect is that the invariant stretching from $D$ gets moved to the eigenvectors.  An SVD, $UDV^{-1}$, on the other hand rotates, stretches along standard basis, then rotates to (potentially) new rotation.  (In the last sentence, we call $V^T=V^{-1}$, which is true for all orthogonal matrices; we also called the orthogonal matrices "rotations" which is a good way to think of orthogonal matrices.)  We can see that $PDP^{-1}$ and $UDV^{-1}$ are just two decompositions of matrices.  The former, called a diagonalization, requires the outside matrices to be inverses, while the SVD requires the outside matrices to be orthogonal.  Diagonalizations exist sometimes, whereas SVD exist all the time.  We'll see in the Section \ref{How to Calculate} that these two concepts are intimately connected.  See Chapter \ref{Symmetric Matrices} for a discussion of then the SVD is also a diagonalization.
+This equality makes sense.  $P^{-1}$ maps the eigenvalues of $A$ to the standard basis; $D$ stretches invariantly along each of the standard basis; and $P$ maps the standard basis back.  The net effect is that the invariant stretching from $D$ gets moved to the eigenvectors.  An SVD, $UDV^{-1}$, on the other hand rotates, stretches along standard basis, then rotates to (potentially) new rotation.  (In the last sentence, we call $V^T=V^{-1}$, which is true for all orthogonal matrices; we also called the orthogonal matrices "rotations" which is a good way to think of orthogonal matrices.)  We can see that $PDP^{-1}$ and $UDV^{-1}$ are just two decompositions of matrices.  The former, called a diagonalization, requires the outside matrices to be inverses, while the SVD requires the outside matrices to be orthogonal.  Diagonalizations exist sometimes, whereas SVD exist all the time.  We'll see in the Section \ref{How to Calculate} that these two concepts are intimately connected.  See Chapter \ref{Symmetric Matrices} for a discussion of how the SVD is also a diagonalization.
 
 \subsection{Vectors and Covectors}
 
@@ -478,8 +476,8 @@ Write $A$ in matrix-form SVD two different ways.
 \end{enumerate}
 \item \label{Ex-SVD Null Space} Given a matrix with SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, prove that $A\vec v=0$ if and only if $\vec v$ is perpendicular to each $\vec v_i$.
 \item \label{Ex-SVD Range} Given a matrix with SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, prove that a vector $\vec u$ equals $A\vec v$ for some $\vec v$ if and only if $\vec u\in\operatorname{span}\left(\vec u_i\right)$.
+\item An invertible square matrix has an SVD $A=UDV^T$, with $D=\left(\begin{array}{cccc}\lambda_1&&&\\ &\lambda_2&&\\ &&\ddots&\\ &&&\lambda_r\end{array}\right)$.  Show that all $\lambda_i\neq0$.  Next argue that $D^{-1}=\left(\begin{array}{cccc}\frac{1}{\lambda_1}&&&\\&\frac{1}{\lambda_2}&&\\&&\ddots&\\&&&\frac{1}{\lambda_r}\end{array}\right)$.  Finally prove that $A^{-1}=VD^{-1}U^T$.
 \end{enumerate}
-\item An invertible square matrix has an SVD $A=UDV^T$, with $D=\left(\begin{array}{cccc}\lambda_1&&&\\&\lambda_2&&\\&&\ddots&\\&&&\lambda_r\end{array}\right)$.  Show that all $\lambda_i\neq0$.  Next argue that $D^{-1}=\left(\begin{array}{cccc}\frac{1}{\lambda_1}&&&\\&\frac{1}{\lambda_2}&&\\&&\ddots&\\&&&\frac{1}{\lambda_r}\end{array}\right)$.  Finally prove that $A^{-1}=VD^{-1}U^T$.
 
 \section{Existence}
 
@@ -545,7 +543,7 @@ $$
 A_1| v _1\rangle\langle v _1| &=& \left(A-\lambda_1| u _1\rangle\langle v _1|\right)| v _1\rangle\langle v _1|& \\
 &=& A| v _1\rangle\langle v _1| - \lambda_1| u _1\rangle\langle v _1| v _1\rangle\langle v _1| & \quad\text{Distribute}\\
 &=& \left(A| v _1\rangle\right)\langle v _1| - \lambda_1| u _1\rangle\langle v _1|& \\
-&=& \left(\lambda_1| u _1\rangle\right)\langle v _1| - \lambda_1| u _1\rangle\langle v _1|&\quad\text{By Lemma \ref{tollbooth}} \\
+&=& \left(\lambda_1| u _1\rangle\right)\langle v _1| - \lambda_1| u _1\rangle\langle v _1|&\quad\text{By above lemma} \\
 &=& 0
 \end{array}
 $$
@@ -623,13 +621,15 @@ Note:  This doesn't preclude $A_{r'}=0$ for some $r'<r$.  If that happens, then 
 \begin{proof}
 Suppose we've gone through $r$ steps, then it must be that the set of perpendicular covectors $\left\{\langle u _i|\right\}$ span the codomain {\em or} the set of perpendicular vectors $\left\{| v _i\rangle\right\}$ span the domain, depending on whether $r=m$ or $r=n$.  Without loss of generality, say that the domain is spanned.  Then 
 $$
-\begin{array}{rcll}
-A_r&=&A_r\left(I-\sum_{i=1}^{r'}| v _i\rangle\langle v _i|\right)&\quad\text{by Theorem \ref{lil_projection_thm}}\\
-&=&A0&\quad\text{by Exercise \ref{outer_product_identity}}\\
-&=&0&
+\begin{array}{rcl}
+A_r&=&A_r\left(I-\sum_{i=1}^{r'}| v _i\rangle\langle v _i|\right)\\
+&=&A0\\
+&=&0
 \end{array}
 $$
 \end{proof}
+
+The first equality follows from Theorem \ref{lil_projection_thm} and the second from Exercise \ref{outer_product_identity}.
 
 \subsection{Change of bases for outer product sums}
 
