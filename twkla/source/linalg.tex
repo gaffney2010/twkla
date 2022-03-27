@@ -75,6 +75,8 @@ We start the book with the most remarkable fact of linear algebra:  For any matr
 If $A$ is dimension $m\times n$, then $U$ is dimension $m\times m$, $V$ is dimension $n\times n$, and $D$ is dimension $m\times n$.  $D$ is zero everywhere expect for potentially $D_{ii}$ for $1\leq i\leq\min(m, n)$.  By convention, we sometimes call $\lambda_i:=D_{ii}$.  As well, we'll sometimes call $r:=\min(m, n)$.
 
 \begin{tcolorbox}[title=Example,colback=blue!5]
+{\bfseries\Large Example}
+
 Let's whip up an example real quick to demonstrate.  We start with an array chosen arbitrarily and show that there is an SVD.
 
 $$
@@ -126,6 +128,8 @@ At this point, this is a neat party trick.  It's not at all clear, but such a de
 The SVD is generally not unique for a given a matrix.  This fact causes difficulties.  Because the SVD is not unique, we usually say that a decomposition is {\em a} SVD and not {\em the} SVD.  We show later in the chapter that SVDs are almost unique.  Often we usually only need {\em any} SVD.
 
 \begin{tcolorbox}[title=Example,colback=blue!5]
+{\bfseries\Large Example}
+
 To give an example of non-uniqueness, let's look at the matrix:
 
 $$
@@ -311,6 +315,8 @@ $$
 We will call the decomposition $\sum_i\lambda_i|u_i\rangle\langle v_i|$ the {\it bra-ket form} of the SVD; the $UDV^T$ form is called the {\it matrix form} of the SVD.  The steps from above can be done in reverse to go from bra-ket form to matrix form.
 
 \begin{tcolorbox}[title=Example,colback=blue!5]
+{\bfseries\Large Example}
+
 Given an SVD in bra-ket form $A=5|u_1\rangle\langle v_1|+2|u_2\rangle\langle v_2|$, where
 
 $$
@@ -355,6 +361,8 @@ Notice that we can just slot the vectors and scalars into their corresponding sp
 There is some caveat about rank here.
 
 \begin{tcolorbox}[title=Example,colback=blue!5]
+{\bfseries\Large Example}
+
 Let's continue the above example.
 
 $$
@@ -482,7 +490,8 @@ Write $A$ in matrix-form SVD two different ways.
 In this section, we prove the existence of an SVD.  This proof is constructive, in the sense that it gives an algorithm for building a bra-ket form of an SVD.
 
 \begin{tcolorbox}[title=Algorithm 1: SVD,colback=blue!5]
-\label{alg1}
+{\bfseries\Large Algorithm 1: SVD}\label{alg1}
+
 Set $A_0 \gets A$
 While $A_i\neq 0$
 \begin{itemize}
@@ -498,6 +507,8 @@ An objection to this algorithm may be that it only works if the while loop event
 Before proving these two theorems, let's build some intuition.  We see that $| u _i\rangle\langle u _i|A_{i-1}| v _i\rangle\langle v _i|=\lambda_i| u _i\rangle\langle v _i|$ is just a matrix; and it's the same shape as $A_{i-1}$.  But it's not just any matrix.  It's the matrix that captures all the signal that $A_{i-1}$ has in the axes $\vec u_i$ and $\vec v_i$.  To illustrate what this means, let's first look at a lower-dimensional analogy.
 
 \begin{tcolorbox}[title=Example: Covector Analogy,colback=blue!5]
+{\bfseries\Large Covector Analogy}
+  
 Consider the axis $\vec v=\left(\begin{array}{ccc} 3 & 3 & 2 \end{array}\right)$.  If we wanted to remove all the signal along the axis $\vec e_1 = \left(\begin{array}{ccc} 1 & 0 & 0 \end{array}\right)$, then we would subtract $3\vec e_1 = \left(\begin{array}{ccc} 3 & 0 & 0 \end{array}\right)$ from $\vec v$ to get $\left(\begin{array}{ccc} 0 & 3 & 2 \end{array}\right)$.
 
 Saying that this "removes signal" along $e_1$ means that now any vector along $\vec e_1$, $\lambda\vec e_1$, gets zeroed out by $\vec v-3\vec e_1$.  That is, $\langle v-3e_1|e_1\rangle=0$.  We arrived at the coefficient $\lambda=3$ by looking at the first element of $\vec v$.  This can be formalized as $3=\langle v|e_1\rangle$.
@@ -693,6 +704,8 @@ A=\sum_i\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|,
  where $\lambda_1>\lambda_2>\cdots$.  By indexing the vectors/covectors with a second index $j$, we can make sure that all our $\lambda_i$ are unique.
  
 \begin{tcolorbox}[title=Example,colback=blue!5]
+{\bfseries\Large Example}
+  
 Suppose we had an SVD:
 $$
 A=2|u_1\rangle\langle v_1|+2|u_2\rangle\langle v_2|+2|u_3\rangle\langle v_3|+|u_4\rangle\langle v_4|+|u_5\rangle\langle v_5|
