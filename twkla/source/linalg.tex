@@ -1105,19 +1105,25 @@ This is just a rearrangement of the same data, but the interpretation is helpful
 There's a cool feature about Collaborative Filter that I want to mention.  Call $B=\sqrt DU^T$, the embedding of users, and $A=\sqrt DM^T$, the embedding of movies, so that $W\approx W'=A^TB$.  Let's say that you know the embeddings of movies, $A$, the singular values $D$, and the watch matrix $W$.  From these can you get user embeddings $B$?  Yes, some simple algebra yields:
 
 $$
-W\approx A^TB \implies B\approx\left(A^T\right)^{-1}W=MD^{-1/2}W=AD^{-1}W
+\begin{array}{rcl}
+W\approx A^TB \implies B & \approx & \left(A^T\right)^{-1}W \\
+ & = & \left(MD^{1/2}\right)^{-1}W \\
+ & = & \left(D^{-1/2}M^T\right)W \\
+ & = & D^{-1/2}D^{-1/2}D^{1/2}M^TW \\
+ & = & D^{-1}AW \\
+\end{array}
 $$
 
-Call $AD^{-1}$ the "modified embedding" (a non-standard term).  This amounts to taking the embedding of each movie, and dividing the $i$-th element by $\lambda_i$.  Now the above equation says that the embedding for a user is approximately the sum of the modified embeddings of movies that the user watched!  This is hugely helpful when a user starts on the platform.  After they watch a few movies, we could determine what their embedding should be, without have to refactor an enormous matrix.
+Call $D^{-1}A$ the "modified embedding" (a non-standard term).  This amounts to taking the embedding of each movie, and dividing the $i$-th element by $\lambda_i$.  Now the above equation says that the embedding for a user is approximately the sum of the modified embeddings of movies that the user watched!  This is hugely helpful when a user starts on the platform.  After they watch a few movies, we could determine what their embedding should be, without have to refactor an enormous matrix.
 
-There's some theoretical value here too.  Let's say that all the top $100$ singular values are close in value, call it $\lambda$.  (The idea here is that because we're only keeping the largest singular values, they'll be near to each other.)  Then we can say that $D\approx\lambda I$.  (It's this author's experience that this assumption won't be close to true; however making the assumption will still make a useful model that makes good recommendations.). Under this assumption, we can drop the "modified."  Under that assumption, the user embedding is the sum of the movie embeddings across all the movies they watched, {\em AND} the movie embedding is the sum of the user embeddings across all the users who watched it.  This fact gives a good intuition for what Collaborative Filtering actually does.
+There's some theoretical value here too.  Let's say that all the top $100$ singular values are close in value, call it $\lambda$.  (The idea here is that because we're only keeping the largest singular values, they'll be near to each other.)  Then we can say that $D\approx\lambda I$.  (It's this author's experience that this assumption won't be close to true; however making the assumption will still make a useful model that makes good recommendations.). Under this assumption, we can drop the "modified."  Then the user embedding is the sum of the movie embeddings across all the movies they watched, {\em AND} the movie embedding is the sum of the user embeddings across all the users who watched it.  This fact gives a good intuition for what Collaborative Filtering actually does.
 
 Quick note on notation here before we wrap:  Breaking $UDV^T$ into two bits $U\sqrt D\sqrt DV^T$, the bra-ket notation is a little trickier.  To keep it being a sum, we need to put the $i$-th term of $\sqrt DV^T$ into the $i$-th coordinate by attaching the $|e_i\rangle$.  So we write $\sqrt DV^T=\sum_i\sqrt\lambda_i|e_i\rangle\langle v_i|$ and $U\sqrt D=\sum_i\sqrt\lambda_i|u_i\rangle\langle e_i|$.  Verify that these multiply to equal $\sum_i\lambda_i|u_i\rangle\langle v_i|$
 
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
-\item \label{almost_min_average} In this exercise we're gonna be proving a simplified version of Theorem \ref{min_average}; instead of proving this for an average vector, we prove it for an average basis vector.  Given an SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with distinct singular values and the vectors $\left\{\langle v_i|\right\}$ spanning the domain, prove that $\frac{1}{n}\sum_j\left\|\left(A-\lambda|u\rangle\langle v|\right)|v_j\rangle\right\|$ ($\|\vec u\|=\|\vec v\|=1$) is minimal when $\lambda=\lambda_1$ and $|u\rangle=|u_1\rangle$ and $\langle v|=\langle v_1|$.  (Hint: Use $\|\vec x\|=\langle x|x\rangle$.  Then use $\sum_i\langle v_i|v\rangle = 1$ along with some other identities to reduce.  Then use Corollary \ref{corollary1} along with some calculus to minimize.)
+\item \label{almost_min_average} In this exercise we're gonna be proving a simplified version of Theorem \ref{min_average}; instead of proving this for an average vector, we prove it for an average basis vector.  Given an SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with distinct singular values and the vectors $\left\{\langle v_i|\right\}$ spanning the domain, prove that $\frac{1}{n}\sum_j\left\|\left(A-\lambda|u\rangle\langle v|\right)|v_j\rangle\right\|$ ($\|\vec u\|=\|\vec v\|=1$) is minimal when $\lambda=\lambda_1$ and $|u\rangle=|u_1\rangle$ and $\langle v|=\langle v_1|$.  (Hint: Use $\|\vec x\|=\langle x|x\rangle$.  Then use $\sum_i\langle v_i|v\rangle^2 = 1$ along with some other identities to reduce.  Then use Corollary \ref{corollary1} along with some calculus to minimize.)
 \item Suppose you are running a small movie-streaming service, and you have the following watch matrix:
 
 \begin{tabular}{ccccccccc}
@@ -1140,7 +1146,7 @@ Using a computer, perform Collaborative Filtering using $1$ latent dimension, $2
 \item \label{movie_lens_1} $\obot$ Download the MovieLens dataset from https://grouplens.org/datasets/movielens/.  (Choose which size dataset you want to work with.  For a greater challenge, do a larger set.)  Perform Collaborative Filtering on the data.  Test your model by filling in 5-stars for some of your favorite movies; what movies get recommended?  (If you don’t like movies, then try entering Escape from New York, Overboard, and Deathproof.)  Bonus:  Make software (or Jupyter notebook) that let’s the user enter movies, and updates the top-10 recommendation list.
 \end{enumerate}
 
-\subsection{Principle Component Analysis}
+\section{Principle Component Analysis}
 
 Let's say you're trying to build a credit profile on a set of users.  We know that everyone gets a one-number credit score, but if you're a bank or an insurance company, you may find this insufficient.  These same credit companies will sell you a packet of hundreds (or thousands) of variables for each of your customers.  You can use these to predict loan defaults\footnote{"Default" means failure to make payments owed.} or car accidents.  You could even build an insurance-specific credit score for each of your customers.  (Such a score would omit medical debt, by law.)  This will be our motivating example for this section.  Although the use of credit scores can be controversial, we'll focus only on the modeling challenge it presents.
 
