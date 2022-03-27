@@ -906,7 +906,7 @@ Yet another way to see this to write $A=UDV^T$, so that $A^TA=VD^2V^T$.  Because
 \begin{enumerate}[\thechapter.\thesection .1]
 \item Using the eigenvector technique presented in this section, calculate the SVD of $\left(\begin{array}{cc}2&6\\1&1\end{array}\right)$.
 \item Prove that the eigenvalues of $A^TA$ form the same multiset as the eigenvalues of $AA^T$.
-\item Show that for any $j>i$ an eigenvector corresponding to a non-zero eigenvalue of $A_j$ is also an eigenvector of $A_i$.
+\item Given a matrix $A$, let $\left\{A_i\right\}$ be the matrices found in Algorithm \label{alg1}.  Show that for any $j>i$ an eigenvector corresponding to a non-zero eigenvalue of $A_j$ is also an eigenvector of $A_i$.
 \item Given a symmetric matrix $A$ with distinct singular values, prove that every SVD has the form $\sum_i\lambda_i|v_i\rangle\langle v_i|$.
 \end{enumerate}
 
@@ -921,7 +921,7 @@ If $A$ is an $m\times n$-dimensional matrix, then $\operatorname{Dim}\left(\oper
  \end{theorem}
 
 \begin{proof}
-Choose some SVD of $A=\sum_{i=1}^r|u_i\rangle\langle v_i|$.  Expand $\left\{|v_i\rangle\right\}_{i=1}^r$ to a basis of the domain by adding vectors $|v_{r+1}\rangle, |v_{r+2}\rangle, ..., |v_n\rangle$.  Clearly $\operatorname{Range}(A)=\operatorname{Span}\left\{\langle u_i|\right\}_{i=1}^r$.  And $\operatorname{NullSpace}(A)=\operatorname{Span}\left\{|v_i\rangle\right\}_{i=r+1}^n$.  (See Exercises \ref{Ex-SVD Null Spaceercise} and \ref{Ex-SVD Rangeercise}.)  So the equality follows.
+Choose some SVD of $A=\sum_{i=1}^r|u_i\rangle\langle v_i|$.  Expand $\left\{|v_i\rangle\right\}_{i=1}^r$ to a basis of the domain by adding vectors $|v_{r+1}\rangle, |v_{r+2}\rangle, ..., |v_n\rangle$.  $\operatorname{Range}(A)=\operatorname{Span}\left\{\langle u_i|\right\}_{i=1}^r$.  And $\operatorname{NullSpace}(A)=\operatorname{Span}\left\{|v_i\rangle\right\}_{i=r+1}^n$.  (See Exercises \ref{Ex-SVD Null Spaceercise} and \ref{Ex-SVD Rangeercise}.)  So the equality follows.
 \end{proof}
 
 \subsection{Determinant}
@@ -973,7 +973,6 @@ D = np.diag(d)
 
 Some exercises will involve a deeper dive on the programming side.  For these problems, you may need to look up and learn about libraries not covered in this book.  I label these problems with a $\obot$.
 
-Exercises
 {\bfseries\scshape\Large Exercises}
 
 For these exercises, we use
@@ -1009,7 +1008,7 @@ An observation is that if you had a very tiny $\lambda_n$ and you omitted the su
 
 But who cares?  Well, this gives a good way to smooth out a linear map.  This is sometimes called a {\em low-rank approximation}.  Similar to fitting a polynomial to a scatterplot, a low-rank approximation can help capture the signal through the noise.  And experience has shown that this works quite well.
 
-Well if low-rank matrices are less prone to noise, why choose this particular low-rank matrix?  Well we'd want $\left\|A|v\rangle-A'|v\rangle\right\|$ to be small as often as possible.  Let's again use the SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, and for the sake of this example.  What's the best rank-$1$ matrix $A'$ to approximate this?  It turns out that $\left\|A|v\rangle-A'|v\rangle\right\|$ is minimal for an "average" $|v\rangle$ precisely when $A'$ is the first summand of the SVD of $A$.
+But why choose this particular low-rank matrix?  Well we'd want $\left\|A|v\rangle-A'|v\rangle\right\|$ to be small as often as possible.  Let's again use the SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, and for the sake of this example.  What's the best rank-$1$ matrix $A'$ to approximate this?  It turns out that $\left\|A|v\rangle-A'|v\rangle\right\|$ is minimal for an "average" $|v\rangle$ precisely when $A'$ is the first summand of the SVD of $A$.
 
 \begin{theorem}
 \label{min_average}
@@ -1022,13 +1021,13 @@ is achieved when $A'=\lambda_1|u_1\rangle\langle v_1|$.
 
 Proving Theorem \ref{min_average} would need a better definition of "average" and would be too much of a diversion to prove here, but we do leave a simplified version as Exercise \ref{almost_min_average}.  Applying this theorem repeatedly we see that the best low-rank approximation we can get for a matrix is to just truncate the SVD after a number of the largest summands.  Very cool!
 
-Let's talk about Netflix again.  $W$ is a large $m\times n$, where $m$ is the number of movies and $n$ is the number of users.  The rank is probably close to $m$, which is probably over ten thousand.  But what if we low-rank approximated $W$ with a $100$-dimensional:
+Let's talk about Netflix again.  $W$ is a large $m\times n$, where $m$ is the number of users and $n$ is the number of movies.  The rank is probably close to $n$, which is probably over ten thousand.  But what if we low-rank approximated $W$ with a $100$-dimensional:
 
 $$
 W'=\sum_{i=1}^{100}\lambda_i|m_i\rangle\langle u_i|
 $$
 
-Maybe this captures signal through the noise, but what practically does it give us?  You'll remember from Exercise \ref{irrational_summands} that the summands of the SVD usually aren't rational, even if their sum is.  $W$ mapped users to movies, but it wasn't very useful, because it only told us what movies a user already watched.  $W'$ maps users to movies, but it gives an irrational value for every movie, which gives us a total ranking of movies.  Now we can tell you not just what a user watched, but what they're likely to have watched.  By recommending movies that the user hasn't watched, but score high for, they're likely to want to watch.
+Maybe this captures signal through the noise, but what practically does it give us?  You'll remember from Exercise \ref{irrational_summands} that the summands of the SVD usually aren't rational, even if their sum is.  $W$ mapped users to movies, but it wasn't very useful, because it only told us what movies a user already watched.  $W'$ maps users to movies, but it gives an irrational value for every movie, which gives us a total ranking of movies.  Now we can tell you not just what a user watched, but what they're likely to have watched.  By recommending movies that the user hasn't watched, but score high for, they're likely to {\em want} to watch.
 
 This low-rank approximation is called {\bf collaborative filtering}.  The $j$-th row in the resulting matrix represents an interest profile for each user, with one entry for every movie.  This translates to recommendations by simply looking for those movies with the highest score.  There's a lot of conversation in this section, but the algorithm is really nothing more than a truncated SVD.
 
@@ -1095,11 +1094,11 @@ $$
 
 It also happens to be a linear map, and it's exactly equal to $U^T$, where $W'=MDU^T$ is the matrix form of the SVD of $W'$.  Another embedding is $\sqrt{D}U^T$, where $\sqrt{D}$ is a diagonal matrix with the terms the square roots of the terms on $D$.
 
-We should be a little more careful with dimensions.  Recall that $U^T$ is an $n\times n$ matrix where $n$ is the number of users.  This isn't actually a dimensionality reducer, but we think of it like it is.  This is because $DU^T$ will zero out all but the first $100$ entries.  $\sqrt DU^T$ is an $m\times n$ matrix, but the all but the first $100$ entries will be zero.  So actually if we replaced $\sqrt D$ with a diagonal matrix with the same entries but shaped $100\times n$, we'd have a true dimension reduction.  Let's go ahead and do that, so that all this is just a pesky caveat.
+We should be a little more careful with dimensions.  Recall that $U^T$ is an $n\times n$ matrix where $n$ is the number of users.  This isn't actually a dimensionality reducer, but we think of it like it is.  This is because $DU^T$ will zero out all but the first $100$ entries.  $\sqrt DU^T$ is an $m\times n$ matrix, but the all but the first $100$ column will be zero.  So actually if we replaced $\sqrt D$ with a diagonal matrix with the same entries but shaped $100\times n$, we'd have a true dimension reduction.  Let's go ahead and do that, so that all this is just a pesky caveat.
 
 If we did the same thing for movies, the linear map $\sqrt DM^T$ takes movies vectors (columns in $W'$) to a $100$-dimensional vector space.  We can think of this space as the same space as the image of $\sqrt DU^T$.  If we take the embedding of a movie $|m\rangle$, $\sqrt DM^T|m\rangle$, and the embedding of a user $|u\rangle$, $\sqrt DU^T|u\rangle$, and take the inner product, we get $\langle m|M\sqrt D\sqrt DU^T|u\rangle=\langle m|W'|u\rangle$.  So from these two embeddings, we can reconstruct the entries in $W'$, by doing dot products.  Recall that the dot product is the product of the norms times the cosine of the angle between them.  In practice the embeddings will be comparable in norm, so the closeness of the movie/user vectors as measure by angle corresponds to how similar the the movie is to the user.  In fact, similar movies will be close to each other as well, owing to the fact that users who like one movie will like the other.  Similar users will also be close.
 
-This is just a rearrangement of the same data, but the interpretation is helpful.  We could leverage nearest neighbor algorithms to produce good recommendations on extremely large datasets.  As well the movie-to-movie similarity that this interpretation gives you, let's you make categories like, "Because you watched The Christmas Chronicles."
+This is just a rearrangement of the same data, but the interpretation is helpful.  We could leverage approximate nearest neighbor algorithms to produce good recommendations on extremely large datasets.  As well the movie-to-movie similarity that this interpretation gives you, let's you make categories like, "Because you watched The Christmas Chronicles."
 
 \subsection{Averaging}
 
