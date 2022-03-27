@@ -380,7 +380,7 @@ A basic fact about linear maps is that they're often invariant for certain axes.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.75\textwidth]{eigenvectors}
+\includegraphics[width=0.5\textwidth]{eigenvectors.png}
 \end{figure}
 
 The fact that eigenvalues usually exist isn't obvious, and it's a fact that people can't shut up about.  If you remember one thing from linear algebra, it's probably eigenvalues.  Eigenvalues and eigenvectors are important.  But talking about eigenvalues is difficult and requires a lot of caveats.  Eigenvalues only exist for square matrices and they are sometimes complex.  Defective matrices don't have a "full set" of eigenvalues.  (Defective matrices are covered much later in the book.)  The SVD doesn't have any of these qualifiers.  We'll see throughout this book that for many applications of eigenvalues, the SVD will work instead.  Look to Section \ref{Quick Conclusions} for a couple of immediate examples.
@@ -1178,7 +1178,7 @@ What's nice about the SVD is that it builds orthogonality right in.  This means 
 \begin{figure}
 \caption{First and second principle components.}
 \centering
-\includegraphics[width=0.75\textwidth]{pca}
+\includegraphics[width=0.5\textwidth]{pca.png}
 \end{figure}
 
 After you get the Principle Components, we project a user's data onto these axes.  This projection map can be called $\sum_i |e_i\rangle\langle u_i|$.  The $|e_i\rangle$ terms just say that we want the the $i$-th projection to go in the $i$-th coordinate.
