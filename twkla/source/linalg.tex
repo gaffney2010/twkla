@@ -1149,6 +1149,11 @@ Using a computer, perform Collaborative Filtering using $1$ latent dimension, $2
 \item Users sometimes provide star ratings ($1$-$5$ stars) for movies.  An alternative approach would be to use these ratings instead of a watch matrix.  What are some pros and cons of this alternative approach?
 \item A user not watching a movie doesn't mean that they don't like the movie.  How can you use user traffic to determine when a user isn't interested in a movie?  How could you use this information in a Collaborative Filtering approach?
 \item Suppose that a matrix $A$ has all values $0\leq A_{ij}\leq1$.  And let $A'$ be a low-dimensional approximation obtained by taking a partial sum of the SVD.  Prove that $A'$ also has all values $0\leq A'_{ij}\leq1$.
+\item Imagine that you're building a Netflix-like recommendation engine, and you've discovered that your engine doesn't work well for black users.  To measure this effect, you modify the loss equation from Theorem \ref{CFMinimizes}:
+$$
+\min_{A'\text{ rank-$r$}}E_{|v\rangle\text{, black users}}\left(\left\|A|v\rangle-A'|v\rangle\right\|\right)
+$$
+Explain how you might modify Collaborative Filtering to reduce this loss.  Consider algorithm runtime, and how you'll score new users.
 \item \label{Ex-MovieLens} $\obot$ Download the MovieLens dataset from https://grouplens.org/datasets/movielens/.  (Choose which size dataset you want to work with.  For a greater challenge, do a larger set.)  Perform Collaborative Filtering on the data.  Test your model by filling in 5-stars for some of your favorite movies; what movies get recommended?  (If you don’t like movies, then try entering Escape from New York, Overboard, and Deathproof.)  Bonus:  Make software (or Jupyter notebook) that let’s the user enter movies, and updates the top-10 recommendation list.
 \end{enumerate}
 
