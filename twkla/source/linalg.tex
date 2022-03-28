@@ -46,7 +46,7 @@ Finally, some good news for some of you.  I've written this book to avoid talkin
 \section{Review (to be multiple sections)}
 
  \begin{theorem}
-\label{cos_sim}
+\label{CosineSimilarity}
 Given two vectors, $\vec u$, $\vec v$, with angle between them $\theta$, the inner product can be expressed as:
 $$
 \langle u|v\rangle = \|\vec u\|\cdot\|\vec v\|\cdot\cos\theta
@@ -54,7 +54,7 @@ $$
  \end{theorem}
 
  \begin{theorem}
-\label{vector_decomp}
+\label{VectorDecomposition}
 For any subspace $W$ and any vector $|v\rangle$, $|v\rangle$ can be written as $|v\rangle=|v_\parallel\rangle+|v_\bot\rangle$, where $|v_\parallel\rangle\in W$ and $\langle w|v_\bot\rangle=0$ for all $w\in W$.
  \end{theorem}
  \end{comment}
@@ -154,7 +154,7 @@ $$
 
 If you follow the multiplication through, you can see that for the outside matrices, everything except the first row and column get ignored.  We must choose orthonormal vectors for the other two rows and columns in order to satisfy the orthogonality condition of the SVD.  But outside of that constraint, we're free to do whatever we want with these other rows and columns.\newline\newline
 
-Low-rank matrices are one way that uniqueness can fail, but not the only way.  See Section \ref{almost_uniqueness} for a more complete discussion.
+Low-rank matrices are one way that uniqueness can fail, but not the only way.  See Section \ref{Section-Almost Uniqueness} for a more complete discussion.
 \end{tcolorbox}
 
 Soon we'll show that the SVD exists.  Said another way:  We'll show there exists bases in the domain and range for which $A$ is diagonal.  (See Section \ref{Change of Basis} for a review of this concept.)  On its face, this is a simple-yet-powerful theorem that doesn't have the usual qualifiers seen in linear algebra.  It doesn't require complex numbers, and it's one of the few theorems that apply cleanly to rectangular matrices.  But beyond these surface advantages, we'll see that the SVD is widely applicable.  In fact, it's so applicable that we make this a cornerstone of the book.  The SVD is critical to understanding linear algebra, because it expresses something fundamental about linear transformations.
@@ -175,7 +175,6 @@ $$
 Here $| u _i\rangle$ are the columns of $U$ and $\langle v _i|$ are the rows of $V^T$.
 
 \begin{theorem}
-\label{braket_exists}
 Any matrix $A$ can be written as:
 $$
 A=\sum_{i=1}^r\lambda_i| u _i\rangle\langle v _i|
@@ -286,11 +285,10 @@ Because of the orthogonality of $U$ and $V$, the set of vectors $\left\{\langle 
 To see why this form is convenient, we'll show a quick proof that will be used later.
 
 \begin{lemma}
-\label{ata_eq}
+\label{ATASimplification}
 Given an SVD, $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, then 
 
 \begin{equation}
-\label{ata_simplified}
 A^TA=\sum_i\lambda_i^2|v_i\rangle\langle v_i|
 \end{equation}
 \end{lemma}
@@ -397,7 +395,7 @@ $$
 PDP^{-1}|v_i\rangle = PD|e_i\rangle = \lambda_iP|e_i\rangle = \lambda_i|v_i\rangle = A|v_i\rangle
 $$
 
-This equality makes sense.  $P^{-1}$ maps the eigenvalues of $A$ to the standard basis; $D$ stretches invariantly along each of the standard basis; and $P$ maps the standard basis back.  The net effect is that the invariant stretching from $D$ gets moved to the eigenvectors.  An SVD, $UDV^{-1}$, on the other hand rotates, stretches along standard basis, then rotates to (potentially) new rotation.  (In the last sentence, we call $V^T=V^{-1}$, which is true for all orthogonal matrices; we also called the orthogonal matrices "rotations" which is a good way to think of orthogonal matrices.)  We can see that $PDP^{-1}$ and $UDV^{-1}$ are just two decompositions of matrices.  The former, called a diagonalization, requires the outside matrices to be inverses, while the SVD requires the outside matrices to be orthogonal.  Diagonalizations exist sometimes, whereas SVD exist all the time.  We'll see in the Section \ref{How to Calculate} that these two concepts are intimately connected.  See Chapter \ref{Symmetric Matrices} for a discussion of how the SVD is also a diagonalization.
+This equality makes sense.  $P^{-1}$ maps the eigenvalues of $A$ to the standard basis; $D$ stretches invariantly along each of the standard basis; and $P$ maps the standard basis back.  The net effect is that the invariant stretching from $D$ gets moved to the eigenvectors.  An SVD, $UDV^{-1}$, on the other hand rotates, stretches along standard basis, then rotates to (potentially) new rotation.  (In the last sentence, we call $V^T=V^{-1}$, which is true for all orthogonal matrices; we also called the orthogonal matrices "rotations" which is a good way to think of orthogonal matrices.)  We can see that $PDP^{-1}$ and $UDV^{-1}$ are just two decompositions of matrices.  The former, called a diagonalization, requires the outside matrices to be inverses, while the SVD requires the outside matrices to be orthogonal.  Diagonalizations exist sometimes, whereas SVD exist all the time.  We'll see in the Section \ref{Section-How to Calculate} that these two concepts are intimately connected.  See Chapter \ref{Symmetric Matrices} for a discussion of how the SVD is also a diagonalization.
 
 \subsection{Vectors and Covectors}
 
@@ -490,7 +488,7 @@ Write $A$ in matrix-form SVD two different ways.
 In this section, we prove the existence of an SVD.  This proof is constructive, in the sense that it gives an algorithm for building a bra-ket form of an SVD.
 
 \begin{tcolorbox}[title=Algorithm 1: SVD,colback=blue!5]
-{\bfseries\Large Algorithm 1: SVD}\label{alg1}
+{\bfseries\Large Algorithm 1: SVD}\label{Algorithm1}
 
 Set $A_0 \gets A$
 While $A_i\neq 0$
@@ -500,9 +498,9 @@ While $A_i\neq 0$
 \end{itemize}
 \end{tcolorbox}
 
-When the algorithm finishes, we have $A_r=0$.  So that $0=A_r=A-\sum_{i=1}^r| u _i\rangle\langle u _i|A_{i-1}| v _i\rangle\langle v _i|$.  We recognize that $\lambda_i:=\langle u _i|A_{i-1}| v _i\rangle$ is just a scalar, and add these to both sides so that we get $A=\sum_{i=1}^r\lambda_i| u _i\rangle\langle v _i|$.  The resulting vectors are normal, by choice.  But for this to be an SVD as described in the first section, we need the vectors $\left\{u_i\right\}_i$ to be a perpendicular set, and for $\left\{v_i\right\}_i$ to be a perpendicular set.  We prove that this is so in Theorem \ref{svd_perpendicular}.
+When the algorithm finishes, we have $A_r=0$.  So that $0=A_r=A-\sum_{i=1}^r| u _i\rangle\langle u _i|A_{i-1}| v _i\rangle\langle v _i|$.  We recognize that $\lambda_i:=\langle u _i|A_{i-1}| v _i\rangle$ is just a scalar, and add these to both sides so that we get $A=\sum_{i=1}^r\lambda_i| u _i\rangle\langle v _i|$.  The resulting vectors are normal, by choice.  But for this to be an SVD as described in the first section, we need the vectors $\left\{u_i\right\}_i$ to be a perpendicular set, and for $\left\{v_i\right\}_i$ to be a perpendicular set.  We prove that this is so in Theorem \ref{SVDPerpendicular}.
 
-An objection to this algorithm may be that it only works if the while loop eventually terminates.  For the algorithm to work, it must be true that $A_r=0$ for some $r$.  In Theorem \ref{svd_terminates}, we show that for $A$ with dimension $m\times n$ this must happen within $r := \min(m, n)$ steps.
+An objection to this algorithm may be that it only works if the while loop eventually terminates.  For the algorithm to work, it must be true that $A_r=0$ for some $r$.  In Theorem \ref{SVDTerminates}, we show that for $A$ with dimension $m\times n$ this must happen within $r := \min(m, n)$ steps.
 
 Before proving these two theorems, let's build some intuition.  We see that $| u _i\rangle\langle u _i|A_{i-1}| v _i\rangle\langle v _i|=\lambda_i| u _i\rangle\langle v _i|$ is just a matrix; and it's the same shape as $A_{i-1}$.  But it's not just any matrix.  It's the matrix that captures all the signal that $A_{i-1}$ has in the axes $\vec u_i$ and $\vec v_i$.  To illustrate what this means, let's first look at a lower-dimensional analogy.
 
@@ -522,26 +520,26 @@ This process is known as the Gram-Schmidt process applied to orthonormal vectors
 By choosing the maximizing pair of vectors for remaining signal with each step, we guarantee that we're getting perpendicular vectors from earlier vectors.  The reasoning is that if we chose some vector that was pointing in a similar direction as an earlier vector, then we'd be pointing partly in a zeroing direction.  The zeroing part of the new matrix, $| u \rangle\langle u |A| v \rangle\langle v |$, starts by projecting onto the zeroed axis; if this projection is non-zero, then some part of the vector is going to waste.
 \end{tcolorbox}
 
-\subsection{Proof of the Correctness of Algorithm \ref{alg1}}
+\subsection{Proof of the Correctness of Algorithm \ref{Algorithm1}}
 
 \begin{lemma}
-\label{tollbooth}
+\label{MaximalVectorMap}
 For any matrix $A$, if $\langle u |A| v \rangle=\max_{\|u_i\|=\|v_i\|=1}\langle u_i |A| v_i \rangle$, then $A| v \rangle=\lambda| u \rangle$, for some scalar $\lambda$.
 \end{lemma}
 
 \begin{proof}
-Fix the maximizing $|v\rangle$.  $A| v \rangle$ maps to some vector.  We call this vector $\lambda|t\rangle$, where $|t\rangle$ is a unit vector.  (The magnitude has been factored out into the scalar $\lambda$.  So $\langle u |A| v \rangle=\lambda\langle u | t\rangle$.  Given that $\langle u |$ and $| t\rangle$ are unit vectors, the inner product is given by the cosine of the angle between them (Theorem \ref{cos_sim}), which is maximized when the vectors are the same.
+Fix the maximizing $|v\rangle$.  $A| v \rangle$ maps to some vector.  We call this vector $\lambda|t\rangle$, where $|t\rangle$ is a unit vector.  (The magnitude has been factored out into the scalar $\lambda$.  So $\langle u |A| v \rangle=\lambda\langle u | t\rangle$.  Given that $\langle u |$ and $| t\rangle$ are unit vectors, the inner product is given by the cosine of the angle between them (Theorem \ref{CosineSimilarity}), which is maximized when the vectors are the same.
 \end{proof}
 
 This is an important fact that helps with the next lemma.  It also advances our intuition.  We think of a matrix $A$ as acting on a vector by projecting that vector onto a covector ($\vec v$) and using the resulting coefficient $\lambda$ to tell us how far to go in the direction of another vector $u$.  The above lemma says that when we've chosen the maximizing unit vector ($ u $) and covector ($ v $), as prescribed by the SVD algorithm, we've chosen a matching pair.  If we wanted to remove the effect of the projecting onto $ v $, then we need to subtract from the output some multiple of $ u $.
 
-Note that though Lemma \ref{tollbooth} doesn't make a claim about the value of $\lambda$, it's easy to see that $\lambda=\langle u |A| v\rangle$, because $\langle u|A|v\rangle = \lambda\langle u|u\rangle = \lambda$.
+Note that though Lemma \ref{MaximalVectorMap} doesn't make a claim about the value of $\lambda$, it's easy to see that $\lambda=\langle u |A| v\rangle$, because $\langle u|A|v\rangle = \lambda\langle u|u\rangle = \lambda$.
 
 Next we use this fact to see:
 
 \begin{lemma}
-\label{a1lemma}
-Given $A_1=A-\lambda_1| u _1\rangle\langle v _1|$, with $\lambda_1=\langle u_1|A|v_1\rangle$, then $A_1| v _1\rangle\langle v _1|=0$.
+\label{A1ProjectionZero}
+Given that $\langle u_1|$ and $|v_1\rangle$ maximize $\langle u|A|v\rangle$.  Define $A_1=A-\lambda_1| u _1\rangle\langle v _1|$, with $\lambda_1=\langle u_1|A|v_1\rangle$.  Then $A_1| v _1\rangle\langle v _1|=0$.
 \end{lemma}
 
 \begin{proof}
@@ -556,19 +554,19 @@ A_1| v _1\rangle\langle v _1| &=& \left(A-\lambda_1| u _1\rangle\langle v _1|\ri
 $$
 \end{proof}
 
-We can immediately conclude from Lemma \ref{a1lemma} that $A_1=A_1\left(I-| v _1\rangle\langle v _1|\right)$.  This says that applying $A_1$ to a vector $| v \rangle$ is the same as first applying $\left(I-| v _1\rangle\langle v _1|\right)$ to $| v \rangle$, then applying $A_1$ to the resulting vector.  $\left(I-| v _1\rangle\langle v _1|\right)$ is a special matrix that acts on any vector by projecting onto the subspace of all vectors perpendicular to $| v _1\rangle$.  This will be justified reach the section on projection matrices.  For now it's sufficient to understand:
+We can immediately conclude from Lemma \ref{A1ProjectionZero} that $A_1=A_1\left(I-| v _1\rangle\langle v _1|\right)$.  This says that applying $A_1$ to a vector $| v \rangle$ is the same as first applying $\left(I-| v _1\rangle\langle v _1|\right)$ to $| v \rangle$, then applying $A_1$ to the resulting vector.  $\left(I-| v _1\rangle\langle v _1|\right)$ is a special matrix that acts on any vector by projecting onto the subspace of all vectors perpendicular to $| v _1\rangle$.  This will be justified reach the section on projection matrices.  For now it's sufficient to understand:
 
 \begin{enumerate}
 \item  $\left(I-| v _1\rangle\langle v _1|\right)| v \rangle$ is exactly $| v \rangle$ when $\langle v _1| v \rangle=0$.  I.e. $ v $ is perpendicular to $ v _1$, and 
 \item  $\left\Vert\left(I-| v _1\rangle\langle v _1|\right)| v \rangle\right\Vert < 1$, otherwise.
 \end{enumerate}
 
-The first statement is obvious.  The second statement should be fairly intuitive because we're subtracting off a component of a vector.  This is analogous to zeroing out the first term of a unit vector, which will leave it smaller.  A more formal proof of this point is left as Exercise \ref{finish_projection}.
+The first statement is obvious.  The second statement should be fairly intuitive because we're subtracting off a component of a vector.  This is analogous to zeroing out the first term of a unit vector, which will leave it smaller.  A more formal proof of this point is left as Exercise \ref{Ex-Finish Projection}.
 
 We state without justification that this also holds for more dimensions.  This fact follows in much the same way as single case we've discussed, but the proof is tedious.
 
  \begin{theorem}
-\label{lil_projection_thm}
+\label{AiProjectionThm}
 For $A_i$ as defined above,
 \begin{enumerate}
 \item $A_i| v \rangle=A_i\left(I-\sum_{k=1}^{i-1}| v _k\rangle\langle v _k|\right)| v \rangle$
@@ -579,7 +577,7 @@ For $A_i$ as defined above,
 Finally because the same logic can be done on the other side of the matrix, we have $A_i=\left(I-\sum_{k=1}^i| u _k\rangle\langle u _k|\right)A_i$.  So we make a more general statement.
 
 \begin{corollary}
-\label{double_side_proj}
+\label{DoubleSidedProjectionThm}
 For $A_i$ as defined above,
 $$
 A_i=\left(I-\sum_{k=1}^i| u _k\rangle\langle u _k|\right)A_i\left(I-\sum_{k=1}^{i}| v _k\rangle\langle v _k|\right)
@@ -588,17 +586,17 @@ $$
 
 We're ready to prove the theorems mentioned at the opening of this chapter.  First we'll prove that the vectors $\left\{\langle u_i|\right\}$ are perpendicular, and that $\left\{|v_i\rangle\right\}$ are perpendicular.  Specifically we argue that each new vector generated by the algorithm is perpendicular to all previous ones.
 
- \begin{theorem}
-Let $A_i$ be as in Algorithm \ref{alg1} with $A_i\neq0$.  If $u_i$, $v_i$ maximize $\langle u |A_i| v \rangle$, then $u_i$ is perpendicular to $u_j$ and $v_i$ is perpendicular to $v_j$ for all $j\leq i$.
- \end{theorem}
+\begin{theorem}
+\label{SVDPerpendicular}
+Let $A_i$ be as in Algorithm \ref{Algorithm1} with $A_i\neq0$.  If $u_i$, $v_i$ maximize $\langle u |A_i| v \rangle$, then $u_i$ is perpendicular to $u_j$ and $v_i$ is perpendicular to $v_j$ for all $j\leq i$.
+\end{theorem}
 
 \begin{proof}
-\label{svd_perpendicular}
 Suppose to the contrary that one or both of the vectors is not perpendicular, and that the maximum is $M$.
 
 $M$ must be positive.  To see this:  $\langle u|A_i|v\rangle$ must be non-zero for at least one pair of vectors, for otherwise $A_i=0$.  Consider any non-zero value, $N=\langle u|A_i|v\rangle$.  If $N$ is positive, then the maximimum $M>N>0$.  Otherwise $-N=\langle -u|A|v\rangle$ must be positive, which also implies $M>-N>0$.
 
-Using Corollary \ref{double_side_proj}, we can write $M$ as:
+Using Corollary \ref{DoubleSidedProjectionThm}, we can write $M$ as:
 
 $$
 M=\langle u |A_i| v \rangle=\langle u |\left(I-\sum_{k=1}^i| u _k\rangle\langle u _k|\right)A_i\left(I-\sum_{k=1}^{i}| v _k\rangle\langle v _k|\right)| v \rangle=\langle u '|A_i| v '\rangle
@@ -606,7 +604,7 @@ $$
 
 where $\langle u'|=\langle u |\left(I-\sum_{k=1}^i| u _k\rangle\langle u _k|\right)$ and $|v'\rangle=\left(I-\sum_{k=1}^{i}| v _k\rangle\langle v _k|\right)| v \rangle$.
 
-Because we assumed that either $\vec u$ or $\vec v$ are not perpendicular to all previous vectors, one of vectors $ u '$ or $ v '$ have magnitude less than $1$, by Theorem \ref{lil_projection_thm}, point (b).
+Because we assumed that either $\vec u$ or $\vec v$ are not perpendicular to all previous vectors, one of vectors $ u '$ or $ v '$ have magnitude less than $1$, by Theorem \ref{AiProjectionThm}, point (b).
 
 We can now reach a contradiction, because the unit vectors $\frac{\langle u '|}{\left\Vert\langle u '|\right\Vert}$ and $\frac{| v '\rangle}{\left\Vert| v '\rangle\right\Vert}$ do a better job of maximizing $\langle u|A|v\rangle$ than $\langle u_i|$ and $|v_i\rangle$.  This is because:
 
@@ -616,10 +614,10 @@ $$
 
 \end{proof}
 
-Finally we prove that Algorithm \ref{alg1} terminates.
+Finally we prove that Algorithm \ref{Algorithm1} terminates.
 
  \begin{theorem}
-\label{svd_terminates}
+\label{SVDTerminates}
 If $A$ is dimension $m\times n$, call $r:=\min(m,n)$, then $A_r=0$.
  \end{theorem}
 
@@ -636,16 +634,16 @@ A_r&=&A_r\left(I-\sum_{i=1}^{r'}| v _i\rangle\langle v _i|\right)\\
 $$
 \end{proof}
 
-The first equality follows from Theorem \ref{lil_projection_thm} and the second from Exercise \ref{outer_product_identity}.
+The first equality follows from Theorem \ref{AiProjectionThm} and the second from Exercise \ref{Ex-Outer Product Identity}.
 
 \subsection{Change of bases for outer product sums}
 
 Before moving on, we'll state a fact that we'll need later.  This is a little out of place here, except that it shows a nice application of the concepts cover in this section.
 
-We will see in Exercise \ref{outer_product_identity} that for any basis $\left\{|v_i\rangle\right\}$, we have $I=\sum_i|v_i\rangle\langle v_i|$.  And a natural extension of this is that if you had two sets of orthonormal vectors, $\left\{|v_i\rangle\right\}$ and $\left\{|v_i'\rangle\right\}$, spanning the same space, then $\sum_i|v_i\rangle\langle v_i|=\sum_i|v_i'\rangle\langle v_i'|$.  This is true, but we'll an even more general statement.  We will encounter in the next section sums of outer products, but they won't be necessarily symmetric.  So we need that $\sum_i|u_i\rangle\langle v_i|=\sum_i|u_i'\rangle\langle v_i'|$.  This only happens under special circumstances, but these happen to be the circumstances that arise when picking apart the SVD.
+We will see in Exercise \ref{Ex-Outer Product Identity} that for any basis $\left\{|v_i\rangle\right\}$, we have $I=\sum_i|v_i\rangle\langle v_i|$.  And a natural extension of this is that if you had two sets of orthonormal vectors, $\left\{|v_i\rangle\right\}$ and $\left\{|v_i'\rangle\right\}$, spanning the same space, then $\sum_i|v_i\rangle\langle v_i|=\sum_i|v_i'\rangle\langle v_i'|$.  This is true, but we'll an even more general statement.  We will encounter in the next section sums of outer products, but they won't be necessarily symmetric.  So we need that $\sum_i|u_i\rangle\langle v_i|=\sum_i|u_i'\rangle\langle v_i'|$.  This only happens under special circumstances, but these happen to be the circumstances that arise when picking apart the SVD.
 
 \begin{lemma}
-\label{rebase_projections}
+\label{RebaseProjections}
 For orthonomal sets of vectors $\left\{\langle u_i|\right\}_{i=1}^n$, $\left\{|v_i\rangle\right\}_{i=1}^n$, $\left\{\langle u_i'|\right\}_{i=1}^n$, and $\{|v_i'\rangle\}_{i=1}^n$, we have
 $$
 \sum_i|u_i\rangle\langle v_i|=\sum_i|u_i'\rangle\langle v_i'|
@@ -662,7 +660,7 @@ For the second point, there will always exist some mapping from one orthonormal 
 \begin{proof}
 Call $M=\sum_i|u_i\rangle\langle v_i|$ and $M'=\sum_i|u_i'\rangle\langle v'|$.  To prove these matrices are equal, we show that they act the same on every vector.  We chose some arbitrary vector $|v\rangle$, and show that $M|v\rangle=M'|v\rangle$.
 
-By Theorem \ref{vector_decomp}, we can write $|v\rangle=|v_\parallel\rangle+|v_\bot\rangle$ with $W$ in the Theorem set as $\operatorname{span}\left\{|v_i\rangle\right\}=\operatorname{span}\left\{|v_i'\rangle\right\}$.  With this construction $\langle v_i|v_\bot\rangle=0$ for each $\langle v_i|$, so $M|v_\bot\rangle=M'|v_\bot\rangle=0$.
+By Theorem \ref{VectorDecomposition}, we can write $|v\rangle=|v_\parallel\rangle+|v_\bot\rangle$ with $W$ in the Theorem set as $\operatorname{span}\left\{|v_i\rangle\right\}=\operatorname{span}\left\{|v_i'\rangle\right\}$.  With this construction $\langle v_i|v_\bot\rangle=0$ for each $\langle v_i|$, so $M|v_\bot\rangle=M'|v_\bot\rangle=0$.
 
 Because $|v_\parallel\rangle\in\operatorname{span}\{|v_i\rangle\}$, $|v_\parallel\rangle=\sum_ia_i|v_i\rangle$.
 
@@ -684,20 +682,20 @@ The same calculation with primes on all the $M$, $u$, and $v$ variables gives th
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
-\item \label{finish_projection} Given unit vectors $\vec u$ and $\vec v$.  Prove that if $\langle u|v\rangle\neq0$, then $\left\Vert\left(I-|u\rangle\langle u|\right)|v\rangle\right\Vert < 1$.  (Hint:  For any vector $\vec v $, $\Vert \vec v \Vert<1$ if and only $\langle  v | v \rangle<1$.)
-\item \label{outer_product_identity} Given a basis $\left\{\vec v_i\right\}_{i=1}^n$ of $\mathbb R^n$, prove that $I=\sum_{i=1}^n|v_i\rangle\langle v_i|$.  That is, show for any $\vec v$, $\left(\sum_i|v_i\rangle\langle v_i|\right)|v\rangle=|v\rangle$.
-\item Given a matrix with a SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, let $\left\{A_i\right\}$ be the matrices given by Algorithm \ref{alg1}.  Lemma \ref{tollbooth} implies that $A_{i-1}|v_i\rangle=\lambda_i|u_i\rangle$.  Show that $A|v_i\rangle=\lambda_i|u_i\rangle$.
+\item \label{Ex-Finish Projection} Given unit vectors $\vec u$ and $\vec v$.  Prove that if $\langle u|v\rangle\neq0$, then $\left\Vert\left(I-|u\rangle\langle u|\right)|v\rangle\right\Vert < 1$.  (Hint:  For any vector $\vec v $, $\Vert \vec v \Vert<1$ if and only $\langle  v | v \rangle<1$.)
+\item \label{Ex-Outer Product Identity} Given a basis $\left\{\vec v_i\right\}_{i=1}^n$ of $\mathbb R^n$, prove that $I=\sum_{i=1}^n|v_i\rangle\langle v_i|$.  That is, show for any $\vec v$, $\left(\sum_i|v_i\rangle\langle v_i|\right)|v\rangle=|v\rangle$.
+\item Given a matrix with a SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, let $\left\{A_i\right\}$ be the matrices given by Algorithm \ref{Algorithm1}.  Lemma \ref{MaximalVectorMap} implies that $A_{i-1}|v_i\rangle=\lambda_i|u_i\rangle$.  Show that $A|v_i\rangle=\lambda_i|u_i\rangle$.
 \item Given a matrix with a SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, show that $A=\sum_iA|v_i\rangle\langle v_i|$.  (For fun, prove this two different ways.)
 \end{enumerate}
 
-\section{Almost Uniqueness}\label{almost_uniqueness}
+\section{Almost Uniqueness}\label{Section-Almost Uniqueness}
 
 An annoying fact about the SVD is that it's not unique.  But it is {\em almost} unique.  In this section, we see that there are limitations.
 
 Let's review briefly.  Given a matrix $A$, we can find a SVD, $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$.  The $\lambda_i$ do not need to be distinct.  For the sake of this section, we write this as 
 
 \begin{equation}
-\label{multilambda}
+\label{MultiLambdaNotation}
 A=\sum_i\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|,
 \end{equation}
 
@@ -711,7 +709,7 @@ $$
 A=2|u_1\rangle\langle v_1|+2|u_2\rangle\langle v_2|+2|u_3\rangle\langle v_3|+|u_4\rangle\langle v_4|+|u_5\rangle\langle v_5|
 $$
 
-To rewrite this in the language of Equation (\ref{multilambda}), we would write:
+To rewrite this in the language of Equation (\ref{MultiLambdaNotation}), we would write:
 $$
 A=2\cdot\left(|u_{11}\rangle\langle v_{11}|+|u_{12}\rangle\langle v_{12}|+|u_{13}\rangle\langle v_{13}|\right)+1\cdot\left(|u_{21}\rangle\langle v_{21}|+|u_{22}\rangle\langle v_{22}|\right)
 $$
@@ -720,7 +718,7 @@ So that $\lambda_1=2$ and $\lambda_2=1$.  $|u_1\rangle$ gets renamed to $|u_{11}
 
 \end{tcolorbox}
 
-If the SVD was built with our algorithm from the previous section, then $\langle u_{11}|A|v_{11}\rangle=\lambda_1$ maximizes $\langle u|A|v\rangle$.  Of course because $\langle u_{1j}|A|v_{1j}\rangle=\lambda_1$ for any $1\leq j\leq n_i$, the algorithm may just have chosen $v_{1,2}$ or $v_{1,3}$ first, so any reordering of these could have been produced.  In fact we don't need to be restricted to these exact vectors; for {\em any} unit vector $|v\rangle\in\operatorname{span}\left\{|v_{i*}\rangle\right\}$, we can find a $\langle u|$ (given by Lemma \ref{tollbooth}) for which $\langle u|A|v\rangle=\lambda_1$.  It also turns out that any $|v\rangle\not\in\operatorname{span}\left\{|v_{i*}\rangle\right\}$, there is {\em not} a $\langle u|$ for which $\langle u|A|v\rangle=\lambda_1$.  These two statements are proven in Corollary \ref{corollary1}.
+If the SVD was built with our algorithm from the previous section, then $\langle u_{11}|A|v_{11}\rangle=\lambda_1$ maximizes $\langle u|A|v\rangle$.  Of course because $\langle u_{1j}|A|v_{1j}\rangle=\lambda_1$ for any $1\leq j\leq n_i$, the algorithm may just have chosen $v_{1,2}$ or $v_{1,3}$ first, so any reordering of these could have been produced.  In fact we don't need to be restricted to these exact vectors; for {\em any} unit vector $|v\rangle\in\operatorname{span}\left\{|v_{i*}\rangle\right\}$, we can find a $\langle u|$ (given by Lemma \ref{MaximalVectorMap}) for which $\langle u|A|v\rangle=\lambda_1$.  It also turns out that any $|v\rangle\not\in\operatorname{span}\left\{|v_{i*}\rangle\right\}$, there is {\em not} a $\langle u|$ for which $\langle u|A|v\rangle=\lambda_1$.  These two statements are proven in Corollary \ref{MaximalSpan}.
 
 Together these show that if you follow the algorithm from the previous section of repeatedly finding the maximizing vectors, the only variation you can get is a change of basis in $|v_{i*}\rangle$.  (If $n_i=1$, then this means that we can only vary $\lambda_1|u\rangle\langle v|=\lambda_1|-u\rangle\langle -v|$.)  Actually we've only shown this for for the largest $\lambda=\lambda_1$, but by subtracting off these components and applying the same argument to the resulting difference with a new largest $\lambda=\lambda_2$, we can apply the same argument; this is a trick we'll use repeatedly.
 
@@ -732,7 +730,7 @@ Given an SVD of a matrix, $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, then for a
  \end{theorem}
 
 \begin{proof}
-Using Lemma \ref{tollbooth}, we get that
+Using Lemma \ref{MaximalVectorMap}, we get that
 
 $$
 \max_{\|u\|=\|v\|=1}\langle u|A|v\rangle = \max_{\|v\|=1}\frac{\langle v|A^T}{\lambda}A|v\rangle = \max_{\|v\|=1} \frac{\langle v|A^TA|v\rangle}{\left\|A|v\rangle\right\|}
@@ -748,10 +746,10 @@ $$
 
 A common trick is to notice that the square root of a value is maximal exactly when the value itself is maximal.  So that the same $|v\rangle$ that maximizes $\langle u|A|v\rangle$ also maximizes $\langle v|A^TA|v\rangle$.
 
-So to maximize $\langle v|A^TA|v\rangle$, we use the fact that $A^TA=\sum_i\lambda_i^2|v_i\rangle\langle v_i|$ (Lemma \ref{ata_eq}).  If $\left\{\vec v_i\right\}$ do not span the domain (with dimension $=n$), then we pad it with additional basis vectors, and $\lambda_i=0$.  $A^TA=\sum_{i=1}^n\lambda_i^2|v_i\rangle\langle v_i|$.  Now $\left\{\vec v_i\right\}_{i=1}^n$ is a basis so that any unit vector $|v\rangle = \sum_{i=1}^na_i|v_i\rangle$, with $\sum_{i=1}^na_i^2 =1$.
+So to maximize $\langle v|A^TA|v\rangle$, we use the fact that $A^TA=\sum_i\lambda_i^2|v_i\rangle\langle v_i|$ (Lemma \ref{ATASimplification}).  If $\left\{\vec v_i\right\}$ do not span the domain (with dimension $=n$), then we pad it with additional basis vectors, and $\lambda_i=0$.  $A^TA=\sum_{i=1}^n\lambda_i^2|v_i\rangle\langle v_i|$.  Now $\left\{\vec v_i\right\}_{i=1}^n$ is a basis so that any unit vector $|v\rangle = \sum_{i=1}^na_i|v_i\rangle$, with $\sum_{i=1}^na_i^2 =1$.
 
 \begin{equation}
-\label{upperbound_eqn}
+\label{UpperboundEquation}
 \begin{array}{rcl}
 \langle v|A^TA|v\rangle &=& \langle v|\left(\sum_i\lambda_i^2|v_i\rangle\langle v_i|\right)|v\rangle \\
  &=& \left(\sum_i a_i\langle v_i|\right)\left(\sum_i\lambda_i^2|v_i\rangle\langle v_i|\right)\left(\sum_i a_i|v_i\rangle\right) \\
@@ -770,25 +768,25 @@ $$
 $$
 \end{proof}
 
-Notice, that by eliminating the $\langle u|$, the problem of maximizing became easier.  After finding $|v\rangle$, we could use Lemma \ref{tollbooth} to find $\langle u|$.  But by symmetry, we could have instead found the $\langle u|$ that maximizes $\langle u|AA^T|u\rangle$.
+Notice, that by eliminating the $\langle u|$, the problem of maximizing became easier.  After finding $|v\rangle$, we could use Lemma \ref{MaximalVectorMap} to find $\langle u|$.  But by symmetry, we could have instead found the $\langle u|$ that maximizes $\langle u|AA^T|u\rangle$.
 
 While the theorem gives an upper bound of $\lambda_1$, note that this bound is achievable, namely with $\vec u_1$ and $\vec v_1$.  But we can be a little more specific:
 
 \begin{corollary}
-\label{corollary1}
+\label{MaximalSpan}
 Given a matrix with SVD, $A=\sum_i\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|$ (with $\lambda_1>\lambda_2>\cdots$) and a unit vector $|v\rangle$, $\max_{\|u\|=1}\langle u|A|v\rangle=\lambda_1$ if and only if $|v\rangle\in\operatorname{span}\left\{|v_{i*}\rangle\right\}$.
 \end{corollary}
 
-We skip some of the details to this proof.  It amounts to observing that the equality at the end of Eq. (\ref{upperbound_eqn}) is strict unless all the non-zero terms have $\lambda_i$ coefficients equal to $\lambda_1$.
+We skip some of the details to this proof.  It amounts to observing that the equality at the end of Eq. (\ref{UpperboundEquation}) is strict unless all the non-zero terms have $\lambda_i$ coefficients equal to $\lambda_1$.
 
 \begin{proof}
-Redo the work of Lemma \ref{ata_eq}, but this time with the SVD written as $A=\sum_i\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|$ to get
+Redo the work of Lemma \ref{ATASimplification}, but this time with the SVD written as $A=\sum_i\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|$ to get
 
 $$
 A^TA=\sum_i\lambda_i^2\sum_{j=1}^{n_i}|v_{ij}\rangle\langle v_{ij}|
 $$
 
-Write $|v\rangle=\sum a_{ij}|v_{ij}\rangle$.  Because $|v\rangle$ is a unit vector, $\sum a_{ij}^2=1$.  By the same steps logic as Eq. (\ref{upperbound_eqn}), we get that
+Write $|v\rangle=\sum a_{ij}|v_{ij}\rangle$.  Because $|v\rangle$ is a unit vector, $\sum a_{ij}^2=1$.  By the same steps logic as Eq. (\ref{UpperboundEquation}), we get that
 
 $$
 \langle v|A^TA|v\rangle = \sum_ia_i^2\lambda_i^2
@@ -798,7 +796,7 @@ where $a_i^2=\sum_ja_{ij}^2$.  Again we have that the coefficients must satisfy 
 
 \end{proof}
 
-Some words should be said about Theorem \ref{upperbound} and Corollary \ref{corollary1}.  We'll see in a bit that this is used to prove the almost-uniqueness of the SVD.  In many ways, this theorem is the keystone of the entire chapter; it connects all the concepts.  We needed to first prove the existence of an SVD to prove it.  But we now see a motivation for Algorithm \ref{alg1}.  Until now, the singular values seemed like an artifact of the specific SVD representation.  But now we see that the first singular value $\lambda_1$ is something fundamental about the matrix - it's an upper bound that doesn't depend on the SVD representation.  (By repeated subtraction, all singular values are representation-independent.)  So it make sense that we should try to find and use these singular values.  Looking ahead, the next chapter shows how to calculate the vectors $|v_i\rangle$.  That calculation relies entirely on the trick (first encountered in Theorem \ref{upperbound}) of canceling the $\langle u_i|$ by taking $A^TA$.
+Some words should be said about Theorem \ref{upperbound} and Corollary \ref{MaximalSpan}.  We'll see in a bit that this is used to prove the almost-uniqueness of the SVD.  In many ways, this theorem is the keystone of the entire chapter; it connects all the concepts.  We needed to first prove the existence of an SVD to prove it.  But we now see a motivation for Algorithm \ref{Algorithm1}.  Until now, the singular values seemed like an artifact of the specific SVD representation.  But now we see that the first singular value $\lambda_1$ is something fundamental about the matrix - it's an upper bound that doesn't depend on the SVD representation.  (By repeated subtraction, all singular values are representation-independent.)  So it make sense that we should try to find and use these singular values.  Looking ahead, the next chapter shows how to calculate the vectors $|v_i\rangle$.  That calculation relies entirely on the trick (first encountered in Theorem \ref{upperbound}) of canceling the $\langle u_i|$ by taking $A^TA$.
 
 Theorem \ref{upperbound} and its corollary are also perhaps the most surprising.  It seems sort of like magic.  Maybe you're along for the ride when I said that we'll take $A^TA$ to cancel out the $|u_i\rangle$, but it seems like luck when the you end up with $\sum_ia_i^2$, which just happened to be $1$, by nature of looking at unit vectors.  Maybe there's some magic here.  But at the same time, matrices are sometimes thought of as quadratic operators.  For a vector $\vec x=\left(\begin{array}{c}x_1\\x_2\\\vdots\\x_n\end{array}\right)$ and an $n\times n$ matrix $M$, $\vec x^TM\vec x$ has every power-$2$ term of $x$ with coefficients derived from $M$.  (Check this.)  Given this quadratic nature, maybe it's less surprising that it'd take vector components to their magnitude.
 
@@ -823,11 +821,11 @@ We first prove the four statements for $i=1$.
 
 Theorem \ref{upperbound} tells us that the largest value of $\langle u|A|v\rangle$ is the largest singular value for any SVD.  Because these SVDs represent the same matrix, $A$, it follows that these two singular values are equal, $\lambda_1=\lambda_1'$.  So (1) is true.
 
-Because $\langle u_{1j}|A|v_{1j}\rangle=\lambda_1=\lambda_1'$ for each $j$, Corollary \ref{corollary1} tells us that $\langle u_{1j}|\in\operatorname{span}\left\{\langle u_{1*}'|\right\}$ and $|v_{1j}\rangle\in\operatorname{span}\left\{|v_{1*}'\rangle\right\}$.  Since spans are closed under linear combinations, it follows also that $\operatorname{span}\left\{\langle u_{1*}|\right\}\subset\operatorname{span}\left\{\langle u_{1*}'|\right\}$ and $\operatorname{span}\left\{|v_{1*}\rangle\right\}\subset\operatorname{span}\left\{|v_{1*}'\rangle\right\}$.  Applying the same argument in the other direction, we get the subset going the other direction, so that by double inclusion, we can conclude that $\operatorname{span}\left\{\langle u_{1*}|\right\}=\operatorname{span}\left\{\langle u_{1*}'|\right\}$ and $\operatorname{span}\left\{|v_{1*}\rangle\right\}=\operatorname{span}\left\{|v_{1i*}'\rangle\right\}$.  This proves (3) and (4).
+Because $\langle u_{1j}|A|v_{1j}\rangle=\lambda_1=\lambda_1'$ for each $j$, Corollary \ref{MaximalSpan} tells us that $\langle u_{1j}|\in\operatorname{span}\left\{\langle u_{1*}'|\right\}$ and $|v_{1j}\rangle\in\operatorname{span}\left\{|v_{1*}'\rangle\right\}$.  Since spans are closed under linear combinations, it follows also that $\operatorname{span}\left\{\langle u_{1*}|\right\}\subset\operatorname{span}\left\{\langle u_{1*}'|\right\}$ and $\operatorname{span}\left\{|v_{1*}\rangle\right\}\subset\operatorname{span}\left\{|v_{1*}'\rangle\right\}$.  Applying the same argument in the other direction, we get the subset going the other direction, so that by double inclusion, we can conclude that $\operatorname{span}\left\{\langle u_{1*}|\right\}=\operatorname{span}\left\{\langle u_{1*}'|\right\}$ and $\operatorname{span}\left\{|v_{1*}\rangle\right\}=\operatorname{span}\left\{|v_{1i*}'\rangle\right\}$.  This proves (3) and (4).
 
 Because $\left\{|v_{1*}\rangle\right\}$ are orthonormal, the dimension of their span is the number of elements in the set, $n_1$.  The span of $\left\{|v_{1*}'\rangle\right\}$ is the same space, so the same dimension.  But this time the dimension is the number of elements in this orthonormal set, $n_1'$.  It follows that $n_1=n_1'$, which proves (2).
 
-We've only proven this for the first singular value.  This is because Theorem \ref{upperbound} and Corollary \ref{corollary1} are only proven for the maximum singular value.  We want to use the usual trick of subtracting that signal out and repeating the argument on the resulting matrix, repeatedly.  Usually we gloss over this detail, but here requires a little more care.  We subtract $A-\lambda_1\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|$.  On the representation $\sum_{i=1}^n\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|$, this just removes the first summand.
+We've only proven this for the first singular value.  This is because Theorem \ref{upperbound} and Corollary \ref{MaximalSpan} are only proven for the maximum singular value.  We want to use the usual trick of subtracting that signal out and repeating the argument on the resulting matrix, repeatedly.  Usually we gloss over this detail, but here requires a little more care.  We subtract $A-\lambda_1\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|$.  On the representation $\sum_{i=1}^n\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|$, this just removes the first summand.
 
 $$
 A-\lambda_1\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|=\sum_{i=2}^n\lambda_i\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|
@@ -839,7 +837,7 @@ $$
 A-\lambda_1\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|=\lambda_1\left(\sum_{j=1}^{n_j}|u_{ij}'\rangle\langle v_{ij}'|-\sum_{j=1}^{n_j}|u_{ij}\rangle\langle v_{ij}|\right)+\sum_{i=2}^n\lambda_i'\sum_{j=1}^{n_i'}|u_{ij}'\rangle\langle v_{ij}'|
 $$
 
-In order to repeat the above argument, we need to reduce this to an SVD again.  We use Lemma \ref{rebase_projections} with $B=\frac{1}{\lambda_1}A$ to conclude that $\sum_{j=1}^{n_j}|u_{ij}'\rangle\langle v_{ij}'|=\sum_{j=1}^{n_j}|u_{ij}\rangle\langle v_{ij}|$, which cancels out the $\lambda_1$ terms from the above, resulting in:
+In order to repeat the above argument, we need to reduce this to an SVD again.  We use Lemma \ref{RebaseProjections} with $B=\frac{1}{\lambda_1}A$ to conclude that $\sum_{j=1}^{n_j}|u_{ij}'\rangle\langle v_{ij}'|=\sum_{j=1}^{n_j}|u_{ij}\rangle\langle v_{ij}|$, which cancels out the $\lambda_1$ terms from the above, resulting in:
 
 $$
 A-\lambda_1\sum_{j=1}^{n_i}|u_{ij}\rangle\langle v_{ij}|=\sum_{i=2}^n\lambda_i'\sum_{j=1}^{n_i'}|u_{ij}'\rangle\langle v_{ij}'|
@@ -856,21 +854,21 @@ This is a lot of work to show almost-uniqueness, but by now we should start to h
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
-\item With an SVD given by Eq. (\ref{multilambda}), show that if $|v\rangle\in\operatorname{span}\{|v_{i*}\rangle\}$, then $A|v\rangle\in\operatorname{span}\{|u_{i*}\rangle\}$.
+\item With an SVD given by Eq. (\ref{MultiLambdaNotation}), show that if $|v\rangle\in\operatorname{span}\{|v_{i*}\rangle\}$, then $A|v\rangle\in\operatorname{span}\{|u_{i*}\rangle\}$.
 \item Given a matrix with SVD $A=\sum_i\lambda_i|v_i\rangle\langle v_i|$, show that for any $n\in\mathbb N$, $A^n=\sum_i\lambda_i^n|v_i\rangle\langle v_i|$.
 \item Given a matrix with a SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, show that $A=\left(\sum_i|u_i\rangle\langle u_i|\right)A\left(\sum_j|v_j\rangle\langle v_j|\right)$ by distributing the sums and arguing that $\langle u_i|A|v_j\rangle$ equals $\lambda_i$ if $i=j$ and $0$ otherwise.  How could you show this equality without distributing?
 \item Given an invertible square matrix $A$ with minimum singular $\lambda_n$, prove that for any unit vectors $\vec u$ and $\vec v$, $\langle u|A|v\rangle\geq\lambda_n$.
 \item Given a matrix $A$, prove that for any value $t$ between the smallest and largest singular value $\lambda_n\leq t\leq\lambda_1$, there are some unit vectors $\langle u|$ and $|v\rangle$ for which $\langle u|A|v\rangle=t$.
 \end{enumerate}
 
-\section{How to Calculate}\label{How to Calculate}
+\section{How to Calculate}\label{Section-How to Calculate}
 
-So far we haven't said how to actually calculate an SVD.  Algorithm \ref{alg1} says to repeatedly find maximal vectors, but we haven't said how to do this.  In this section we show that this calculation amounts to calculating certain eigenvalues and eigenvectors.  In practice, you could calculate the SVD using a computer program.  (See Section \ref{computer_section}.)  Yet knowing how to calculate manually will advance our understanding of the SVD.
+So far we haven't said how to actually calculate an SVD.  Algorithm \ref{Algorithm1} says to repeatedly find maximal vectors, but we haven't said how to do this.  In this section we show that this calculation amounts to calculating certain eigenvalues and eigenvectors.  In practice, you could calculate the SVD using a computer program.  (See Section \ref{Section-Computer Science}.)  Yet knowing how to calculate manually will advance our understanding of the SVD.
 
 Before going on, we need a small fact about calculus.  I'll state a lemma here without proof.  Calculus is outside the scope of this book, but I provide some discussion in Appendix X.
 
 \begin{lemma}
-\label{calc}
+\label{CalculusLemma}
 For any square matrix $B$,
 
 $$
@@ -886,7 +884,7 @@ $$
 \langle v|A^TA|v\rangle-\lambda\langle v|v\rangle=\langle v|\left(A^TA-\varepsilon I\right)|v\rangle
 $$
 
-By taking the derivative using Lemma \ref{calc} and setting to zero, we get
+By taking the derivative using Lemma \ref{CalculusLemma} and setting to zero, we get
 
 $$
 \left(A^TA-\varepsilon I\right)|v_1\rangle=0
@@ -915,7 +913,7 @@ Yet another way to see this to write $A=UDV^T$, so that $A^TA=VD^2V^T$.  Because
 \begin{enumerate}[\thechapter.\thesection .1]
 \item Using the eigenvector technique presented in this section, calculate the SVD of $\left(\begin{array}{cc}2&6\\1&1\end{array}\right)$.
 \item Prove that the eigenvalues of $A^TA$ form the same multiset as the eigenvalues of $AA^T$.
-\item Given a matrix $A$, let $\left\{A_i\right\}$ be the matrices found in Algorithm \ref{alg1}.  Show that for any $j>i$ an eigenvector corresponding to a non-zero eigenvalue of $A_j$ is also an eigenvector of $A_i$.
+\item Given a matrix $A$, let $\left\{A_i\right\}$ be the matrices found in Algorithm \ref{Algorithm1}.  Show that for any $j>i$ an eigenvector corresponding to a non-zero eigenvalue of $A_j$ is also an eigenvector of $A_i$.
 \item Given a symmetric matrix $A$ with distinct singular values, prove that every SVD has the form $\sum_i\lambda_i|v_i\rangle\langle v_i|$.
 \end{enumerate}
 
@@ -963,8 +961,7 @@ Show that the determinant $D$ is linear on this space.  Define the inner product
 
 \chapter{Direct Applications of SVD}
 
-\section{Computer Programming}
-\label{computer_section}
+\section{Computer Programming}\label{Section-Computer Science}
 
 For the applications we discuss, the work will be done with computers.  Though we won't focus on programming in this book, there will be exercises with computer work.
 
@@ -995,7 +992,7 @@ $$
 \item Use the computer to multiply $U$, $D$, and $V^T$.  Verify that it's the same as $A$.
 \item Verify that $U$ and $V^T$ are orthogonal.
 \item Write this in bra-ket notation.
-\item \label{irrational_summands} Use the computer to multiply out the summands in the bra-ket notation.  Notice that these are not rational number despite the sum being whole.
+\item \label{Ex-Irrational Summands} Use the computer to multiply out the summands in the bra-ket notation.  Notice that these are not rational number despite the sum being whole.
 \item Use the bra-ket notation to find the null space.
 \end{enumerate}
 
@@ -1020,7 +1017,7 @@ But who cares?  Well, this gives a good way to smooth out a linear map.  This is
 But why choose this particular low-rank matrix?  Well we'd want $\left\|A|v\rangle-A'|v\rangle\right\|$ to be small as often as possible.  Let's again use the SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, and for the sake of this example.  What's the best rank-$1$ matrix $A'$ to approximate this?  It turns out that $\left\|A|v\rangle-A'|v\rangle\right\|$ is minimal for an "average" $|v\rangle$ precisely when $A'$ is the first summand of the SVD of $A$.
 
 \begin{theorem}
-\label{min_average}
+\label{CFMinimizes}
 Given a matrix with SVD, $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, then 
 $$
 \min_{A'\text{ rank-$1$}}E_{|v\rangle}\left(\left\|A|v\rangle-A'|v\rangle\right\|\right)
@@ -1028,7 +1025,7 @@ $$
 is achieved when $A'=\lambda_1|u_1\rangle\langle v_1|$.
 \end{theorem}
 
-Proving Theorem \ref{min_average} would need a better definition of "average" and would be too much of a diversion to prove here, but we do leave a simplified version as Exercise \ref{almost_min_average}.  Applying this theorem repeatedly we see that the best low-rank approximation we can get for a matrix is to just truncate the SVD after a number of the largest summands.  Very cool!
+Proving Theorem \ref{CFMinimizes} would need a better definition of "average" and would be too much of a diversion to prove here, but we do leave a simplified version as Exercise \ref{Ex-CFMinimizes Simplified}.  Applying this theorem repeatedly we see that the best low-rank approximation we can get for a matrix is to just truncate the SVD after a number of the largest summands.  Very cool!
 
 Let's talk about Netflix again.  $W$ is a large $m\times n$, where $m$ is the number of users and $n$ is the number of movies.  The rank is probably close to $n$, which is probably over ten thousand.  But what if we low-rank approximated $W$ with a $100$-dimensional:
 
@@ -1036,7 +1033,7 @@ $$
 W'=\sum_{i=1}^{100}\lambda_i|m_i\rangle\langle u_i|
 $$
 
-Maybe this captures signal through the noise, but what practically does it give us?  You'll remember from Exercise \ref{irrational_summands} that the summands of the SVD usually aren't rational, even if their sum is.  $W$ mapped users to movies, but it wasn't very useful, because it only told us what movies a user already watched.  $W'$ maps users to movies, but it gives an irrational value for every movie, which gives us a total ranking of movies.  Now we can tell you not just what a user watched, but what they're likely to have watched.  By recommending movies that the user hasn't watched, but score high for, they're likely to {\em want} to watch.
+Maybe this captures signal through the noise, but what practically does it give us?  You'll remember from Exercise \ref{Ex-Irrational Summands} that the summands of the SVD usually aren't rational, even if their sum is.  $W$ mapped users to movies, but it wasn't very useful, because it only told us what movies a user already watched.  $W'$ maps users to movies, but it gives an irrational value for every movie, which gives us a total ranking of movies.  Now we can tell you not just what a user watched, but what they're likely to have watched.  By recommending movies that the user hasn't watched, but score high for, they're likely to {\em want} to watch.
 
 This low-rank approximation is called {\bf collaborative filtering}.  The $j$-th row in the resulting matrix represents an interest profile for each user, with one entry for every movie.  This translates to recommendations by simply looking for those movies with the highest score.  There's a lot of conversation in this section, but the algorithm is really nothing more than a truncated SVD.
 
@@ -1132,7 +1129,7 @@ Quick note on notation here before we wrap:  Breaking $UDV^T$ into two bits $U\s
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
-\item \label{almost_min_average} In this exercise we're gonna be proving a simplified version of Theorem \ref{min_average}; instead of proving this for an average vector, we prove it for an average basis vector.  Given an SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with distinct singular values and the vectors $\left\{\langle v_i|\right\}$ spanning the domain, prove that $\frac{1}{n}\sum_j\left\|\left(A-\lambda|u\rangle\langle v|\right)|v_j\rangle\right\|$ ($\|\vec u\|=\|\vec v\|=1$) is minimal when $\lambda=\lambda_1$ and $|u\rangle=|u_1\rangle$ and $\langle v|=\langle v_1|$.  (Hint: Use $\|\vec x\|=\langle x|x\rangle$.  Then use $\sum_i\langle v_i|v\rangle^2 = 1$ along with some other identities to reduce.  Then use Corollary \ref{corollary1} along with some calculus to minimize.)
+\item \label{Ex-CFMinimizes Simplified} In this exercise we're gonna be proving a simplified version of Theorem \ref{CFMinimizes}; instead of proving this for an average vector, we prove it for an average basis vector.  Given an SVD $A=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with distinct singular values and the vectors $\left\{\langle v_i|\right\}$ spanning the domain, prove that $\frac{1}{n}\sum_j\left\|\left(A-\lambda|u\rangle\langle v|\right)|v_j\rangle\right\|$ ($\|\vec u\|=\|\vec v\|=1$) is minimal when $\lambda=\lambda_1$ and $|u\rangle=|u_1\rangle$ and $\langle v|=\langle v_1|$.  (Hint: Use $\|\vec x\|=\langle x|x\rangle$.  Then use $\sum_i\langle v_i|v\rangle^2 = 1$ along with some other identities to reduce.  Then use Corollary \ref{MaximalSpan} along with some calculus to minimize.)
 \item Suppose you are running a small movie-streaming service, and you have the following watch matrix:
 
 \begin{tabular}{ccccccccc}
@@ -1152,7 +1149,7 @@ Using a computer, perform Collaborative Filtering using $1$ latent dimension, $2
 \item Users sometimes provide star ratings ($1$-$5$ stars) for movies.  An alternative approach would be to use these ratings instead of a watch matrix.  What are some pros and cons of this alternative approach?
 \item A user not watching a movie doesn't mean that they don't like the movie.  How can you use user traffic to determine when a user isn't interested in a movie?  How could you use this information in a Collaborative Filtering approach?
 \item Suppose that a matrix $A$ has all values $0\leq A_{ij}\leq1$.  And let $A'$ be a low-dimensional approximation obtained by taking a partial sum of the SVD.  Prove that $A'$ also has all values $0\leq A'_{ij}\leq1$.
-\item \label{movie_lens_1} $\obot$ Download the MovieLens dataset from https://grouplens.org/datasets/movielens/.  (Choose which size dataset you want to work with.  For a greater challenge, do a larger set.)  Perform Collaborative Filtering on the data.  Test your model by filling in 5-stars for some of your favorite movies; what movies get recommended?  (If you don’t like movies, then try entering Escape from New York, Overboard, and Deathproof.)  Bonus:  Make software (or Jupyter notebook) that let’s the user enter movies, and updates the top-10 recommendation list.
+\item \label{Ex-MovieLens} $\obot$ Download the MovieLens dataset from https://grouplens.org/datasets/movielens/.  (Choose which size dataset you want to work with.  For a greater challenge, do a larger set.)  Perform Collaborative Filtering on the data.  Test your model by filling in 5-stars for some of your favorite movies; what movies get recommended?  (If you don’t like movies, then try entering Escape from New York, Overboard, and Deathproof.)  Bonus:  Make software (or Jupyter notebook) that let’s the user enter movies, and updates the top-10 recommendation list.
 \end{enumerate}
 
 \section{Principle Component Analysis}
@@ -1168,7 +1165,7 @@ An example of a bad variable to use is number of bankruptcies in the last three 
 Recall the defintion of variance:  It's a measure of the spread of data points, with more points further away from the center being better.  It can be calculated as:
 
 \begin{equation}
-\label{var}
+\label{VarianceEquation}
 \operatorname{Var}(X) = \operatorname{E}(X^2) - \operatorname{E}(X)^2
 \end{equation}
 
@@ -1202,7 +1199,7 @@ $$
 x_i':=\frac{x_i-\operatorname{E}(X)}{\sqrt{\operatorname{Var}(X)}}
 $$
 
-Say that the $x_i'$ are points of the new variable $X'$.  Well mention some nice effects of normalization.  Subtracting the $\operatorname{E}(X)$ guarantees that $\operatorname{E}(X')=0$.  This is what allows us to ignore the $\operatorname{E}(X)^2$ in Eq. (\ref{var}) above.  We put a square root in the denominator (vs. using variance) to ensure that the unit matches the numerator.  Also notice that $\langle x_i'|(A')^TA'|x_i'\rangle=\frac{\langle x_i|A^TA|x_i\rangle}{\lambda_i^2} = \frac{\lambda_i^2}{\lambda_i^2}=1$.  Because the $\left\{|x_i\rangle\right\}$ form a basis, every vector in the span can be written as $|x\rangle=\sum_ia_i|x_i\rangle$, where $\sum_ia_i^2=1$; it follows that $\langle x|(A')^TA'|x\rangle=1$ for all $|x\rangle$.
+Say that the $x_i'$ are points of the new variable $X'$.  Well mention some nice effects of normalization.  Subtracting the $\operatorname{E}(X)$ guarantees that $\operatorname{E}(X')=0$.  This is what allows us to ignore the $\operatorname{E}(X)^2$ in Eq. (\ref{VarianceEquation}) above.  We put a square root in the denominator (vs. using variance) to ensure that the unit matches the numerator.  Also notice that $\langle x_i'|(A')^TA'|x_i'\rangle=\frac{\langle x_i|A^TA|x_i\rangle}{\lambda_i^2} = \frac{\lambda_i^2}{\lambda_i^2}=1$.  Because the $\left\{|x_i\rangle\right\}$ form a basis, every vector in the span can be written as $|x\rangle=\sum_ia_i|x_i\rangle$, where $\sum_ia_i^2=1$; it follows that $\langle x|(A')^TA'|x\rangle=1$ for all $|x\rangle$.
 
 \subsection{User embeddings}
 
@@ -1217,7 +1214,7 @@ Compare to the user embeddings from the last section, we get that the embedding 
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
-\item \label{iris_pca} Load the Iris dataset.  In Python this can be done with:
+\item \label{Ex-Iris PCA} Load the Iris dataset.  In Python this can be done with:
 
 \begin{lstlisting}
 import sklearn.datasets
@@ -1230,7 +1227,7 @@ This is available in other languages too.  The dataset has $150$ datapoints with
 features, target = iris["data"], iris["target"]
 \end{lstlisting}
 
-Use PCA to reduce the feature space to a $3$-dimensional space.  Report the principle components.  These should be three vectors, each $4$-dimensions.  You can either manually compute this using the SVD functionality introduced in Section \ref{computer_section}, or you can look up a PCA function (like in sklearn).
+Use PCA to reduce the feature space to a $3$-dimensional space.  Report the principle components.  These should be three vectors, each $4$-dimensions.  You can either manually compute this using the SVD functionality introduced in Section \ref{Section-Computer Science}, or you can look up a PCA function (like in sklearn).
 \item Given a matrix $A$, and an SVD $AA^T=UDV^T$, consider the embedding of the $i$-th row of $A$ given by $\sqrt DV^TA|e_i\rangle$.  Show that the dot product of the $i$-th embedding and the $j$-th embedding equals $\langle e_i|A^TDA|e_j\rangle$.
 \item One might argue that the rows of the watch matrix from the previous section should be normalized.  What are some pros and cons of this?
 \item $C=A^TA$ is sometimes called the covariance matrix, because every term, $C_{ij}$ is the covariance between the $i$-th and $j$-th variable.  Suppose $A'$ normalizes the rows of $A$.  Prove that $C'=(A')^TA'$ is a correlation matrix, in the sense that $C'_{ij}$ is the Pearson's correlation coefficient between the $i$-th and $j$-th variable of $A$.
@@ -1253,26 +1250,26 @@ In the previous section, we may have rejected number of bankruptcies too quickly
 
 Continuing the example, say that the target is loan default ($1$ for default and $0$ for no default).  We have historical data which says whether users with a given profile defaulted.  With $n$ historical data points, we put these targets in a $n\times 1$ matrix $X$.  We also have features for these data points, an $n\times m$ matrix $Y$.  $X^TY$ is a $1\times m$ matrix, where each entry $(X^TY)_{1j}$ is correlation coefficient of the $j$-th dimension of $Y$ with the target variable, provide that $X$ and $Y$ are normalized.  $\langle u|X^TY|v\rangle$ is the correlation between the axes $X|u\rangle$ and $Y|v\rangle$.  To maximize correlation, we find the maximizing $\vec u$ and $\vec v$, which we can again do with the SVD.  $\vec u$ is a $1$-dimensional unit vector, so it must be $\pm (1)$.  The maximizing vector $|v\rangle$ is more interesting; it represents the axis in the feature space that most correlates with the target.  Because $X^TV$ will have rank $1$, we can only get a single PLS dimension out.  However, this dimension is likely to be a good dimension for predicting a default.
 
-If there are multiple target dimensions, you could still perform an SVD on $X^TY$, and get as many PLS axes as there are target dimensions.  (See Exercise \ref{iris_pls} for an example of this.)  In that case, the vectors $\left\{\vec u_i\right\}$ will be non-trivial.  However, even in that case, only the dimensions in the feature space, $\left\{\vec v_i\right\}$ will be of interest.
+If there are multiple target dimensions, you could still perform an SVD on $X^TY$, and get as many PLS axes as there are target dimensions.  (See Exercise \ref{Ex-Iris PLS} for an example of this.)  In that case, the vectors $\left\{\vec u_i\right\}$ will be non-trivial.  However, even in that case, only the dimensions in the feature space, $\left\{\vec v_i\right\}$ will be of interest.
 
 Collaborative Filtering and PCA are considered {\bf unsupervised models}, because they don't take into account target.  PLS is a {\bf supervised model} because it does.  Unsupervised models are common for building embeddings, because we think of them as trying to capture some intrinsic about the data.  A single embedding will often be used in multiple applications, and tying too closely to a single target may not be desirable.
 
-PLS is less commonly used than the other algorithms presented here.  One reason may be that it can only produce as many dimensions as you have targets.  (However, see Exercise \ref{pls_pca_ex} for a way to supplement PLS and PCA.)  Another reason may be that PCA is an unsupervised algorithm.  This means that you don't need target data.  But also, dimensionality reduction is usually done upstream of modeling; the output may be used for exploration or sent to many different applications.  A third reason that PLS is less common than PCA may just simply be that it is less well-known.  PLS might be thought of as a variant of PCA.  PCA is valued for its simplicity, and modelers probably don't spend much time researching variants.  In my experience, I've found that PLS can be very useful, especially if you have a single application in mind.  It's my opinion that PLS should be a tool in any modelers tool belt.
+PLS is less commonly used than the other algorithms presented here.  One reason may be that it can only produce as many dimensions as you have targets.  (However, see Exercise \ref{Ex-PLS PCA hybrid} for a way to supplement PLS and PCA.)  Another reason may be that PCA is an unsupervised algorithm.  This means that you don't need target data.  But also, dimensionality reduction is usually done upstream of modeling; the output may be used for exploration or sent to many different applications.  A third reason that PLS is less common than PCA may just simply be that it is less well-known.  PLS might be thought of as a variant of PCA.  PCA is valued for its simplicity, and modelers probably don't spend much time researching variants.  In my experience, I've found that PLS can be very useful, especially if you have a single application in mind.  It's my opinion that PLS should be a tool in any modelers tool belt.
 
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
-\item \label{iris_pls} Load the Iris dataset.  (See Exercise \ref{iris_pca} for more details.)  Make three target variables, $1$ or $0$ indicating whether the datapoint is a Setosa, Versicolous, or Virginica iris.  Use PLS to reduce features to a $3$-dimensional space.
+\item \label{Ex-Iris PLS} Load the Iris dataset.  (See Exercise \ref{Ex-Iris PCA} for more details.)  Make three target variables, $1$ or $0$ indicating whether the datapoint is a Setosa, Versicolous, or Virginica iris.  Use PLS to reduce features to a $3$-dimensional space.
 \item Critique the following model proposal:  "Given loan data, we use PLS to get the single dimension that is most correlated with default.  The applicants who score lower on this dimension must be less likely to default.  Approve all loans below a certain threshold."
 \item You and a coworker are building an insurance model on credit data.  The model will be a logistic regression to predict the probability of an insurance claim.  You have historical claim data.  You think you should use only PLS, and your coworker thinks you should only use PCA.  How can you decide with data which model is better?
-\item \label{pls_pca_ex} Consider a scheme where you use both PLS and PCA.  If you start with 1 PLS dimension $|x\rangle$, how can you choose the dimension that is orthogonal to this dimension and that captures the most variance?  That is, how do you find
+\item \label{Ex-PLS PCA hybrid} Consider a scheme where you use both PLS and PCA.  If you start with 1 PLS dimension $|x\rangle$, how can you choose the dimension that is orthogonal to this dimension and that captures the most variance?  That is, how do you find
 
 $$
 \max_{\left\||u_1\rangle\right\|=1, \langle x|u_1\rangle=0}\langle u_1|A^TA|u_1\rangle
 $$
 \item Imagine you fit a logistic regression on a PLS dimension.  Because the PLS dimension and the regression are both fit on the same data, you have concerns that you are overfitting the data.  How can you confirm that your model is not overfit?
 \item Given a feature matrix, $\left(\begin{array}{cc}a&b\\c&d\end{array}\right)$, and a target variable, $\left(\begin{array}{c}x\\y\end{array}\right)$, suppose you compute a PLS dimension as $\left(\begin{array}{c}u\\v\end{array}\right)$.  Compute $\frac{\partial u}{\partial x}$, $\frac{\partial u}{\partial y}$, $\frac{\partial v}{\partial x}$, and $\frac{\partial v}{\partial y}$.
-\item $\obot$ Start with embeddings from problem \ref{movie_lens_1} or found online, and filter this list to ~100 movies that people are likely to know.  (Look at the IMDB top 250 if you aren’t sure.)  Make a game, called Hot-or-Cold:  This game chooses a random (secret) game from the ~100 movies.  The user guesses which movie it is, and the program tells them how close they are to the target, by telling them the cosine similarity between the guessed movie and the secret movie.  Show the player the top 100 list, or allow the user to enter any movie from the larger dataset.
+\item $\obot$ Start with embeddings from problem \ref{Ex-MovieLens} or found online, and filter this list to ~100 movies that people are likely to know.  (Look at the IMDB top 250 if you aren’t sure.)  Make a game, called Hot-or-Cold:  This game chooses a random (secret) game from the ~100 movies.  The user guesses which movie it is, and the program tells them how close they are to the target, by telling them the cosine similarity between the guessed movie and the secret movie.  Show the player the top 100 list, or allow the user to enter any movie from the larger dataset.
 \end{enumerate}
 
 \section{Canonical Correlation Analysis}
@@ -1287,7 +1284,7 @@ To do this, we look for axes that maximize covariance.  This is exactly the same
 
 Many of the topics covered in this chapter are closely related, but none more than PLS and CCA.  Again the use cases for the two are much different.  For PLS, we use the target variable to determine the best axis among a single set of features.  But for CCA, we use two sets of features to find the best axis.
 
-Because of this there are two sets of features, we end up having two signals to which we can attach for any user.  We can embed a user $|e_i\rangle$ by first mapping them to their $X$ features, then embedding this like we did in the Collaborative Filtering section, $\sqrt DU^TX|e_i\rangle$.  {\it Or} we could map first into $Y$ and embed, $\sqrt DVY^T|e_i\rangle$.  These are {\it almost} the same signal (see Exercise \ref{two_lsrl}), and in practice we could use just one of these signals.
+Because of this there are two sets of features, we end up having two signals to which we can attach for any user.  We can embed a user $|e_i\rangle$ by first mapping them to their $X$ features, then embedding this like we did in the Collaborative Filtering section, $\sqrt DU^TX|e_i\rangle$.  {\it Or} we could map first into $Y$ and embed, $\sqrt DVY^T|e_i\rangle$.  These are {\it almost} the same signal (see Exercise \ref{Ex-Two LSRLs}), and in practice we could use just one of these signals.
 
 {\bfseries\scshape\Large Exercises}
 
@@ -1300,7 +1297,7 @@ Because of this there are two sets of features, we end up having two signals to 
 \item Pinterest is trying to build a user embedding based only on what posts the user favorited.  The embeddings will be used for several applications.
 \item An insurance company is trying to build a fraud detector based only on the text content of police reports.  You have a large number of labeled data points.
 \end{enumerate}
-\item \label{two_lsrl} You do CCA on two matrices $X$ and $Y$ to get that $XY^T=UDV^T$.  Imagine that we used the axes $\left\{\vec u_i\right\}$ to perform a linear regression.  A linear regression treats the vectors $\left\{\vec u_i\right\}$ as the data points, along with targets $y_i$, and it tries to find the coefficients that minimize the square error:
+\item \label{Ex-Two LSRLs} You do CCA on two matrices $X$ and $Y$ to get that $XY^T=UDV^T$.  Imagine that we used the axes $\left\{\vec u_i\right\}$ to perform a linear regression.  A linear regression treats the vectors $\left\{\vec u_i\right\}$ as the data points, along with targets $y_i$, and it tries to find the coefficients that minimize the square error:
 
 $$
 \min_{\left\{c_j\right\}}\sum_i \left(y_i-\sum_jc_ju_{ij}\right)^2 = \min_{\langle c|}\sum_i \left(y_i-\langle c|u_{i}\rangle\right)^2
