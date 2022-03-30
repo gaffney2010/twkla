@@ -1,0 +1,130 @@
+<html>
+<head><title>Linear Algebra for Those Who Know Linear Algebra</title></head>
+<style>
+a:hover {
+    text-color: #c1d0e8;
+    font-weight: bolder;
+}
+hr {
+  border: 8px solid #cccccc;
+  border-radius: 3px;
+}
+</style>
+<body>
+<h1>Linear Algebra for Those Who Know Linear Algebra</h1>
+
+<hr>
+
+<p>You've reached the landing page for the eBook.</p>
+
+<h2>About the topic</h2>
+<p>The book employs a novel approach to teaching linear algebra by centering on singular value decomposition (SVD). This vantage point provides a deeper understanding of algorithms, like PCA, quadratic programming, and regressions, and allows the reader to develop their intuition for how to modify and apply these algorithms in real world applications.</p>
+<p>The book interweaves theory and application, beginning with SVD, from which PCA and collaborative filtering immediately follow.  Regressions can be understood via projection matrices (matrices with singular values all equal to 1) or via pseudo-inverses (inverses on the non-zero singular values).  Quadratic programming can be understood via positive definite matrices (matrices with an SVD having inverse isometries and all positive singular values).  Recognizing that most applied linear algebra follows from a solid understanding of SVD makes it easier to understand these hard topics.</p>
+<p>After establishing a solid theoretical basis, the book dives into application.  It discusses which model to use when, how to interpret model outputs, and what modeling choices are available for each algorithm.  It grounds this discussion in concrete applications, like the Netflix Prize for collaborative filtering.  Further, the book provides real-world exercises, such as, “You and a coworker are building an insurance model on credit data.  The model will be a logistic regression to predict the probability of an insurance claim.  You have historical claim data.  You think you should use only PLS, and your coworker thinks you should only use PCA.  How can you decide with data which model is better?”</p>
+
+<h2>Table of Contents</h2>
+
+<ul>
+    <li><a href="linalg.html#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+    <li><a href="linalg.html#singular-value-decomposition"><span class="toc-section-number">2</span> Singular Value Decomposition</a>
+    <ul>
+    <li><a href="linalg.html#statement-of-svd"><span class="toc-section-number">2.1</span> Statement of SVD</a>
+    <ul>
+    <li><a href="linalg.html#bra-ket-form"><span class="toc-section-number">2.1.1</span> Bra-ket Form</a></li>
+    <li><a href="linalg.html#eigenvalues-and-eigenvectors"><span class="toc-section-number">2.1.2</span> Eigenvalues and Eigenvectors</a></li>
+    <li><a href="linalg.html#vectors-and-covectors"><span class="toc-section-number">2.1.3</span> Vectors and Covectors</a></li>
+    <li><a href="linalg.html#conventions"><span class="toc-section-number">2.1.4</span> Conventions</a></li>
+    <li><a href="linalg.html#outro"><span class="toc-section-number">2.1.5</span> Outro</a></li>
+    </ul></li>
+    <li><a href="linalg.html#existence"><span class="toc-section-number">2.2</span> Existence</a>
+    <ul>
+    <li><a href="linalg.html#proof-of-the-correctness-of-algorithm-algorithm1"><span class="toc-section-number">2.2.1</span> Proof of the Correctness of Algorithm <span>[Algorithm1]</span></a></li>
+    <li><a href="linalg.html#change-of-bases-for-outer-product-sums"><span class="toc-section-number">2.2.2</span> Change of bases for outer product sums</a></li>
+    </ul></li>
+    <li><a href="linalg.html#Section-Almost Uniqueness"><span class="toc-section-number">2.3</span> Almost Uniqueness</a></li>
+    <li><a href="linalg.html#Section-How to Calculate"><span class="toc-section-number">2.4</span> How to Calculate</a></li>
+    <li><a href="linalg.html#Quick Conclusions"><span class="toc-section-number">2.5</span> Quick Conclusions</a>
+    <ul>
+    <li><a href="linalg.html#rank-nullity-theorem"><span class="toc-section-number">2.5.1</span> Rank-Nullity Theorem</a></li>
+    <li><a href="linalg.html#determinant"><span class="toc-section-number">2.5.2</span> Determinant</a></li>
+    </ul></li>
+    </ul></li>
+    <li><a href="linalg.html#direct-applications-of-svd"><span class="toc-section-number">3</span> Direct Applications of SVD</a>
+    <ul>
+    <li><a href="linalg.html#Section-Computer Science"><span class="toc-section-number">3.1</span> Computer Programming</a></li>
+    <li><a href="linalg.html#collaborative-filtering"><span class="toc-section-number">3.2</span> Collaborative Filtering</a>
+    <ul>
+    <li><a href="linalg.html#latent-dimensions-and-embeddings"><span class="toc-section-number">3.2.1</span> Latent Dimensions and Embeddings</a></li>
+    <li><a href="linalg.html#embeddings"><span class="toc-section-number">3.2.2</span> Embeddings</a></li>
+    <li><a href="linalg.html#averaging"><span class="toc-section-number">3.2.3</span> Averaging</a></li>
+    </ul></li>
+    <li><a href="linalg.html#principle-component-analysis"><span class="toc-section-number">3.3</span> Principle Component Analysis</a>
+    <ul>
+    <li><a href="linalg.html#normalization"><span class="toc-section-number">3.3.1</span> Normalization</a></li>
+    <li><a href="linalg.html#user-embeddings"><span class="toc-section-number">3.3.2</span> User embeddings</a></li>
+    </ul></li>
+    <li><a href="linalg.html#partial-least-squares"><span class="toc-section-number">3.4</span> Partial Least Squares</a></li>
+    <li><a href="linalg.html#canonical-correlation-analysis"><span class="toc-section-number">3.5</span> Canonical Correlation Analysis</a></li>
+    </ul></li>
+    <li><span class="toc-section-number">4</span> [WIP] Regression</a>
+    <ul>
+    <li><span class="toc-section-number">4.1</span> Projection matrices</a></li>
+    <li><span class="toc-section-number">4.2</span> Inverses and pseudo-inverses</a></li>
+    <li><span class="toc-section-number">4.3</span> Least Squares</a></li>
+    <li><span class="toc-section-number">4.4</span> Graham-Schmidt and QR factorizations</a></li>
+    <li><span class="toc-section-number">4.5</span> Legendre polynomials</a></li>
+    </ul></li>
+    <li><span class="toc-section-number">5</span> [WIP] Generalized Regression</a>
+    <ul>
+    <li><span class="toc-section-number">5.1</span> Polynomial Regression</a></li>
+    <li><span class="toc-section-number">5.2</span> Logistic</a></li>
+    <li><span class="toc-section-number">5.3</span> GLM</a></li>
+    <li><span class="toc-section-number">5.4</span> LOESS</a></li>
+    <li><span class="toc-section-number">5.5</span> Ridge Regression</a></li>
+    </ul></li>
+    <li><span class="toc-section-number">6</span> [WIP] Definite Matrices</a>
+    <ul>
+    <li><span class="toc-section-number">6.1</span> Definite matrices</a></li>
+    <li><span class="toc-section-number">6.2</span> Quadratic programming</a></li>
+    <li><span class="toc-section-number">6.3</span> Partial second derivative test</a></li>
+    </ul></li>
+    <li><span class="toc-section-number">7</span> [WIP] Symmetric Matrices</a>
+    <ul>
+    <li><span class="toc-section-number">7.1</span> Symmetric Matrices</a></li>
+    <li><span class="toc-section-number">7.2</span> Prove specific form</a></li>
+    <li><span class="toc-section-number">7.3</span> Corollaries</a></li>
+    <li><span class="toc-section-number">7.4</span> Use to calculate SVD</a></li>
+    <li><span class="toc-section-number">7.5</span> Inner products, covariance</a></li>
+    <li><span class="toc-section-number">7.6</span> Spectral Theorem</a></li>
+    <li><span class="toc-section-number">7.7</span> Taylor series and smooth functions</a></li>
+    <li><span class="toc-section-number">7.8</span> Functions on Non-symmetric matrices</a></li>
+    </ul></li>
+    <li><span class="toc-section-number">8</span> [WIP] Stats</a>
+    <ul>
+    <li><span class="toc-section-number">8.1</span> Covariance matrix</a></li>
+    <li><span class="toc-section-number">8.2</span> Multi-dimensional normal</a></li>
+    <li><span class="toc-section-number">8.3</span> Moment generating function</a></li>
+    <li><span class="toc-section-number">8.4</span> Markov Chain</a></li>
+    <li><span class="toc-section-number">8.5</span> PageRank</a></li>
+    <li><span class="toc-section-number">8.6</span> Linear discriminant analysis</a></li>
+    </ul></li>
+    <li><span class="toc-section-number">9</span> [WIP] SVM</a></li>
+    <li><span class="toc-section-number">10</span> Review</a>
+    <ul>
+    <li><a href="linalg.html#orthogonal-matrices"><span class="toc-section-number">10.1</span> Orthogonal Matrices</a></li>
+    <li><a href="linalg.html#Spans and Bases"><span class="toc-section-number">10.2</span> Spans and Bases</a></li>
+    <li><a href="linalg.html#Change of Basis"><span class="toc-section-number">10.3</span> Change of Basis</a></li>
+    <li><a href="linalg.html#Bra-Ket Notation"><span class="toc-section-number">10.4</span> Bra-Ket Notation</a></li>
+    <li><a href="linalg.html#misc"><span class="toc-section-number">10.5</span> Misc</a></li>
+    </ul></li>
+    </ul>
+
+<p>A PDF version can be found <a href="https://github.com/gaffney2010/twkla/blob/main/twkla/pdf/linalg.pdf">here</a>.</p>
+
+<h2>Contact</h2>
+
+<p>To contact the author, please email: gaffney.tj+twkla@gmail.com.</p>
+
+</body>
+
+</html>
