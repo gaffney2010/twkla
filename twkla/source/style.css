@@ -7,7 +7,7 @@ html {
 }
 body {
   margin: 0 auto;
-  padding-left: 250px;
+  padding-left: 310px;
   padding-right: 10px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -123,7 +123,7 @@ header {
 }
 #TOC {
   height: 100%;
-  width: 240px;
+  width: 300px;
   position: fixed; /* Fixed Sidebar (stay in place on scroll) */
   z-index: 1; /* Stay on top */
   top: 0; /* Stay at the top */
@@ -132,6 +132,7 @@ header {
   background-color: #cccccc;
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
+  padding-right: 5px;
 }
 #TOC li {
   list-style: none;
