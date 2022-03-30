@@ -4,6 +4,7 @@ twkla/html
 # Extra output
 twkla/pdf/linalg.aux
 twkla/pdf/linalg.log
+twkla/pdf/linalg.out
 
 # VSCode noise
 .DS_Store
