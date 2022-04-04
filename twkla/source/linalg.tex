@@ -145,7 +145,7 @@ Low-rank matrices are one way that uniqueness can fail, but not the only way.  S
 
 Soon we'll show that the SVD exists.  Said another way:  We'll show there exists bases in the domain and range for which $A$ is diagonal.  (See Section \ref{Change of Basis} for a review of this concept.)  On its face, this is a simple-yet-powerful theorem that doesn't have the usual qualifiers seen in linear algebra.  It doesn't require complex numbers, and it's one of the few theorems that apply cleanly to rectangular matrices.  But beyond these surface advantages, we'll see that the SVD is widely applicable.  In fact, it's so applicable that we make this a cornerstone of the book.  The SVD is critical to understanding linear algebra, because it expresses something fundamental about linear transformations.
 
-After a brief detour to discuss bra-ket form, we'll spend the rest of this section exploring that fundamentality.  We will view the SVD through two major lenses:  Firstly by viewing matrixes as a collection of eigenvectors and eigenvectors.  Then by viewing matrixes as the product of vectors and covectors.
+After a brief detour to discuss bra-ket form, we'll spend the rest of this section exploring that fundamentality.  We will view the SVD through three major lenses:  Firstly by viewing matrixes as a collection of eigenvectors and eigenvectors.  Then by viewing matrixes as the product of vectors and covectors.  Finally by viewing matrices as bilinear forms.
 
 \subsection{Bra-ket Form}
 
@@ -426,6 +426,29 @@ $$
 Comparing both sides, we can now say that $A=\sum_i|A_{*i}\rangle\langle e_i|$.  This rewriting recognizes that $A$ is a sum of vector/covector products.  The covectors $\left\{\langle e_i|\right\}$ project onto the standard axes to get a scalar.  Then the vectors $\left\{|A_{*i}\rangle\right\}$ give direction to each of these scalars.  This is an important way to understand matrices.
 
 But by studying linear algebra, you learn that there's nothing special about the standard basis $\left\{|e_i\rangle\right\}$.  For any basis $\left\{| v _i\rangle\right\}$, we can write the matrix $A$ with this basis on the domain.  (See Section \ref{Change of Bases} for more detailed discussion on bases.)  Call the columns of this new matrix $\left\{| u _i\rangle\right\}$, and it follows that $A=\sum_i| u _i\rangle\langle v _i|$.  Although $\left\{\langle v _i|\right\}$ are orthonormal, it's not usually true of the resulting $\left\{| u _i\rangle\right\}$.  The existence of an SVD is the existence of a domain basis $\left\{\langle v _i|\right\}$ for which the corresponding $\left\{| u _i\rangle\right\}$ are also orthogonal, but not normal.  We can write $|u_i\rangle=\lambda_i|u_i'\rangle$, so that $\left\{u_i'\right\}$ are orthonormal.  The basis $\left\{\langle v _i|\right\}$ that produces orthogonal columns on $A$ is a very special basis.  There's no reason to prefer to represent $A$ in the standard basis or any other basis.  So we might as well choose $\left\{\langle v _i|\right\}$, giving $A=\sum_i\lambda_i|u_i'\rangle\langle v_i|$, the SVD.  We'll see throughout the course of this book that it simplifies many things.
+
+\subsection{Bilinear Forms}
+
+Linear forms are defined for matrices generally.  But we'll define a linear form as a function $f:\mathbb R^n \to\mathbb R$ that is "linear" meaning that it satifies the two properties:
+
+\begin{enumerate}
+\item $f\left(\vec x+\vec y\right)=f\left(\vec x\right) + f\left(\vec y\right)$ for all $\vec x,\vec y\in\mathbb R^n$.
+\item $f\left(\lambda\vec x\right)=\lambda f\left(\vec x\right)$ for all $\lambda\in\mathbb R$ and $\vec x\in\mathbb R^n$.
+\end{enumerate}
+
+We state without proving that all linear forms can be written as $\lambda\langle u|$ for some unit vector $\vec u$, meaning that $f\left(|x\rangle\right)=\lambda\langle u|x\rangle$.
+
+By the definition of linear forms, the sum of any two linear forms is itself a linear form.  It's interesting, though not surprising that the sum of two covectors $\lambda\langle u|$ must therefore result in a new covector, so that it can also be written this way.
+
+By analogy a bilinear form is a function $f:\mathbb R^m\times\mathbb R^n \to\mathbb R$ that satisfies linearity for both inputs:
+
+\begin{enumerate}
+\item $f\left(\vec x+\vec y,\vec z\right)=f\left(\vec x,\vec z\right) + f\left(\vec y,\vec z\right)$ for all $\vec x,\vec y,\vec z\in\mathbb R^n$.
+\item $f\left(\vec z,\vec x+\vec y\right)=f\left(\vec z,\vec x\right) + f\left(\vec z,\vec y\right)$ for all $\vec x,\vec y,\vec z\in\mathbb R^n$.
+\item $f\left(\lambda\vec x,\vec y\right)=\lambda f\left(\vec x,\vec y\right)=f\left(\vec x,\lambda\vec y\right)$ for all $\lambda\in\mathbb R$ and $\vec x,\vec y\in\mathbb R^n$.
+\end{enumerate}
+
+We also state without proof that all bilinear forms can be written as a matrix, $A$, so that $f\left(\vec x, \vec y\right)=\langle x|A|y\rangle$.  Conversely all matrices yield a bilinear form in this way.  So maybe a good way to think about matrices is exactly as bilinear forms.  In analogy to linear forms, say that a particular matrix $A$ can be written as $\lambda|u\rangle\langle v|$.  Then it's action on a pair of vectors $\vec x,\vec y$ is $\lambda\langle x|u\rangle\langle v|y\rangle$, which is a product of two linear forms.  This seems like a useful analogy.  But unlike linear forms, we can't add together a bunch of matrices of the form $\lambda|u\rangle\langle v|$ and still expect to get a matrix of the form $\lambda|u\rangle\langle v|$.  Instead you get a sum of such matrices, $\sum_i\lambda_i|u_i\rangle\langle v_i|$.  The surprising thing here is that if you added very many such matrices, you could always reduce to $r:=\min(m, n)$ summands.  Either way, this representation seems like a sensible way to represent a matrix.
 
 \subsection{Conventions}
 
