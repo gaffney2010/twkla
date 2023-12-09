@@ -16,6 +16,7 @@
 \usepackage{bold-extra}
 \pagecolor{white}
 \usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
 \usepackage{mathabx}
 \usepackage{hyperref}
 
@@ -1330,16 +1331,89 @@ $$
 \chapter{[WIP] Regression}
 \section{Projection matrices}
 
-We'll talk now about an important family of matrices, called {\em Projection Matrices}.  The are matrices $P$ for which project onto their image.  Let's explain this a bit.  Call $\mathcal P:=\operatorname{Im}(P)$, the image of $P$.  Recall that the image of a matrix is the set of all vectors $|w\rangle$ which equal $P|v\rangle$ for some $|v\rangle$.  Now by Theorem \ref{VectorDecomposition}, we can write any vector as $|v\rangle=|v_\parallel\rangle+|v_\bot\rangle$, where $|v_\parallel\rangle\in\mathcal P$ and $\langle p|v_\bot\rangle=0$ for all $p\in\mathcal P$.  (See also Exercise \ref{Image is subspace}.)  A projection matrix is a matrix for which $P|v\rangle=|v_\parallel\rangle$ for all $|v\rangle$.  We'll argue later that $|v_\parallel\rangle$ is the closest vector in $\mathcal P$ to $|v\rangle$ itself.  It's a nice consequence that what remains, $|v\rangle - |v_\parallel\rangle$ is orthogonal to $\mathcal P$.  The mapping $|v\rangle\to|v_\parallel\rangle$ is sometimes called the "orthogonal projection."  This is what we usually think of as projection.  If you had a sphere in 3D space, and I asked you to project to the xy-plane, you'd probably naturally project it orthogonally.
+We'll talk now about an important family of matrices, called projection matrices.  A {\em Projection Matrix} is a square matrix with an SVD given by $P=\sum_i|v_i\rangle\langle v_i|$ for some set of orthonormal vectors.  The important properties are that each vector is paired with itself and that all coefficients are $1$.  Note that projection matrices under this definition are necessarily symmetric.  At its surface level, this is a simple definition - a projection matrix just has a special SVD.  But this has a number of equivalent properties, that are sometimes given as definition.
 
-An immediate consequence of the definition of projection matrices is that it has an {\em Invariant Subspace}.  Namely the entire subspace $\mathcal P$ is fixed by applying $P$ to it.  This subspace also contains {\it all} the vectors that are fixed by $P$.  Because any vector $|v\rangle$ not in $\mathcal P$ gets decomposed as $|v\rangle=|v_\parallel\rangle+|v_\bot\rangle$, where $|v_bot\rangle\neq0$ (for otherwise $|v\rangle$ would be in $\mathcal P$.
+\begin{theorem}
+\label{ProjectionMatrix}
+  For a matrix $P$, with $\mathcal P:=\operatorname{Im}(P)$, the following properties are equivalent:
+  \begin{enumerate}[a]
+    \item \label{pm_svd} Every SVD representation of $P$ has the form $P=\sum_i|v_i\rangle\langle v_i|$, where the set of $\left\{|v_i\rangle\right\}_i$ span the $\mathcal P$.
+    \item \label{pm_projection} $P|v\rangle=|v\rangle$ for all $|v\rangle\in\mathcal P$, and $P|w\rangle=|0\rangle$ for all $|w\rangle\in\mathcal P^\bot$.
+    \item \label{pm_idempotence} $P^2=P$ and symmetric.
+  \end{enumerate}
+\end{theorem}
 
-Another consequence is that after you've projected onto $\mathcal P$, there's nothing else to do.  That is $P\left(P|v\rangle)=P|v\rangle$ for all $|v\rangle$.  This is immediate because $P|v\rangle\in\mathcal P$.  This can be written as $P^2=P$.  This is called {\em idempotence}.  Some books will give idempotence as a definition for projection matrices.  We'll see later that idempotence implies our above definition.
+Property \ref{pm_projection} is the projection property that gives these matrices their name, and it's probably the most important of the three.  This property says that the matrix projects vectors onto it's image, $\mathcal P$.  We know from Theorem \ref{VectorDecomposition} that we can write any vector $|v\rangle$ as $|v_\parallel\rangle+|v_\bot\rangle$, where $|v_\parallel\rangle\in\mathcal P$ and $|v_\bot\rangle\in\mathcal P^\bot$.  Property \ref{pm_projection} then tells us that $P|v\rangle=|v_\parallel\rangle$; this is the orthogonal projection of $|v\rangle$ to the subspace $\mathcal P$.  This is called orthogonal, because the difference, $|v_\bot\rangle$ is orthogonal to $\mathcal P$.  $|v_\parallel\rangle$ happens to be the vector in $\mathcal P$ that's closest to $|v\rangle$.  When we say "projection" colloquially, usually we mean orthogonal projection; for example the projection of all the points on a sphere to a planar subspace is the disc that gets projected (like a shadow cast) from the sphere onto the plane.  $\mathcal P$ is can be called the {\em Invariant Subspace} of $P$.
+
+Property \ref{pm_idempotence} contains the property that $P^2=P$, which is called {\em idempotence}, meaning simply that if you apply the matrix repeatedly, it does the same as if you apply it only once.  See Exercise \ref{idempotence_taylor} for an example of the type of arithmetic you can do with these matrices.  Property \ref{pm_idempotence} also mentions that the matrix must be symmetric.  The reader may be familiar with this property that means $P^T=P$.  If you're unfamiliar, read the beginning of Section \ref{SymmetricMatrices}, search the internet, or skip this property for now.
+
+\begin{proof}
+{\em \ref{pm_svd}$\implies$\ref{pm_projection}} Let $|v\rangle$ be in $\mathcal P=\operatorname{Im}(P)$, then $|v\rangle=\sum_ia_i|v_i\rangle$.  Then $P|v\rangle=\sum_j\sum_ia_i|v_j\rangle\langle v_j|v_i\rangle=\sum_ja_j|v_j\rangle=|v\rangle$.  If $|w\rangle\in\mathcal P^\bot$, then $P|w\rangle=|0\rangle$ is immediate.
+
+{\em \ref{pm_projection}$\implies$\ref{pm_idempotence}}  $P^2=P$ if $P^2|v\rangle=P|v\rangle$ for all $|v\rangle$.  Given the above argument $P|v\rangle=|v_\parallel\rangle$, where $|v_\parallel\rangle\in\mathcal P$.  So we have $P^2|v\rangle=P|v_\parallel\rangle=|v_\parallel\rangle=P|v\rangle$.
+
+To prove that $P$ must be symmetric, we show that $\langle u|P|v\rangle=\langle u|P^T|v\rangle$ for all $\langle u|$, $|v\rangle$.  (Why is this sufficient?)  We have that
+
+$$
+\begin{array}{rcl}
+\langle u|P|v\rangle &=& \langle u|v_\parallel\rangle \\
+&=& \langle u_\parallel|v_\parallel\rangle + \langle u_\bot|v_\parallel\rangle \\
+&=& \langle u_\parallel|v_\parallel\rangle
+\end{array}
+$$
+
+The last equality follows from the fact that $v_\parallel\in\mathcal P$, and is therefore perpendicular to $u_\bot$.  A similar argument says that $\langle u|P^T|v\rangle=(\langle u|P^T)|v\rangle=\langle u_\parallel|v\rangle=\langle u_\parallel|v_\parallel\rangle$.  So these calculations are the same.
+
+{\em \ref{pm_idempotence}$\implies$\ref{pm_svd}}  We look ahead to a theorem from Section \ref{SymmetricMatrices} to say that any SVD for a symmetric matrix has the form $P=\sum_i\lambda_i|v_i\rangle\langle v_i|$.  Now when we square this we get
+
+$$
+\begin{array}{rcl}
+P^2 &=& \left(\sum_i\lambda_i|v_i\rangle\langle v_i|\right)\left(\sum_j\lambda_j|v_j\rangle\langle v_j|\right) \\
+&=& \sum_i\sum_j\lambda_i\lambda_j|v_i\rangle\langle v_i|v_j\rangle\langle v_i| \\
+&=& \sum_i\lambda_i^2|v_i\rangle\langle v_i|
+\end{array}
+$$
+
+Where the last equality from the usual trick of taking advantage of orthonormality to cancel any term with $\langle v_i|v_j\rangle$ where $i\neq j$.
+
+Now $P^2=P\implies \sum_i\lambda_i^2|v_i\rangle\langle v_i|=\sum_i\lambda_i|v_i\rangle\langle v_i|$.  We can apply $|v_i\rangle$ to both side of either matrix to get $\lambda_i^2=\lambda_i$, implying that $\lambda_i$ is $0$ or $1$, completing the proof.
+\end{proof}
+
+Recall that we used projection matrices already in Theorem \ref{AiProjectionThm}.  There we argued that a matrix like $I-|v\rangle\langle v|$ is a projection.  With Theorem \ref{ProjectionMatrix}, we can see that this must be a projection matrix, because it's obviously symmetric, and the reader can check that it's idempotent.  But what is it's SVD?  By Exercise \ref{Ex-Outer Product Identity}, we can choose any basis $\left\{|v_i\rangle\right\}_i$, where $|v_1\rangle=|v\rangle$, then $I=\sum_i|v_i\rangle\langle v_i|$, and $I-|v\rangle\langle v|=\sum_{i\neq1}|v_i\rangle\langle v_i|$ is a valid SVD.  This begins to establish the one-to-one connection between a projection matrix's SVD and its invariant subspace, made explicit by the next theorem.
+
+\begin{theorem}
+A projection matrix has an invariant subspace spanned by $\left\{|v_i\rangle\right\}_i$ if and only if $\sum_i|v_i\rangle\langle v_i|$ is an SVD for the matrix.
+\end{theorem}
+
+\begin{proof}
+Start by assuming that $\left\{|v_i\rangle\right\}_i$ spans the invariant subspace, $\mathcal P$, of $P$.  Then we argue as above that for any $\langle u|$, $|v\rangle$, that $\langle u|P|v\rangle=\langle u_\parallel|v_\parallel\rangle$.  Now for any $|v\rangle$, we can write $|v\rangle=|v_\parallel\rangle+|v_\bot\rangle$.  Since $|v_\parallel\rangle\in\mathcal P$, the span of $\left\{|v_i\rangle\right\}_i$ we can write $|v_\parallel\rangle=\sum_ia_i|v_i\rangle$, for some $\left\{a_i\right\}_i$.  So that $\left(\sum_i\langle v_i|\right)|v\rangle=\left(\sum_i\langle v_i|\right)\left(\sum_ja_j|v_j\rangle\right)=\sum_ia_i|v_i\rangle$.  So that 
+
+$$
+\begin{array}{rcl}
+\left(\sum_i\langle v_i|\right)|v\rangle &=& \left(\sum_i\langle v_i|\right)\left(|v_\parallel\rangle+|v_\bot\rangle\right) \\
+&=& \left(\sum_i\langle v_i|\right)|v_\parallel\rangle + \left(\sum_i\langle v_i|\right)|v_\bot\rangle \\
+&=& |v_\parallel\rangle + 0
+\end{array}
+$$
+
+Applying the same to the other side, we get that $\langle u|\left(\sum_i|v_i\rangle\langle v_i|\right)| v\rangle=\langle u_\parallel|v_\parallel\rangle$.  So that $P=\sum_i|v_i\rangle\langle v_i|$, and this is therefore an SVD of $P$.
+
+To prove the other direction, assume that $P=\sum_{i=1}^k|v_i\rangle\langle v_i|$, we take some basis of the domain $\left\{|w_i\rangle\right\}_i$ with $|w_i\rangle=|v_i\rangle$ for $i=1..k$.  That is, this basis extends the $|v_i\rangle$ to the entire domain, as in Theorem \ref{ExtendBasis}.  Now any vector $|v\rangle=\sum_{i=1}^na_i|w_i\rangle$, and $\left(\sum_{i=1}^k|v_i\rangle\langle v_i|\right)\sum_{j=1}^na_j|w_j\rangle=\sum_{i=1}^ka_i|w_i\rangle$.  This equals $|v\rangle$ if and only if $a_i=0$ for all $i>k$; that is if $|v\rangle\in\operatorname(span)\left\{|v_i\rangle\right\}$.
+\end{proof}
+
+Notice that this theorem doesn't rely on the fact that the invariant subspace is the image of the projection operator, but from the SVD, we can see that the image is precisely spanned by the $\left\{|v_i\rangle\right\}$.
 
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
-\item \label{Image is subspace} In the opening of the chapter, we use Theorem \ref{VectorDecomposition}, but we can only do this if $\mathcal P$ is a subspace, meaning that it's closed under vector addition and scalar multiplication.  Prove that any matrix's image is a subspace.
+\item To make the shadow example explicit, argue that the unit sphere given by all points $x^2+y^2+z^2=1$ maps to a unit disc under the projection matrix $\left(\begin{array}{ccc}1&0&0\\0&1&0\\0&0&1\end{array}\right)$.  Graph these.  Generalize by arguing that the image of the unit sphere under any projection is a unit disc (potentially 0 or 1 dimensional).
+\item Prove that the image of any matrix forms a subspace.
+\item Prove that a projection matrix is either singular or the identity matrix.
+\item Matrices do not have a unique SVD representation.  However, prove that if a matrix has any SVD of the form $P=\sum_i|v_i\rangle\langle v_i|$, then all SVDs must be of the form $P=\sum_j|v_j\rangle\langle v_j|$.
+\item Intuitively we expect the composition of two projection matrices, $P$ and $Q$, to be a projection matrix, $PQ$, with the image being the intersection of $\operatorname{Im}(A)$ and $\operatorname{Im}(B)$.  Prove that this is the case.
+\item Let $P$ and $Q$ be projection matrices with images $\mathcal P$ and $\mathcal Q$ that are orthogonal - that is $\langle p|q\rangle=0$ for all $|p\rangle\in\mathcal P$, $|q\rangle\in\mathcal Q$.  Prove that $P+Q$ is a projection matrix also.
+\item\label{idempotence_taylor} Given the definition of $\exp(M)=\sum_n\frac{M^n}{n!}$, for any matrix, $M$, show that $\exp{P}=e+(e-1)P$ for all idempotent matrices, $P$.  We generalize this in Section \ref{section_taylor_series}.
+\end{enumerate}
 
 \section{Inverses and pseudo-inverses}
 \section{Least Squares}
@@ -1359,13 +1433,13 @@ Another consequence is that after you've projected onto $\mathcal P$, there's no
 \section{Partial second derivative test}
 
 \chapter{[WIP] Symmetric Matrices}
-\section{Symmetric Matrices}
+\section{Symmetric Matrices}\label{SymmetricMatrices}
 \section{Prove specific form}
 \section{Corollaries}
 \section{Use to calculate SVD}
 \section{Inner products, covariance}
 \section{Spectral Theorem}
-\section{Taylor series and smooth functions}
+\section{Taylor series and smooth functions}\label{section_taylor_series}
 \section{Functions on Non-symmetric matrices}
 
 \chapter{[WIP] Stats}
@@ -1380,7 +1454,7 @@ Another consequence is that after you've projected onto $\mathcal P$, there's no
 
 \chapter{Review}
 
-\section{Orthogonal Matrices}
+\section{Orthogonal Matrices}\label{OrthogonalMatrices}
 
 This section is under construction.  In the meantime, \url{https://www.nagwa.com/en/explainers/476190725258/} is a good source to review this topic.
 
@@ -1401,8 +1475,13 @@ This section is under construction.  In the meantime, \url{https://www.mathpages
 This section is under construction.
 
 \begin{theorem}
+\label{ExtendBasis}
+For any set of orthonormal vectors, $\left\{|v_i\rangle\right\}_{i=1}^k$ in $\mathbb R^n$, there exists a basis, $\left\{|w_i\rangle\right\}_{i=1}^n$ such that $|v_i\rangle=|w_i\rangle$ for $i=1..k$.  We call this {\em Extending the Basis}.
+\end{theorem}
+
+\begin{theorem}
 \label{VectorDecomposition}
-For any subspace $W$ and any vector $|v\rangle$, $|v\rangle$ can be written uniquely as $|v\rangle=|v_\parallel\rangle+|v_\bot\rangle$, where $|v_\parallel\rangle\in W$ and $\langle w|v_\bot\rangle=0$ for all $w\in W$.
+For any subspace $W$ and any vector $|v\rangle$, $|v\rangle$ can be written uniquely as $|v\rangle=|v_\parallel\rangle+|v_\bot\rangle$, where $|v_\parallel\rangle\in W$ and $\langle w|v_\bot\rangle=0$ for all $w\in W$.  Moreover, $|v_parallel\rangle$ is the unique vector in $W$ that minimizes $\| |v\rangle-|v_\parallel\rangle \|$ with minimum value $\|v_\bot\|$.
 \end{theorem}
 
 \begin{theorem}
