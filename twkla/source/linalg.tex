@@ -297,7 +297,7 @@ A^TA = \sum_i\lambda_i\lambda_i|v_i\rangle\langle u_i|u_i\rangle\langle v_i| = \
 $$
 \end{proof}
 
-We will call the decomposition $\sum_i\lambda_i|u_i\rangle\langle v_i|$ the {\it bra-ket form} of the SVD; the $UDV^T$ form is called the {\it matrix form} of the SVD.  The steps from above can be done in reverse to go from bra-ket form to matrix form.
+We will call the decomposition $\sum_i\lambda_i|u_i\rangle\langle v_i|$ the {\it bra-ket form} (or {\it summation form} of the SVD; the $UDV^T$ form is called the {\it matrix form} of the SVD.  The steps from above can be done in reverse to go from bra-ket form to matrix form.
 
 \begin{tcolorbox}[title=Example,colback=blue!5]
 {\bfseries\Large Example}
@@ -427,6 +427,19 @@ $$
 Comparing both sides, we can now say that $A=\sum_i|A_{*i}\rangle\langle e_i|$.  This rewriting recognizes that $A$ is a sum of vector/covector products.  The covectors $\left\{\langle e_i|\right\}$ project onto the standard axes to get a scalar.  Then the vectors $\left\{|A_{*i}\rangle\right\}$ give direction to each of these scalars.  This is an important way to understand matrices.
 
 But by studying linear algebra, you learn that there's nothing special about the standard basis $\left\{|e_i\rangle\right\}$.  For any basis $\left\{| v _i\rangle\right\}$, we can write the matrix $A$ with this basis on the domain.  (See Section \ref{Change of Bases} for more detailed discussion on bases.)  Call the columns of this new matrix $\left\{| u _i\rangle\right\}$, and it follows that $A=\sum_i| u _i\rangle\langle v _i|$.  Although $\left\{\langle v _i|\right\}$ are orthonormal, it's not usually true of the resulting $\left\{| u _i\rangle\right\}$.  The existence of an SVD is the existence of a domain basis $\left\{\langle v _i|\right\}$ for which the corresponding $\left\{| u _i\rangle\right\}$ are also orthogonal, but not normal.  We can write $|u_i\rangle=\lambda_i|u_i'\rangle$, so that $\left\{u_i'\right\}$ are orthonormal.  The basis $\left\{\langle v _i|\right\}$ that produces orthogonal columns on $A$ is a very special basis.  There's no reason to prefer to represent $A$ in the standard basis or any other basis.  So we might as well choose $\left\{\langle v _i|\right\}$, giving $A=\sum_i\lambda_i|u_i'\rangle\langle v_i|$, the SVD.  We'll see throughout the course of this book that it simplifies many things.
+
+\subsection{Coordinates}\label{Coordinates}
+
+In this section we continue to build intuition.
+
+\begin{tcolorbox}[title=Example: Coordinate Systems,colback=blue!5]
+  {\bfseries\Large Coordinate Systems}
+Consider a basis, $\mathcal B$, of $\mathbb R^3$ given by $\vec v_1=\langle 1/\sqrt2, 1/\sqrt2, 0\rangle$, $\vec v_2=\langle 1/\sqrt2, -1/\sqrt2, 0\rangle$, $\vec v_3=\langle 0, 0, -1\rangle$.  Because $\mathcal B$ is a basis, we know that any vector in $\mathbb R^3$ can be written as a linear combination of of these three vectors.  For example, $\langle 1, 2, 3\rangle = 3/\sqrt2 \vec v_1-1/\sqrt2\vec v_2-3\vec v_3$.  Occasionally, this linear combination is written in its own vector notation, with a special $\mathcal B$ subscript.  $\langle 1, 2, 3\rangle=\langle 3/\sqrt2, -1/sqrt2, -3\rangle_{\mathcal B}$.
+\end{tcolorbox}
+
+The purpose of this short section is to make the connection that both $\langle 1, 2, 3\rangle$ and $\langle 3/\sqrt2, -1/sqrt2, -3\rangle_{\mathcal B}$ are equally legitimate representations of the same vector.  This is a conceptual decoupling between a vector and the coordinates we use to write it.  The observation is akin to the realization that the number $14$ can be written in binary as $1110$; the number itself is not either of these things, but is merely represented by them.
+
+And if any choice of coordinates are equally legitimate, we may as well choose the bases given by the SVD, $M=\sum_i|u_i\rangle\langle v_i|$.  That is, if $\mathcal B=(|u_1\rangle, |u_2\rangle, \cdots, |u_n\rangle)$ and $\mathcal B'=(|v_1\rangle, |v_2\rangle, \cdots, |v_n\rangle)$ then $M\langle x_1, x_2, \cdots x_n\rangle_{\mathcal B}=\langle \lambda_1x_1, \lambda_2x_2, \cdots, \lambda_nx_n\rangle_{\mathcal B'}$.  So the existance of an SVD says that any matrix is merely a dillation under the correct coordinate systems.  Quite a surprising fact!
 
 \subsection{Bilinear Forms}
 
@@ -944,6 +957,7 @@ Choose some SVD of $A=\sum_{i=1}^r|u_i\rangle\langle v_i|$.  Expand $\left\{|v_i
 \subsection{Determinant}
 
  \begin{theorem}
+  \label{DeterminantTheorem}
 Let $A$ be an $m\times m$-dimensional matrix with $m$ (not-necessarily-distinct) singular values, $\lambda_1, ..., \lambda_m$.  Then $|A|=\prod_{i=1}^n\lambda_i$.
  \end{theorem}
 
@@ -1381,7 +1395,7 @@ Now $P^2=P\implies \sum_i\lambda_i^2|v_i\rangle\langle v_i|=\sum_i\lambda_i|v_i\
 
 Recall that we used projection matrices already in Theorem \ref{AiProjectionThm}.  There we argued that a matrix like $I-|v\rangle\langle v|$ is a projection.  With Theorem \ref{ProjectionMatrix}, we can see that this must be a projection matrix, because it's obviously symmetric, and the reader can check that it's idempotent.  But what is it's SVD?  By Exercise \ref{Ex-Outer Product Identity}, we can choose any basis $\left\{|v_i\rangle\right\}_i$, where $|v_1\rangle=|v\rangle$, then $I=\sum_i|v_i\rangle\langle v_i|$, and $I-|v\rangle\langle v|=\sum_{i\neq1}|v_i\rangle\langle v_i|$ is a valid SVD.  This begins to establish the one-to-one connection between a projection matrix's SVD and its invariant subspace, made explicit by the next theorem.
 
-\begin{theorem}
+\begin{theorem}\label{projection_svd}
 A projection matrix has an invariant subspace spanned by $\left\{|v_i\rangle\right\}_i$ if and only if $\sum_i|v_i\rangle\langle v_i|$ is an SVD for the matrix.
 \end{theorem}
 
@@ -1416,6 +1430,88 @@ Notice that this theorem doesn't rely on the fact that the invariant subspace is
 \end{enumerate}
 
 \section{Inverses and pseudo-inverses}
+
+An inverse of a matrix, $M$, is a new matrix, $M^{-1}$ that "undoes" $M$.  That is, whenever $M|v\rangle=|w\rangle$, then $M^{-1}|w\rangle=|v\rangle$.  Said another way, $MM^{-1}=M^{-1}M=I$.
+
+\begin{tcolorbox}[title=Example,colback=blue!5]
+  {\bfseries\Large Rotation Matrix}
+A rotation matrix in two dimensions is given by
+
+$$
+R(\theta)=\left(\begin{array}{cc}\cos(\theta) & -\sin(\theta) \\ \sin(\theta) & \cos(\theta)\end{array}\right)
+$$
+
+This acts on any vector $|v\rangle$ by rotating counter clockwise by $\theta$.  It follows then that $R(\theta)^{-1}=R(-\theta)$.
+\end{tcolorbox}
+
+We note that not all matrices have inverses; more on that in a bit.
+
+Notice that if $A$, $B$, and $AB$ are invertible, then $(AB)^{-1}=B^{-1}A^{-1}$.  That is, the order is reversed, and because matrices do not commute, this matters.  This is because if $AB|v\rangle=|w\rangle$, then $B|v\rangle=A^{-1}|w\rangle$, and finally $|v\rangle=B^{-1}A^{-1}|w\rangle$.
+
+Next we notice that if a matrix is a diagonal with non-zero entries $D=\left(\begin{array}{cccc}\lambda_1&0&\cdots&0\\0&\lambda_2&\cdots&0\\ \vdots&\vdots&\ddots&\vdots\\0&0&\cdots&\lambda_n\end{array}\right)$, then the inverse is also a diagonal matrix, $D^{-1}=\left(\begin{array}{cccc}1/\lambda_1&0&\cdots&0\\0&1/\lambda_2&\cdots&0\\ \vdots&\vdots&\ddots&\vdots\\0&0&\cdots&1/\lambda_n\end{array}\right)$.  The reader can easily verify that these are inverses.
+
+Putting these facts together with the fact that $M^{-1}=M^T$ for orthogonal matrices (see Section \ref{OrthogonalMatrices}), we can calculate the inverse of a matrix, $M$, with the given SVD (in matrix form) of $M=UDV^T$.  That is, $M^{-1}=(V^T)^{-1}D^{-1}U^{-1}=VD^{-1}U^T$.  This form is already given as an SVD, since the multiplicands are still orthogonal and diagonal.  Since every square matrix has an SVD $UDV^T$, this approach gives an inverse whenever $D$ has all non-zero diagonals; that is whenever $D$ is full-rank.  Conversely if $D$ does have a zero-entry on the diagonal, then it's not invertible, or {\em singular}.  To see this, suppose there's a zero entry in the $(1, 1)$ entry of $D$, then nothing maps to the first row of $U$.  Restated in summation form if $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$ where $\lambda_1=0$, then no $|v\rangle$ maps to $M|v\rangle=|u_1\rangle$; the best we could do is some combination of $|u_i\rangle$ with $i>1$, which are all perpendicular to $|u_1\rangle$.  Given Theorem \ref{DeterminantTheorem}, we can conclude that a matrix is singular if and only if the determinant is $0$.
+
+What inversion does to an SVD is very natural.  Suppose a square matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$ is full-rank, that is $\lambda_i\neq0$ for $i=1..n$, with $n$ equal to the dimension of domain.  Then $M^{-1}=\sum_i\frac{1}{\lambda_i}|v_i\rangle\langle u_i|$.  Because $M$ is full-rank, both $\left\{|u_i\rangle\right\}_i$ and $\left\{|v_i\rangle\right\}_i$ form bases, sometimes called coordinates.  The SVD of $M$ basically says that to calculate $M|v\rangle$, you must first write $|v\rangle$ in the $\left\{|v_i\rangle\right\}_i$ coordinate system, then scale each $i$-th coordinate by $\lambda_i$, and the result is $M|v\rangle$ written in the $\left\{|u_i\rangle\right\}_i$ coordinate system.  (See Subsection \ref{Coordinates} for more details.)  The inverse then writes a vector in the $\left\{|u_i\rangle\right\}_i$ coordinate system, unscales the $i$-th coordinate by $1/\lambda_i$, and ends up with a vector written in the $\left\{|v_i\rangle\right\}_i$ coordinate system.
+
+We now look at an example of a singular matrix.
+
+\begin{tcolorbox}[title=Example,colback=blue!5]
+  {\bfseries\Large Singular Rotation Matrix}
+The following matrix rotates the first two dimensions, but zeroes out the third dimension.
+
+$$
+R=\left(\begin{array}{ccc}\cos(\theta) & -\sin(\theta)&0 \\ \sin(\theta) & \cos(\theta)&0 \\ 0&0&0\end{array}\right)
+$$
+
+$R\langle x, y, z\rangle$ first zeroes out the third coordinate, then rotates $\langle x, y\rangle$ by $\theta$ in the $x-y$ plane, landing on $\langle x', y', 0\rangle$.  Of course, this is singular because we nothing maps to $\langle x', y', z'\rangle$ if $z'\neq0$.  Any vector $\langle x', y', 0\rangle$ does have a vector that maps to it, $\langle x, y, 0\rangle$.  However, this isn't unique, because $\langle x, y, z\rangle$ also maps to $\langle x', y', 0\rangle$ for all $z\in\mathbb R$.  Because of the non-uniqueness, we don't call these inverses.
+
+Although $R$ has no inverse, we could do an almost-inverse.  Given a vector, $|w\rangle$, we could project $|w\rangle$ to the first two dimensions, resulting in $P|w\rangle$, then apply $R(-\theta)$ to those two dimensions.  This would give us a new vector, $|v\rangle$, which has the property that $R|v\rangle$ is as close to $|w\rangle$ as possible.  This "close as possible" claim is justified by the fact that $R|v\rangle=RR(-\theta)P|w\rangle=P|w\rangle$ is the projection of $|w\rangle$ onto the image of $R$.  By Theorem \ref{VectorDecomposition}, the projection is the closest vector in the first two dimensions (the image of $R$) to $|w\rangle$.  Writing such an "almost-inverse" down would look like.
+
+$$
+S=\left(\begin{array}{ccc}\cos(-\theta) & -\sin(-\theta)&0 \\ \sin(-\theta) & \cos(-\theta)&0 \\ 0&0&0\end{array}\right)\left(|e_1\rangle\langle e_1|+|e_2\rangle\langle e_2|\right)
+$$
+
+The first matrix is the inverse on the image of $R$ and the second matrix is projection onto that image.  If we knew an SVD for $R=\lambda_1|u_1\rangle\langle v_1|+\lambda_2|u_2\rangle\langle v_2|$, then we'd know that the image $\operatorname{Span}\left\{|u_1\rangle, |u_2\rangle\right\}=\operatorname{Span}\left\{|e_1\rangle, |e_2\rangle\right\}$.  By Theorem \ref{projection_svd}, we can rewrite $|e_1\rangle\langle e_1|+|e_2\rangle\langle e_2|=|u_1\rangle\langle v_1|+|u_2\rangle\langle v_2|$.  And so we can rewrite,
+
+$$
+S=\left(\frac{1}{\lambda_1}|v_1\rangle\langle u_1|+\frac{1}{\lambda_2}|v_2\rangle\langle u_2|\right)\left(|u_1\rangle\langle v_1|+|u_2\rangle\langle v_2|\right)=\frac{1}{\lambda_1}|v_1\rangle\langle u_1|+\frac{1}{\lambda_2}|v_2\rangle\langle u_2|
+$$
+
+The first matrix is the inverse of the SVD of R, which exists if we restrict to the first two dimenisions.  This tells us that the almost inverse is given by doing the inverse to the non-zero terms of the SVD.  It almost doesn't feel worth mentioning projection, but when you consider that there's an implicit zero term in the SVD of $R$, we see that $R=R=\lambda_1|u_1\rangle\langle v_1|+\lambda_2|u_2\rangle\langle v_2|+0|e_3\rangle\langle e_3|$.  It hardly feels justifiable to invert the non-zero terms and leave the zero term untouched.  But when we consider that it's the ortogonal projection onto $R$'s image, then it seems justifiable by closeness arguments.
+\end{tcolorbox}
+
+Generalizing the example, we define the {\em pseudo-inverse} of a matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$ is $M^+=\sum_i\frac{1}{\lambda_i}|v_i\rangle\langle u_i|$.  The pseudo-inverse of a matrix always exists, even for non-square matrices.  In general, there's no good way to write this in matrix form, because we're unable to ignore the zero entries in the diagonal matrix.  Also in general, there is no such relationship $M^+$, $M$, and $I$.  We'll discuss some special cases now.
+
+Given a matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with non-zero terms, if $\left\{|v_i\rangle\right\}_i$ span the domain, then $M^TM=\sum_i\lambda_i^2|v_i\rangle\langle v_i|$ is square and full-rank, and therefore invertible.  It's inverse using arguments above must be $\left(M^TM\right)^{-1}=\sum_i\frac{1}{\lambda_i^2}|v_i\rangle\langle v_i|$.  This looks like projection, with some scaling, so we try composing it with $M$ to see if we can get the pseudo-inverse.  And indeed, we see that $\left(M^TM\right)^{-1}M^T=\sum_i\frac{1}{\lambda_i}|v_i\rangle\langle u_i|=M^+$.  This identity is sometimes given as the definition of the pseudo-inverse.  In the case that $\left\{|v_i\rangle\right\}_i$ span the domain, and $M^+=\left(M^TM\right)^{-1}M^T$, we have that $M^+M=\left(M^TM\right)^{-1}M^TM=I$.  We say then that $M^+$ is a {\em Left Inverse} of $M$.
+
+On the other hand, given a matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with non-zero terms, if $\left\{|u_i\rangle\right\}_i$ span the codomain, then $MM^T=\sum_i\lambda_i^2|u_i\rangle\langle u_i|$ is full-rank, and therefore invertible.  In this case $M^+=M^T\left(MM^T\right)^{-1}$, and $MM^+=I$, making $M^+$ a {\em Right Inverse} of $M$.
+
+The definition of a pseudo-inverse is very natural when you have the bra-ket form of the SVD.  But most linear algebra books do not center the SVD.  So the pseudo-inverse is given as an abstract matrix satisfying certain properties.  In the two cases outlined above, an explicit formula can be given for the pseudo-inverse.  As such some books decide to only define the pseudo-inverse when it can be written explicitly.  But this gets the implication backwards: It doesn't make sense to define the pseudo-matrix in terms of the inverse, because the inverse is a special case of the pseudo-inverse.  These books prefer this only because they've taken time to teach matrix inversion in detail, even though almost all matrices are not invertible.
+
+The condition for a left inverse is that $\left\{|v_i\rangle\right\}_i$ span the domain.  But this is equivalent to saying that $M$ is injective.  That is, for any two distinct vectors $|v\rangle$ and $|w\rangle$ in the domain, $M|v\rangle\neq M|w\rangle$.  It's outside the scope of this book, but any injective function (even non-linear functions) have left inverses.  The condition for a right inverse is that $\left\{|u_i\rangle\right\}_i$ span the codomain.  This is equivalent to the matrix being surjective.  That is, for any vector $|w\rangle$ in the codomain, there's a vector $|v\rangle$ in the domain with $M|v\rangle=|w\rangle$.
+
+{\bfseries\scshape\Large Exercises}
+
+\begin{enumerate}[\thechapter.\thesection .1]
+\item Prove that if $AB=I$, then $BA=I$.
+\item Show that $R(\theta)R(-\theta)=I$ by multiplying matrices, and applying trig identities.
+\item Prove that $A$ and $B$ are both invertible if and only if $AB$ is invertible.
+\item Prove the above claim that for a matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$, $\left\{|v_i\rangle\right\}_i$ spans the domain if and only $M$ is injective.
+\item Given that the SVD of an $n\times n$ square matrix can be computed in $O(n^3)$-time, argue that we can compute the inverse in $O(n^3)$-time.  Note: This is not the most efficient way to calculate an inverse.
+\item Show that when an inverse exists, there is a unique inverse.  That is, for an invertible matrix, $A$, there is only one matrix, $B$, for which $AB=I$.  Pseudo-inverses are also unique.
+\item Prove the following facts about the pseudo-inverse:
+\begin{enumerate}[a]
+  \item $AA^+A=A$
+  \item $A^+AA^+=A^+$
+  \item $\left(AA^+\right)^T=AA^+$  (We can continue to assume that $A$ and $A^+$ are all real.)
+  \item $\left(A^+A\right)^T=A^+A$
+\end{enumerate}
+\item Show that $\left(AB\right)^+=B^+A^+$.
+\item Why is it true that a square matrix is injective if and only if it's surjective?
+\item A $1\times1$ matrix $(m)$ maps 1-scalars $(x)$ to 1-scalars $(mx)$.  When is this matrix invertible?  What is the inverse when it's invertible?  What is the pseudo-inverse when it's singular?
+\end{enumerate}
+
 \section{Least Squares}
 \section{Graham-Schmidt and QR factorizations}
 \section{Legendre polynomials}
