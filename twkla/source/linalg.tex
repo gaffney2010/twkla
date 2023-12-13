@@ -384,7 +384,7 @@ $$
 
 This equality makes sense.  $P^{-1}$ maps the eigenvalues of $A$ to the standard basis; $D$ stretches invariantly along each of the standard basis; and $P$ maps the standard basis back.  The net effect is that the invariant stretching from $D$ gets moved to the eigenvectors.  An SVD, $UDV^{-1}$, on the other hand rotates, stretches along standard basis, then rotates to (potentially) new rotation.  (In the last sentence, we call $V^T=V^{-1}$, which is true for all orthogonal matrices; we also called the orthogonal matrices "rotations" which is a good way to think of orthogonal matrices.)  We can see that $PDP^{-1}$ and $UDV^{-1}$ are just two decompositions of matrices.  The former, called a diagonalization, requires the outside matrices to be inverses, while the SVD requires the outside matrices to be orthogonal.  Diagonalizations exist sometimes, whereas SVD exist all the time.  We'll see in the Section \ref{Section-How to Calculate} that these two concepts are intimately connected.  See Chapter \ref{Symmetric Matrices} for a discussion of how the SVD is also a diagonalization.
 
-\subsection{Vectors and Covectors}
+\subsection{Vectors and Covectors}\label{SectionVecsAndCovecs}
 
 One view of matrices is that they're the product of vectors and covectors.  The columns of $A$ tell us how to act on standard basis vectors.  Call the $i$-th column of $A$ $|A_{*i}\rangle$.  Then,
 
@@ -428,6 +428,14 @@ Comparing both sides, we can now say that $A=\sum_i|A_{*i}\rangle\langle e_i|$. 
 
 But by studying linear algebra, you learn that there's nothing special about the standard basis $\left\{|e_i\rangle\right\}$.  For any basis $\left\{| v _i\rangle\right\}$, we can write the matrix $A$ with this basis on the domain.  (See Section \ref{Change of Bases} for more detailed discussion on bases.)  Call the columns of this new matrix $\left\{| u _i\rangle\right\}$, and it follows that $A=\sum_i| u _i\rangle\langle v _i|$.  Although $\left\{\langle v _i|\right\}$ are orthonormal, it's not usually true of the resulting $\left\{| u _i\rangle\right\}$.  The existence of an SVD is the existence of a domain basis $\left\{\langle v _i|\right\}$ for which the corresponding $\left\{| u _i\rangle\right\}$ are also orthogonal, but not normal.  We can write $|u_i\rangle=\lambda_i|u_i'\rangle$, so that $\left\{u_i'\right\}$ are orthonormal.  The basis $\left\{\langle v _i|\right\}$ that produces orthogonal columns on $A$ is a very special basis.  There's no reason to prefer to represent $A$ in the standard basis or any other basis.  So we might as well choose $\left\{\langle v _i|\right\}$, giving $A=\sum_i\lambda_i|u_i'\rangle\langle v_i|$, the SVD.  We'll see throughout the course of this book that it simplifies many things.
 
+I want to revisit the equivalence of the two forms of the SVD with this new language.  Given a $UDV^T$ representation of a matrix, $A$, we can write $V^T=\sum_i|e_i\rangle\langle v_i|$, where the $|v_i\rangle$ are the rows of $V^T$, and we can write $U=\sum_i|u_i\rangle\langle e_i|$ where the $|u_i\rangle$ are the columns of $U$.  And of course $D=\sum_i\lambda_i|e_i\rangle\langle e_i|$, where $\lambda_i$ are the diagonal components of $D$.  Now we have
+
+$$
+A=UDV^T=\left(\sum_i|u_i\rangle\langle e_i|\right)\left(\sum_j\lambda_j|e_j\rangle\langle e_j|\right)\left(\sum_k|e_k\rangle\langle v_k|\right)=\sum_i\lambda_i|u_i\rangle\langle v_i|
+$$
+
+where the last equality follows from the orthonomality of $|e_i\rangle$.
+
 \subsection{Coordinates}\label{Coordinates}
 
 In this section we continue to build intuition.
@@ -439,7 +447,20 @@ Consider a basis, $\mathcal B$, of $\mathbb R^3$ given by $\vec v_1=\langle 1/\s
 
 The purpose of this short section is to make the connection that both $\langle 1, 2, 3\rangle$ and $\langle 3/\sqrt2, -1/sqrt2, -3\rangle_{\mathcal B}$ are equally legitimate representations of the same vector.  This is a conceptual decoupling between a vector and the coordinates we use to write it.  The observation is akin to the realization that the number $14$ can be written in binary as $1110$; the number itself is not either of these things, but is merely represented by them.
 
-And if any choice of coordinates are equally legitimate, we may as well choose the bases given by the SVD, $M=\sum_i|u_i\rangle\langle v_i|$.  That is, if $\mathcal B=(|u_1\rangle, |u_2\rangle, \cdots, |u_n\rangle)$ and $\mathcal B'=(|v_1\rangle, |v_2\rangle, \cdots, |v_n\rangle)$ then $M\langle x_1, x_2, \cdots x_n\rangle_{\mathcal B}=\langle \lambda_1x_1, \lambda_2x_2, \cdots, \lambda_nx_n\rangle_{\mathcal B'}$.  So the existance of an SVD says that any matrix is merely a dillation under the correct coordinate systems.  Quite a surprising fact!
+And if any choice of coordinates are equally legitimate, we may as well choose the bases given by the SVD, $M=\sum_i|u_i\rangle\langle v_i|$.  That is, if $\mathcal B_u=(|u_1\rangle, |u_2\rangle, \cdots, |u_n\rangle)$ and $\mathcal B_v=(|v_1\rangle, |v_2\rangle, \cdots, |v_n\rangle)$ then $M\langle x_1, x_2, \cdots x_n\rangle_{\mathcal B_u}=\langle \lambda_1x_1, \lambda_2x_2, \cdots, \lambda_nx_n\rangle_{\mathcal B_v}$.  So the existance of an SVD says that any matrix is merely a dillation under the correct coordinate systems.  Quite a surprising fact!
+
+We can take this notation a bit further even.
+
+\begin{tcolorbox}[title=Example: Coordinate Systems,colback=blue!5]
+{\bfseries\Large Functions on Coordinate Systems}
+You and two friends, Leeta and Odo, are doing some classical physics problem, and have to draw your own axes to solve the problem.  You correctly label the canonical $x$ and $y$ axes, $\langle 1,0\rangle$ and $\langle 0,1\rangle$.  But Leeta is looking at the problem from an angle, so she ends up with axes $\langle 1/\sqrt2, 1/\sqrt2\rangle$ and $\langle -1/\sqrt2, 1/\sqrt2\rangle$.  And Odo is left-handed, so he ends up with axes $\langle 0,1\rangle$ and $\langle 1,0\rangle$.  As an intermediate step, the problem requires you to write down a rotation matrix.  Because the axes are made up by the solver, they shouldn't affect the ultimate solution.  So you can write the rotation in any basis.  When you use the canonical basis $\mathcal B$, you get the usual rotation matrix $R_{\mathcal B\mathcal B}=\left(\begin{array}{cc}\cos\theta & -\sin\theta \\ \sin\theta & \cos\theta\end{array}\right)$.  When Leeta calculates the same matrix in her basis, $\mathcal B_L$, she too ends up with $[R]_{\mathcal B_L\mathcal B_L}=\left(\begin{array}{cc}\cos\theta & -\sin\theta \\ \sin\theta & \cos\theta\end{array}\right)$.  Note the notation on the matrix, which means that both the domain and range are written in Leeta's coordinates, $\mathcal B_L$.  Now Odo's a little odd, so in his coordinates, $\mathcal B_O$, counterclockwise rotation rotates his $y$-axis towards his $x$-axis, and he gets $[R]_{\mathbb O\mathbb O}=\left(\begin{array}{cc}\cos\theta & \sin\theta \\ -\sin\theta & \cos\theta\end{array}\right)$.
+
+As you may guess, it's also possible to write down the rotation matrix where the input is in one coordinate system and the output is in another.  For example $[R]_{\mathcal B_L\mathcal B_O}=\left(\begin{array}{cc} \cos\left(\theta-\pi/4\right) & \sin\left(\theta-\pi/4\right) \\ -\sin\left(\theta-\pi/4\right) & \cos\left(\theta-\pi/4\right)\end{array}\right)$.
+
+If we have a change-of-basis matrix, $C$ that maps our coordinates to Leeta's then we could write, for any matrix, $M$, $[M]_{\mathcal B\mathcal B}=C^{-1}[M]_{\mathcal B_L\mathcal B_L}C$.  The change-of-basis matrix itself can be written as $C=[I]_{\mathcal B_L\mathcal B}$.
+\end{tcolorbox}
+
+With this notation for matrices in different basis, the SVD of a matrix $M$ is simply bases $\mathcal B$ and $\mathcal B'$ for which $[M]_{\mathcal B\mathcal B'}=I$.
 
 \subsection{Bilinear Forms}
 
@@ -1181,7 +1202,7 @@ Explain how you might modify Collaborative Filtering to reduce this loss.  Consi
 \item \label{Ex-MovieLens} $\diamondsuit$ Download the MovieLens dataset from https://grouplens.org/datasets/movielens/.  (Choose which size dataset you want to work with.  For a greater challenge, do a larger set.)  Perform Collaborative Filtering on the data.  Test your model by filling in 5-stars for some of your favorite movies; what movies get recommended?  (If you don’t like movies, then try entering Escape from New York, Overboard, and Deathproof.)  Bonus:  Make software (or Jupyter notebook) that let’s the user enter movies, and updates the top-10 recommendation list.
 \end{enumerate}
 
-\section{Principle Component Analysis}
+\section{Principle Component Analysis}\label{SectionPCA}
 
 Let's say you're trying to build a credit profile on a set of users.  We know that everyone gets a one-number credit score, but if you're a bank or an insurance company, you may find this insufficient.  These same credit companies will sell you a packet of hundreds (or thousands) of variables for each of your customers.  You can use these to predict loan defaults\footnote{"Default" means failure to make payments owed.} or car accidents.  You could even build an insurance-specific credit score for each of your customers.  (Such a score would omit medical debt, by law.)  This will be our motivating example for this section.  Although the use of credit scores can be controversial, we'll focus only on the modeling challenge it presents.
 
@@ -1417,6 +1438,8 @@ To prove the other direction, assume that $P=\sum_{i=1}^k|v_i\rangle\langle v_i|
 
 Notice that this theorem doesn't rely on the fact that the invariant subspace is the image of the projection operator, but from the SVD, we can see that the image is precisely spanned by the $\left\{|v_i\rangle\right\}$.
 
+Before moving on, we want to highlight a special projection matrix, $|v\rangle\langle v|$.  For this to be a projection matrix, $|v\rangle$ must be a unit vector.  (Why?)  This takes a vector and projects onto $|v\rangle$, so that $|w\rangle\to|v\rangle\langle v|w\rangle$.  Recall that the $\langle v|w\rangle$ is the inner product, or dot product; this projection is sometimes written as $\operatorname{proj}_{\vec v}\vec w=\left(\vec v\dot\vec w\rangle\right)\vec v$.  Because $|v\rangle$ is a unit vector, it gives the direction of $|v\rangle$ and $\langle v|w\rangle$ gives the magnitude of the resulting projection.  Doing some trig, we get that the magnitude must also equal $\left\||w\rangle\right\|\cos\theta$, where $\theta$ is the angle between $|v\rangle$ and $|w\rangle$.  More generally if $|v\rangle$ isn't unital, then $\langle v|w\rangle=\left\|v\rangle\right\|\left\||w\rangle\right\|\cos\theta$.  This formula gives a concrete interpretation of the inner product.
+
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
@@ -1424,6 +1447,8 @@ Notice that this theorem doesn't rely on the fact that the invariant subspace is
 \item Prove that the image of any matrix forms a subspace.
 \item Prove that a projection matrix is either singular or the identity matrix.
 \item Matrices do not have a unique SVD representation.  However, prove that if a matrix has any SVD of the form $P=\sum_i|v_i\rangle\langle v_i|$, then all SVDs must be of the form $P=\sum_j|v_j\rangle\langle v_j|$.
+\item Planes in higher dimensions are linear spaces with codimension of $1$, meaning that there's a unique (up to magnitude) vector that's perpendicular to the plane, called the normal vector.  Let $|v\rangle$ be a normal vector to the plane, and argue that $\langle v|x\rangle=0$ is a formula for the plane.  Why might it be valuable to choose a normal vector?
+\item Prove the {\em Cauchy Schwartz inequality} that $\left\|\langle u,v\rangle\right\|^2\leq\langle u,u\rangle\langle v,v\rangle$.
 \item Intuitively we expect the composition of two projection matrices, $P$ and $Q$, to be a projection matrix, $PQ$, with the image being the intersection of $\operatorname{Im}(A)$ and $\operatorname{Im}(B)$.  Prove that this is the case.
 \item Let $P$ and $Q$ be projection matrices with images $\mathcal P$ and $\mathcal Q$ that are orthogonal - that is $\langle p|q\rangle=0$ for all $|p\rangle\in\mathcal P$, $|q\rangle\in\mathcal Q$.  Prove that $P+Q$ is a projection matrix also.
 \item\label{idempotence_taylor} Given the definition of $\exp(M)=\sum_n\frac{M^n}{n!}$, for any matrix, $M$, show that $\exp{P}=e+(e-1)P$ for all idempotent matrices, $P$.  We generalize this in Section \ref{section_taylor_series}.
@@ -1483,13 +1508,25 @@ The first matrix is the inverse of the SVD of R, which exists if we restrict to 
 
 Generalizing the example, we define the {\em pseudo-inverse} of a matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$ is $M^+=\sum_i\frac{1}{\lambda_i}|v_i\rangle\langle u_i|$.  The pseudo-inverse of a matrix always exists, even for non-square matrices.  In general, there's no good way to write this in matrix form, because we're unable to ignore the zero entries in the diagonal matrix.  Also in general, there is no such relationship $M^+$, $M$, and $I$.  We'll discuss some special cases now.
 
-Given a matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with non-zero terms, if $\left\{|v_i\rangle\right\}_i$ span the domain, then $M^TM=\sum_i\lambda_i^2|v_i\rangle\langle v_i|$ is square and full-rank, and therefore invertible.  It's inverse using arguments above must be $\left(M^TM\right)^{-1}=\sum_i\frac{1}{\lambda_i^2}|v_i\rangle\langle v_i|$.  This looks like projection, with some scaling, so we try composing it with $M$ to see if we can get the pseudo-inverse.  And indeed, we see that $\left(M^TM\right)^{-1}M^T=\sum_i\frac{1}{\lambda_i}|v_i\rangle\langle u_i|=M^+$.  This identity is sometimes given as the definition of the pseudo-inverse.  In the case that $\left\{|v_i\rangle\right\}_i$ span the domain, and $M^+=\left(M^TM\right)^{-1}M^T$, we have that $M^+M=\left(M^TM\right)^{-1}M^TM=I$.  We say then that $M^+$ is a {\em Left Inverse} of $M$.
+Given a matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with non-zero terms, if $\left\{|v_i\rangle\right\}_i$ span the domain, then $M^TM=\sum_i\lambda_i^2|v_i\rangle\langle v_i|$ is square and full-rank, and therefore invertible.  It's inverse using arguments above must be $\left(M^TM\right)^{-1}=\sum_i\frac{1}{\lambda_i^2}|v_i\rangle\langle v_i|$.  This looks like projection, with some scaling, so we try composing it with $M$ to see if we can get the pseudo-inverse.  And indeed, we see that $\left(M^TM\right)^{-1}M^T=\sum_i\frac{1}{\lambda_i}|v_i\rangle\langle u_i|=M^+$.  In the case that $\left\{|v_i\rangle\right\}_i$ span the domain, and $M^+=\left(M^TM\right)^{-1}M^T$, we have that $M^+M=\left(M^TM\right)^{-1}M^TM=I$.  We say then that $M^+$ is a {\em Left Inverse} of $M$.
 
 On the other hand, given a matrix $M=\sum_i\lambda_i|u_i\rangle\langle v_i|$, with non-zero terms, if $\left\{|u_i\rangle\right\}_i$ span the codomain, then $MM^T=\sum_i\lambda_i^2|u_i\rangle\langle u_i|$ is full-rank, and therefore invertible.  In this case $M^+=M^T\left(MM^T\right)^{-1}$, and $MM^+=I$, making $M^+$ a {\em Right Inverse} of $M$.
 
 The definition of a pseudo-inverse is very natural when you have the bra-ket form of the SVD.  But most linear algebra books do not center the SVD.  So the pseudo-inverse is given as an abstract matrix satisfying certain properties.  In the two cases outlined above, an explicit formula can be given for the pseudo-inverse.  As such some books decide to only define the pseudo-inverse when it can be written explicitly.  But this gets the implication backwards: It doesn't make sense to define the pseudo-matrix in terms of the inverse, because the inverse is a special case of the pseudo-inverse.  These books prefer this only because they've taken time to teach matrix inversion in detail, even though almost all matrices are not invertible.
 
 The condition for a left inverse is that $\left\{|v_i\rangle\right\}_i$ span the domain.  But this is equivalent to saying that $M$ is injective.  That is, for any two distinct vectors $|v\rangle$ and $|w\rangle$ in the domain, $M|v\rangle\neq M|w\rangle$.  It's outside the scope of this book, but any injective function (even non-linear functions) have left inverses.  The condition for a right inverse is that $\left\{|u_i\rangle\right\}_i$ span the codomain.  This is equivalent to the matrix being surjective.  That is, for any vector $|w\rangle$ in the codomain, there's a vector $|v\rangle$ in the domain with $M|v\rangle=|w\rangle$.
+
+Exercise \ref{Ex-Outer Product Identity} shows that for any basis of $\mathbb R^n$, $\left\{|v_i\rangle\right\}$, $\sum_i|v_i\rangle\langle v_i|=I$.  This section puts that exercise in a new light, because we can recognize $\sum_i|v_i\rangle\langle v_i|$ as a projection matrix.  As such, its invariant subspace is it's image, but because the image is the basis, it spans $\mathbb R^n$; that is, $\left(\sum_i|v_i\rangle\langle v_i|\right)|v\rangle=|v\rangle$ for all $|v\rangle\in\mathbb R^n$.  So it's the identity.
+
+\begin{theorem}
+If a matrix $Q$ has orthonormal rows, then $Q^TQ=I$  If it has orthonomal columns then $QQ^T=I$.  Such matrices are called {\em semi-orthogonal}.
+\end{theorem}
+
+\begin{proof}
+We'll prove the first part.  Any matrix $Q$ with rows given by $\left\{|v_i\rangle\right\}$ can be written as $Q=\sum_i|e_i\rangle\langle v_i|$.  (See Section \ref{SectionVecsAndCovecs}.)  This implies that $Q^TQ=\sum_i|v_i\rangle\langle v_i|$.  Though this is always true, when the $|v_i\rangle$ are orthonormal, $\sum_i|v_i\rangle\langle v_i|$ form a valid SVD.  In this case, $Q^TQ$ must be a projection matrix, invariant on the span of $\left\{|v_i\rangle\right\}$.  If $Q$ has $n$ rows, then $Q^TQ$ is a an $n\times n$ matrix, so $\left\{|v_i\rangle\right\}$ spans the domain and range, and $Q^TQ$ must fix every element.
+\end{proof}
+
+Note that by Theorem \ref{OrthogonalMatrixDefiniton}, square matrices have orthonormal rows precisely when they orthonormal columns.  By the above theorem, such matrices must have $Q^TQ=QQ^T=I$.  So Theorem \ref{OrthogonalMatrixInverse} that $Q^{-1}=Q^T$ for orthogonal matrices follows immediately.
 
 {\bfseries\scshape\Large Exercises}
 
@@ -1512,7 +1549,39 @@ The condition for a left inverse is that $\left\{|v_i\rangle\right\}_i$ span the
 \item A $1\times1$ matrix $(m)$ maps 1-scalars $(x)$ to 1-scalars $(mx)$.  When is this matrix invertible?  What is the inverse when it's invertible?  What is the pseudo-inverse when it's singular?
 \end{enumerate}
 
-\section{Least Squares}
+\section{Least Squares Regression}
+
+Let's look at how inverses can be used to solve problems.  We'll present a word problem like you might see in a high school class.
+
+\begin{tcolorbox}[title=Example,colback=blue!5]
+  {\bfseries\Large Word Problem}
+  You're selling tickets to a 2-day show.  You sell two types of tickets, regular and VIP.  On the first day, you sell $100$ regular tickets and $3$ VIP tickets, and make $11,500$ dollars.  On the second day, you sell $90$ regular tickets and $6$ VIP tickets and make $12,000$ dollars.  How much does a VIP ticket cost versus a regular ticket?
+
+Say that a regular ticket costs $\beta_1$ dollars and a VIP ticket costs $\beta_2$ dollars.  We then have the linear relationship:
+
+$$
+\left(\begin{array}{c} 11500 \\ 12000 \end{array}\right)=\left(\begin{array}{cc} 100&3\\90&6\end{array}\right)\left(\begin{array}{c}\beta_1\\ \beta_2\end{array}\right)
+$$
+
+Of course you can solve this system of equations with some logic or using algebra techniques, but linear algebra saves you from having to do anything difficult and scales nicely to larger systems (at least from a human effort perspective).  The matrix in this equation is invertible, so we can solve this system, by saying:
+
+$$
+\left(\begin{array}{c}\beta_1\\ \beta_2\end{array}\right)=\left(\begin{array}{cc} 100&3\\90&6\end{array}\right)^{-1}\left(\begin{array}{c} 11500 \\ 12000 \end{array}\right)=\left(\begin{array}{c}100 \\500\end{array}\right)
+$$
+\end{tcolorbox}
+
+This is bread-and-butter applied linear algebra, and will probably be familiar to the reader.  It's not surprising that solving system of linear equations is the primary motivation for studying inverses; this is the matrix-equivalent of solving $y=ax$ for $a$.
+
+But what if we modify the example slightly, so that we add a third class of tickets, called "VIP Plus?"  Now your system looks like:
+
+$$
+\left(\begin{array}{c} 12500 \\ 13000 \end{array}\right)=\left(\begin{array}{ccc} 100&3&2\\90&6&1\end{array}\right)\left(\begin{array}{c}\beta_1\\ \beta_2\end{array}\right)
+$$
+
+You may recall from algebra that you generally cannot (and never for linear equations) solve for three unknowns with only two equations.  Such a system is called {\em underdetermined}.  But with the help of pseudo-inverses we can make a best guess.  For now let's call the system $|y\rangle=X|\beta\rangle$, but we'll continue to assume that $X$ is $2\times 3$.  We can almost solve this equation as $X^+|y\rangle=|\beta\rangle$.
+
+It's probably still a little unclear what the pseudo-inverse means, or why this is a good approximate solution.  So let's try a different approach:  We know that as a $2\times3$-dimensional matrix, $X$ cannot possibly be invertible.  But suppose it's rank-$2$, as in our example.  (A $2\times3$ matrix cannot have more than rank $2$.)  Then we want to reduce the dimensionality of the domain by $1$ to end up with a $2\times2$ matrix, that we can then invert.  We know from Section \ref{SectionPCA}, that the PCA is the way to reduce dimensions with minimal information loss.  For a rank-$2$ matrix, there will be two PCA axes that we can choose from.  Let $X=UDV^T$ be an SVD.  Now $V^T$ will be a $3\times3$ orthogonality matrix, where the bottom row has no impact on $X$, because of a zero entry in $D$.  The two PCA axes will be the first two rows of $V^T$, $|v_1\rangle$ and $|v_2\rangle$.  To transform data points to the two SVD axes, we can just project onto each one.  That is we let the first coordinate be the magnitude of the projection onto $|v_1\rangle$, and the second coordinate will be projection onto $|v_2\rangle$.  To transform any point to these two axes, we can just apply the matrix $W^T:=|e_1\rangle\langle v_1|+|e_2\rangle\langle v_2|$.
+
 \section{Graham-Schmidt and QR factorizations}
 \section{Legendre polynomials}
 
@@ -1530,9 +1599,6 @@ The condition for a left inverse is that $\left\{|v_i\rangle\right\}_i$ span the
 
 \chapter{[WIP] Symmetric Matrices}
 \section{Symmetric Matrices}\label{SymmetricMatrices}
-\section{Prove specific form}
-\section{Corollaries}
-\section{Use to calculate SVD}
 \section{Inner products, covariance}
 \section{Spectral Theorem}
 \section{Taylor series and smooth functions}\label{section_taylor_series}
@@ -1553,6 +1619,14 @@ The condition for a left inverse is that $\left\{|v_i\rangle\right\}_i$ span the
 \section{Orthogonal Matrices}\label{OrthogonalMatrices}
 
 This section is under construction.  In the meantime, \url{https://www.nagwa.com/en/explainers/476190725258/} is a good source to review this topic.
+
+\begin{theorem}\label{OrthogonalMatrixDefinition}
+A square matrix has orthonormal rows if and only if it has orthonormal columns.  We call such matrices {\em orthogonal}.
+\end{theorem}
+
+\begin{theorem}\label{OrthogonalMatrixInverse}
+The inverse of a orthogonal matrix is its transpose.  $Q^{-1}=Q^T$.
+\end{theorem}
 
 \section{Spans and Bases}\label{Spans and Bases}
 
