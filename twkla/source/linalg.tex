@@ -19,6 +19,9 @@
 \usepackage[shortlabels]{enumitem}
 \usepackage{mathabx}
 \usepackage{hyperref}
+% \usepackage{tikz}
+% \usetikzlibrary{matrix,arrows.meta}
+% \usepackage{amsmath}
 
 \counterwithin{theorem}{section}
 \renewcommand\thetheorem{\thechapter.\thesection.\arabic{theorem}}
@@ -988,6 +991,17 @@ Choose an SVD, $A=UDV^T$.  Because determinant distributes over matrix multiplic
 
 There's another way to understand this.  The orthogonal matrices $U$ and $V^T$ are isometries.  This means that they preserve distances, and importantly, volumes.  The determinant can be understood as the volume of the image of a unit cube.  With a $UDV^T$ transformation, we see the cube gets rotated ($V^T$), stretched or squashed ($D$) in a way that maps unit cubes to cubes of volume $|D|$, then rotates again ($U$).  The rotations don't affect the volume, so the unit cube gets mapped to some cube of volume $|D|$.
 
+\subsection{Misc}
+
+\begin{theorem}
+\label{ColumnAndRowSpace}
+Given a matrix with SVD, $X=\sum_i\lambda_i|u_i\rangle\langle v_i|$, the span of the columns of $X$ is the span of $\left\{|u_i\rangle\right\}_i$, and the span of the rows of $X$ is the span of $\left\{|v_i\rangle\right\}_i$.
+\end{theorem}
+
+\begin{proof}
+  TODO
+\end{proof}
+
 {\bfseries\scshape\Large Exercises}
 
 \begin{enumerate}[\thechapter.\thesection .1]
@@ -1414,6 +1428,14 @@ Where the last equality from the usual trick of taking advantage of orthonormali
 Now $P^2=P\implies \sum_i\lambda_i^2|v_i\rangle\langle v_i|=\sum_i\lambda_i|v_i\rangle\langle v_i|$.  We can apply $|v_i\rangle$ to both side of either matrix to get $\lambda_i^2=\lambda_i$, implying that $\lambda_i$ is $0$ or $1$, completing the proof.
 \end{proof}
 
+\begin{corollary}\label{closest}
+For a projection matrix $P$ with range $\mathcal P$, $\left|P|v\rangle-|v\rangle\right|=\min_{|w\rangle\in\mathbb P}\left\| |w\rangle-|v\rangle\right\|$.
+\end{corollary}
+
+\begin{proof}
+  TODO
+\end{proof}
+
 Recall that we used projection matrices already in Theorem \ref{AiProjectionThm}.  There we argued that a matrix like $I-|v\rangle\langle v|$ is a projection.  With Theorem \ref{ProjectionMatrix}, we can see that this must be a projection matrix, because it's obviously symmetric, and the reader can check that it's idempotent.  But what is it's SVD?  By Exercise \ref{Ex-Outer Product Identity}, we can choose any basis $\left\{|v_i\rangle\right\}_i$, where $|v_1\rangle=|v\rangle$, then $I=\sum_i|v_i\rangle\langle v_i|$, and $I-|v\rangle\langle v|=\sum_{i\neq1}|v_i\rangle\langle v_i|$ is a valid SVD.  This begins to establish the one-to-one connection between a projection matrix's SVD and its invariant subspace, made explicit by the next theorem.
 
 \begin{theorem}\label{projection_svd}
@@ -1551,6 +1573,8 @@ Note that by Theorem \ref{OrthogonalMatrixDefiniton}, square matrices have ortho
 
 \section{Least Squares Regression}
 
+\subsection{Solving System of Equations}
+
 Let's look at how inverses can be used to solve problems.  We'll present a word problem like you might see in a high school class.
 
 \begin{tcolorbox}[title=Example,colback=blue!5]
@@ -1572,6 +1596,8 @@ $$
 
 This is bread-and-butter applied linear algebra, and will probably be familiar to the reader.  It's not surprising that solving system of linear equations is the primary motivation for studying inverses; this is the matrix-equivalent of solving $y=ax$ for $a$.
 
+\subsection{Under-determined System of Equation}
+
 But what if we modify the example slightly, so that we add a third class of tickets, called "VIP Plus?"  Now your system looks like:
 
 $$
@@ -1582,7 +1608,146 @@ You may recall from algebra that you generally cannot (and never for linear equa
 
 It's probably still a little unclear what the pseudo-inverse means, or why this is a good approximate solution.  So let's try a different approach:  We know that as a $2\times3$-dimensional matrix, $X$ cannot possibly be invertible.  But suppose it's rank-$2$, as in our example.  (A $2\times3$ matrix cannot have more than rank $2$.)  Then we want to reduce the dimensionality of the domain by $1$ to end up with a $2\times2$ matrix, that we can then invert.  We know from Section \ref{SectionPCA}, that the PCA is the way to reduce dimensions with minimal information loss.  For a rank-$2$ matrix, there will be two PCA axes that we can choose from.  Let $X=UDV^T$ be an SVD.  Now $V^T$ will be a $3\times3$ orthogonality matrix, where the bottom row has no impact on $X$, because of a zero entry in $D$.  The two PCA axes will be the first two rows of $V^T$, $|v_1\rangle$ and $|v_2\rangle$.  To transform data points to the two SVD axes, we can just project onto each one.  That is we let the first coordinate be the magnitude of the projection onto $|v_1\rangle$, and the second coordinate will be projection onto $|v_2\rangle$.  To transform any point to these two axes, we can just apply the matrix $W^T:=|e_1\rangle\langle v_1|+|e_2\rangle\langle v_2|$.
 
-\section{Graham-Schmidt and QR factorizations}
+% \begin{tikzpicture}
+%   \matrix (m)
+%     [
+%       matrix of math nodes,
+%       row sep    = 3em,
+%       column sep = 4em
+%     ]
+%     {
+%       \mathbb R^3 & \mathbb R^2 \\
+%       \mathbb R^2 &             \\
+%     };
+%   \path
+%     (m-1-1) edge [->] node [left] {$W^T$} (m-2-1)
+%     (m-1-1.east |- m-1-2) edge [->] node [above] {$X$} (m-1-2)
+%     (m-2-1.east) edge [->,dashed] node [below] {$XW$} (m-1-2);
+% \end{tikzpicture}
+
+We project down to $\mathbb R^2$ via $W^T$, then extend the map $X$ via $W$ to get $XW$, which is the composition of $X$ and $(W^T)^{-1}=W$.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{comm_diag.png}
+\end{figure}
+
+This gives us a map from the PCA space to the image.  The inverse $\left(XW\right)^{-1}$ can be composed with $|y\rangle$ gives coefficients of the PCA axes.  If we wanted to recover coefficients in the original $\mathbb R^3$, then we need to compose this result with $W$.  So that the resulting coefficients are $W\left(XW\right)^{-1}|y\rangle$.  Notice that if $X$ were rectangular, then $W$ would be full rank and invertible, so that this would reduce to $WW^{-1}X^{-1}|y\rangle=X^{-1}|y\rangle$ - This is a good sanity check.
+
+So this tells us that we can almost invert by first projecting to the PCA, and this give an almost inverse of $W\left(XW\right)^{-1}$.  We compare to the usual pseudo inverse of $X^T\left(XX^T\right)$.
+
+$$
+\begin{array}{rcl}
+W\left(XW\right)^{-1} &=& \left(|v_1\rangle\langle e_1|+|v_2\rangle\langle e_2|\right)\left[\left(\sum_i\lambda_i|u_i\rangle\langle v_i|\right)\left(|v_1\rangle\langle e_1|+|v_2\rangle\langle e_2|\right)\right]^{-1} \\
+ &=& \left(|v_1\rangle\langle e_1|+|v_2\rangle\langle e_2|\right)\left[\lambda_1|u_1\rangle\langle e_1|+\lambda_2|u_2\rangle\langle e_2|\right]^{-1} \\
+ &=& \left(|v_1\rangle\langle e_1|+|v_2\rangle\langle e_2|\right)\left(\frac{1}{\lambda_1}|e_1\rangle\langle u_1|+\frac{1}{\lambda_2}|e_2\rangle\langle u_2|\right) \\
+ &=& \frac{1}{\lambda_1}|v_1\rangle\langle u_1|+\frac{1}{\lambda_2}|v_2\rangle\langle u_2| \\
+ &=& X^+
+\end{array}
+$$
+
+The last equality follows from the previous section.  This calculation shows that taking pseudo-inverse is the same as projecting on PCA axes and inverting the resulting full-rank matrix.  This adds some intuition, because PCA is a straight-forward dimensionality reduction.
+
+\subsection{Over-determined System of Equations}
+
+The other side of under-determined systems of equations is, of course, over-determined systems of equations.  These are scenarios where there are more equations than unknowns.  Importantly, an over-determined system gives different coefficients depending on which subset of equations you use.  Going back to our example, if you had VIP tickets at $500$ dollars and regular tickets at $100$ dollars, and data from multiple weeks, you could choose any given weekend, and solve the problem just as you did in the earlier section.  In fact, in this case, if you did do an SVD, you'd get a rank-$2$ matrix, and the pseudo-inverse would still give the same answer.
+
+Imagine instead a situation where customers spend additional money on merchandise and refreshments.  We still know for each day the number of regular customers, $x_1$, and VIP customers, $x_2$.  And we know for each day, how much money we made, $y$.  Then we let $\beta_1$ and $\beta_2$ be the typical total spend (ticket plus merch plus refreshments) of regular and VIP customers.  Can we solve for $\beta_1$ and $\beta_2$?  If we found the right values of $\beta$, we may not have that $y=\beta_1x_1+\beta_2x_2$ holds for any day in our data set, but it will still provide the best estimate.
+
+\begin{tcolorbox}[title=Example,colback=blue!5]
+  {\bfseries\Large Over-determined System}\label{OverDeterminedSystem}
+Suppose, as above, we know for each day how many of each type of ticket we sold, and the total revenue after merch and refreshments.  If we have sales like this. 
+
+TODO: Fix
+% \begin{table}[]
+%   \begin{tabular}{|l|c|c|c|}
+%   \hline
+%          & \multicolumn{1}{l|}{Revenue (000s)} & \multicolumn{1}{l|}{Num regular} & \multicolumn{1}{l|}{Num VIP} \\ \hline
+%   Jan 3  & 12.6                                & 100                              & 3                            \\ \hline
+%   Jan 4  & 13.7                                & 90                               & 6                            \\ \hline
+%   Jan 10 & 14.0                                & 94                               & 5                            \\ \hline
+%   Jan 11 & 16.4                                & 163                              & 0                            \\ \hline
+%   Jan 17 & 15.8                                & 119                              & 5                            \\ \hline
+%   Jan 18 & 10.7                                & 78                               & 4                            \\ \hline
+%   \end{tabular}
+% \end{table}
+
+We can formulate this as a matrix problem like:
+
+$$
+\left(\begin{array}{c} 12.6\\13.7\\14.0\\16.4\\15.8\\10.7 \end{array}\right)=\left(\begin{array}{cc}100&3\\90&6\\94&5\\163&0\\119&5\\78&4 \end{array}\right)\left(\begin{array}{c}\beta_1 \\ \beta_2\end{array}\right)
+$$
+
+Then we can almost solve for $\vec\beta$, by taking the pseudo-inverse.  Call this matrix $|y\rangle=X|\beta\rangle$.  We come up with a solution $\hat\beta=X^+|y\rangle=X^T\left(XX^T\right)^{-1}$.
+\end{tcolorbox}
+
+This example shouldn't be surprising or even interesting at this point.  But I do want to point out that this is a more interesting problem than under-determined or full-rank square matrices.  This is the first example that resembles a real world problem.  By solving it, we learn something interesting about the customers; we probably already knew how much tickets themselves cost.  The over-determined matrix arises from real-world problems more often.  A possible explanation is that we're unlikely to build a model with more variables than data points.  There are situations where a family of inputs is quite large, but in those cases, a dimensionality-reduction, like PCA is done explicitly as a pre-processing step.  An old-fashioned rule of thumb (from before the era of big data) states that with $n$ data points, you shouldn't try to model more than $\sqrt[3]{n}$ variables.  So if you did have a $216\times1000$ matrix, it'd be better probably to use PCA to project onto the $6$ most priniple axes, then set up a linear system on a $216\times6$ matrix.  This may do a better job smoothing out the noise; and you'd see better performance on out-of-sample data points.
+
+The solution you get from $\hat\beta=X^+|y\rangle=X^T\left(XX^T\right)^{-1}$ is the "best" solution in some abstract sense; the argument is something, something, orthogonal projection.  But for the over-determined scenario has a clearer inpretation.  Specifically, $\hat\beta$ is what we get when we minimize $\mathcal L=\sum_i\left(\beta_1(x_i)_1+\beta_2(x_i)_2-y_i\right)^2$.  Written in matrix form, this is
+
+$$
+\begin{array}{rcl}
+\mathcal L &=& \left(X|\beta\rangle - |y\rangle\right)^T\left(X|\beta\rangle - |y\rangle\right) \\
+&=& \left(\langle\beta|X^T - \langle y|\right)\left(X|\beta\rangle - |y\rangle\right) \\
+&=& \langle\beta|X^TX|\beta\rangle-\langle\beta|X^T|y\rangle-\langle y|X|\beta\rangle+\langle y|y\rangle \\
+&=& \langle\beta|X^TX|\beta\rangle-2\langle y|X|\beta\rangle+\langle y|y\rangle
+\end{array}
+$$
+
+Where the last equality follows from the fact that $\langle\beta|X^T|y\rangle$ is a scalar, so it's its own inverse.  (Or equivalently, the commutativity of the inner product.)  We minimize this using Lemma \ref{CalculusLemma}.
+
+$$
+0=\frac{\partial\mathcal L}{\partial \vec\beta} = 2X^TX|\beta\rangle-2X^T|y\rangle
+$$
+
+Solving this for $|\beta\rangle$, we get $|\beta\rangle=\left(X^TX\right)^{-1}X^T|y\rangle$, precisely as before.
+
+$\mathcal L$ is the sum of the squares of the {\em residuals}, the difference between predicted and actual.  And as such, this type of model is called {\em Least Squares Regression}.  You may ask if $\mathcal L$ is the correct thing to minimize.  Minimizing $\mathcal L$ achieves the maximum likelihood estimation when we assume that the residuals are all drawn from the same normal curve.  The maximum likelihood estimation is outside the scope of this book, but we can think of it like a best guess.  The key assumption though is that we assume that the residuals belong to a normal distribution, and that the variance doesn't change for different inputs.  If that still doesn't make sense, it suffices for now to know that linear regression is a simple technique that works well very often; as such, it should always be your first attempt.
+
+One notation that we find useful is the "hat" notation.  After we solve for $|\beta\rangle$, we say that the solution is "beta-hat" or $|\hat\beta\rangle$.  This just means the predicted value of $\beta$.  With this notation we may write $|\hat y\rangle=X|\hat\beta\rangle$ to mean the predicted values of $|y\rangle$ that we get by plugging $|\hat\beta\rangle$ into our original equation.  It helps to keep this distinguished from the original $|y\rangle$.  For example, now we can write the vector of residuals as $|\hat y\rangle-|y\rangle$.  It then follows that $\mathcal L=\left\| |\hat y\rangle-|y\rangle \right\|^2$.
+
+We have that $|\hat y\rangle=X|\hat\beta\rangle=X\left(X^TX\right)^{-1}X^T|y\rangle$.  We sometimes call $H:=X\left(X^TX\right)^{-1}X^T$ the "hat matrix," because it puts a hat on $|y\rangle$:  $|\hat y\rangle=H|y\rangle$.  The remarkable thing about the hat matrix is that it equals
+
+$$
+\begin{array}{rcl}
+H&=&X\left(\left(X^TX\right)^{-1}X^T\right) \\
+&=&\left(\sum_i\lambda_i|u_i\rangle\langle v_i|\right)\left(\sum_j\frac{1}{\lambda_j}|v_j\rangle\langle u_j|\right) \\
+&=&\sum_i|u_i\rangle\langle u_i|
+\end{array}
+$$
+
+which is a projection matrix!  (Aren't you glad we just went over those?)  If $X$ is a $m\times n$ matrix, representing $m$ data points with $n$ variables, then $H$ is a projection matrix in $\mathbb R^m$.  This is the sample space, where each dimension represents a data point.  It's strange to think of this as a space.  A vector in this space, like $|y\rangle$ represents the values observed across the data points.  Each column in $X$ is a vector in the sample space, representing all the sampled values for that input variable.  The subspace spanned by $\left\{|u_i\rangle\right\}_i$ is the same as the space spanned by the columns $X$, by Theorem \ref{ColumnAndRowSpace}.  So you can think of this subspace as the space of all vectors that can be written as a linear combination of the input variables.  If $|y\rangle$ is in this span, then $|\hat y\rangle=|y\rangle$, meaning that $|y\rangle$ can be written exactly as a linear combination of the input variables, and there's no "almost-ness" to the almost inverse we compute.  Otherwise, $|\hat y\rangle$ is the closest vector (to $|y\rangle$) in the span of inputs, by Theorem \ref{closest}, which is why $|\hat y\rangle$ minimizes $\mathcal L=\left\| |\hat y\rangle-|y\rangle \right\|^2$.
+
+{\bfseries\scshape\Large Exercises}
+
+\begin{enumerate}[\thechapter.\thesection .1]
+\item Calculate $\hat\beta$ for Example \ref{OverDeterminedSystem}.
+\item An $m\times n$ matrix with $m<n$ is often surjective.  Find an example of such a matrix that is not surjective.
+\item Prove that $\mathcal L$ is minimize precisely when $\sqrt{\mathcal L}$ is minimized.
+
+For the next two exercises call $|y\rangle=\left(\begin{array}{c}y_1\\y_2\\ \vdots \\v_m\end{array}\right)$ and $X=\left(\begin{array}{cc}X_{1,1}&X_{1,2}\\X_{2,1}&X_{2,2}\\ \vdots&\vdots \\X_{m,1}&X_{m,2}\end{array}\right)$.
+
+\item In the case that $y_m=X_{m,1}+2\cdot X_{m,2}$, prove that $|\hat\beta\rangle=\left(X^TX\right)^{-1}X^T|y\rangle=\left(\begin{array}{c}1\\2\end{array}\right)$.
+\item Call $\left(\begin{array}{c}\beta_1\\ \beta_2\end{array}\right)=\left(X^TX\right)^{-1}X^T|y\rangle$.  Prove that $\bar y=\beta_1\bar{X_1}+\beta_2\bar{X_2}$, where $\bar y=\frac{1}{m}\sum_iy_i$ and $\bar{X_j}=\frac{1}{m}\sum_iX_{i,j}$.
+\end{enumerate}
+
+\section{Least Squares Regression, Part 2}
+\subsection{Variance}
+\subsection{Multicolinearity}
+\subsection{VIF and Cook's D}
+\subsection{Closing remarks}
+
+One note is that the least squares regression is among many models.  But whereas many complex or weak-assumption models, like neural networks, ARIMA, or MCMC, generally solve an optimization via some variation of gradient descent, least squares regression uses a matrix solution.  Solving this is fast for computers, even with large datasets.
+
+Finally, it should be mentioned that this book is meant to motivate and explore the mathematics that go into a regression.  But this does not make you a modeling expert.  There are many considerations that go into modeling, like model choice, data collection, data quality, outlier modeling, train/test splits, hyperparameter optimization, over-fitting, winner's curse, model stability, explanability, acceptability, and model matainence.  These things are outside the scope of this book.  And although many of these topics are less mathematically complex than the formula itself, these topics can take years to master.  For the practicianer, this book should be supplemented with modeling books and practice.
+
+\section{Gram-Schmidt and QR factorizations}
+\subsection{Gram-Schmidt Algorithm}
+\subsection{QR factorization}
+\subsection{Least Squares Regression as Projection}
+
+\section{Computer Programming, Regression}
+TODO: Mention iterative approach here.
 \section{Legendre polynomials}
 
 \chapter{[WIP] Generalized Regression}
@@ -1590,16 +1755,16 @@ It's probably still a little unclear what the pseudo-inverse means, or why this 
 \section{Logistic}
 \section{GLM}
 \section{LOESS}
-\section{Ridge Regression}
 
 \chapter{[WIP] Definite Matrices}
 \section{Definite matrices}
 \section{Quadratic programming}
 \section{Partial second derivative test}
+\section{Ridge Regression}
 
 \chapter{[WIP] Symmetric Matrices}
 \section{Symmetric Matrices}\label{SymmetricMatrices}
-\section{Inner products, covariance}
+\section{Inner products}
 \section{Spectral Theorem}
 \section{Taylor series and smooth functions}\label{section_taylor_series}
 \section{Functions on Non-symmetric matrices}
