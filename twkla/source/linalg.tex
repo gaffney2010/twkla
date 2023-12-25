@@ -1663,12 +1663,12 @@ TODO: Fix
 %   \begin{tabular}{|l|c|c|c|}
 %   \hline
 %          & \multicolumn{1}{l|}{Revenue (000s)} & \multicolumn{1}{l|}{Num regular} & \multicolumn{1}{l|}{Num VIP} \\ \hline
-%   Jan 3  & 12.6                                & 100                              & 3                            \\ \hline
-%   Jan 4  & 13.7                                & 90                               & 6                            \\ \hline
-%   Jan 10 & 14.0                                & 94                               & 5                            \\ \hline
-%   Jan 11 & 16.4                                & 163                              & 0                            \\ \hline
-%   Jan 17 & 15.8                                & 119                              & 5                            \\ \hline
-%   Jan 18 & 10.7                                & 78                               & 4                            \\ \hline
+%   Jan 3  & 14.1                                & 100                              & 3                            \\ \hline
+%   Jan 4  & 14.8                                & 90                               & 6                            \\ \hline
+%   Jan 10 & 15.1                                & 94                               & 5                            \\ \hline
+%   Jan 11 & 18.0                                & 163                              & 0                            \\ \hline
+%   Jan 17 & 20.0                                & 119                              & 5                            \\ \hline
+%   Jan 18 & 11.8                                & 78                               & 4                            \\ \hline
 %   \end{tabular}
 % \end{table}
 
@@ -1702,7 +1702,7 @@ $$
 
 Solving this for $|\beta\rangle$, we get $|\beta\rangle=\left(X^TX\right)^{-1}X^T|y\rangle$, precisely as before.
 
-$\mathcal L$ is the sum of the squares of the {\em residuals}, the difference between predicted and actual.  And as such, this type of model is called {\em Least Squares Regression}.  You may ask if $\mathcal L$ is the correct thing to minimize.  Minimizing $\mathcal L$ achieves the maximum likelihood estimation when we assume that the residuals are all drawn from the same normal curve.  The maximum likelihood estimation is outside the scope of this book, but we can think of it like a best guess.  The key assumption though is that we assume that the residuals belong to a normal distribution, and that the variance doesn't change for different inputs.  If that still doesn't make sense, it suffices for now to know that linear regression is a simple technique that works well very often; as such, it should always be your first attempt.
+$\mathcal L$ is the sum of the squares of the {\em residuals}, the difference between predicted and actual.  And as such, this type of model is called {\em Least Squares Regression}, or sometimes {\em Ordinary Least Squares (OLS)}.  You may ask if $\mathcal L$ is the correct thing to minimize.  Minimizing $\mathcal L$ achieves the maximum likelihood estimation when we assume that the residuals are all drawn from the same normal curve, and that observations are independent.  This assumption allows us to write covariance of residuals as a matrix $\sigma^2I$.  The maximum likelihood estimation is outside the scope of this book, but we can think of it like a best guess.  The key assumption though is that we assume that the residuals are independent samples belonging to a normal distribution, and that the variance doesn't change for different inputs.  If that still doesn't make sense, it suffices for now to know that linear regression is a simple technique that works well very often; as such, it should always be your first attempt.
 
 One notation that we find useful is the "hat" notation.  After we solve for $|\beta\rangle$, we say that the solution is "beta-hat" or $|\hat\beta\rangle$.  This just means the predicted value of $\beta$.  With this notation we may write $|\hat y\rangle=X|\hat\beta\rangle$ to mean the predicted values of $|y\rangle$ that we get by plugging $|\hat\beta\rangle$ into our original equation.  It helps to keep this distinguished from the original $|y\rangle$.  For example, now we can write the vector of residuals as $|\hat y\rangle-|y\rangle$.  It then follows that $\mathcal L=\left\| |\hat y\rangle-|y\rangle \right\|^2$.
 
@@ -1733,13 +1733,245 @@ For the next two exercises call $|y\rangle=\left(\begin{array}{c}y_1\\y_2\\ \vdo
 
 \section{Least Squares Regression, Part 2}
 \subsection{Variance}
+
+We start this section by solving Example \ref{OverDeterminedSystem} with a computer program.
+
+\begin{lstlisting}[label=sm_readout]
+  OLS Regression Results                                
+  =======================================================================================
+  Dep. Variable:                revenue   R-squared (uncentered):                   0.997
+  Model:                            OLS   Adj. R-squared (uncentered):              0.995
+  Method:                 Least Squares   F-statistic:                              570.9
+  Date:                Sat, 16 Dec 2023   Prob (F-statistic):                    1.22e-05
+  Time:                        19:10:10   Log-Likelihood:                         -8.1232
+  No. Observations:                   6   AIC:                                      20.25
+  Df Residuals:                       4   BIC:                                      19.83
+  Df Model:                           2                                                  
+  Covariance Type:            nonrobust                                                  
+  ===================================================================================
+                        coef    std err          t      P>|t|      [0.025      0.975]
+  -----------------------------------------------------------------------------------
+  regular_tickets     0.1130      0.007     16.900      0.000       0.094       0.132
+  vip_tickets         0.9309      0.172      5.403      0.006       0.453       1.409
+  ==============================================================================
+  Omnibus:                          nan   Durbin-Watson:                   2.641
+  Prob(Omnibus):                    nan   Jarque-Bera (JB):                1.799
+  Skew:                           1.325   Prob(JB):                        0.407
+  Kurtosis:                       3.422   Cond. No.                         40.8
+  ==============================================================================
+\end{lstlisting}
+
+We read this as the estimated coefficient for the regular\_tickets is \$$113.00$ and the estimated coefficient for vip\_tickets is \$$930.90$.  (Recall that the $y$ values are in thousands of dollars.)  Which in the context of the problem, this means that we estimate each regular ticketholder will spend $113$ dollars (including ticket cost), while each VIP ticketholder will spend around $931$ dollars.  This is a valuable insight.  Say you know that you're selling regular tickets for \$$100$ and VIP tickets for \$$500$.  Now you know that VIPs will spend almost their entire ticket price on merchandise and refreshments, whereas regular ticket holders spend a much less significant amount.  This kinda insight can inform how you market to VIPs, where you place merchandise, or even how you set prices.  And it can be achieved without having to track the movement of every VIP throughout the venue.
+
+We should be careful however about how we state our conclusions.  Say the venue has an East entrance and a West entrance, with separate ticket stands and separate revenue, but virtually identical.  If you run an analysis on the East entrance and somebody else runs an analysis on the West entrance, you'd be embarassed to confidently assert that the average VIP spends \$$931$ if the analyst on the West side concludes that a VIP spends \$$510$, barely more than their ticket price.  But this could happen.  By modeling this as a linear regression, we're asserting that $y=\beta_1x_1+\beta_2x_2+\varepsilon$, where $\varepsilon$ is a random normal variable.  And although we're guessing $\beta_1$ and $\beta_2$ based on the data we've observed, our estimate itself is subject to the randomness.  So it stands to reason that if we measured on different days or even a different half of the venue on the same days, we'd expect to get different estimates for $\beta$.
+
+But we do have a sense of the range of error on our estimate.  We need to dive into stats a little bit.  Variance gives a sense of spread and it's calculated as $\operatorname{Var}(T)=\sum_i\left(t_i-E(T)\right)^2$, where $\left\{t_i\right\}_i$ is a large sample of $T$, and $E(T)=\frac{1}{\#(T)}\sum_it_i$.  (Statisticians may object to the use of "large sample" instead of "population," but close enough is fine for this book.)  Standard deviation is the square root of variance, and for normal variables, this is all we need to comment on the relative likelihood of different scenarios.  Any observation drawn from a normal distribution is $95\%$ likely to be within about $2$ standard deviations of the center.  In Table \ref{sm_readout}, the coefficient of vip\_tickets is \$$930.90$ with a standard deviation of \$$172$.  The $95\%$ confidence interval is given as \$$453$ and \$$1,409$.  This means that there's a $95\%$ chance that whatever the West entrance measures for this coefficient will between \$$453$ and \$$1,409$, with a $95\%$ probability.  This is a pretty wide range.  (With a keen eye, you may notice that the confidence interval is more than $2$ standard deviations.  This is because statsmodels uses a more-accurate t-test rather than a z-test.  Don't worry about this difference, at around $30$ or more data points, the difference is negligible.)  The $95\%$ confidence interval is all points that are within $2$ standard deviations of the mean, $|\hat\beta\rangle$; said another way, it's all points for which the {\em z-score}, $z=\frac{|\beta\rangle-|\hat\beta\rangle}{\sigma}$ is less than $2$.
+
+There's a multidimensional version of variance.  For a multivariate normal distribution, with center $|\mu\rangle$ and variance $\Sigma$ given as a matrix, the "Mahalanobis distance" of a point $|x\rangle$ is given by $\sqrt{\langle x-\mu|\Sigma^{-1}|x-\mu\rangle}$.  In the one dimensional case, this equals the absolute value of the z-score.  And this generalizes the z-score in that $95\%$ of data drawn from the distribution have Mahalanobis distance less than $2$.  As before $|\mu\rangle=\frac{1}{n}\sum_{i=1}^n|x_i\rangle$, the average of points.  And $\Sigma=\frac{1}{n}\sum_{i=1}^n\left(|x_i\rangle-|\mu\rangle\rangle\right)\left(\langle x_i|-\langle\mu|\rangle\right)$.  We have a convenient identity here:
+
+$$
+\begin{array}{rcl}
+\Sigma &=& \frac{1}{n}\sum_{i=1}^n\left(|x_i\rangle-|\mu\rangle\rangle\right)\left(\langle x_i|-\langle\mu|\rangle\right) \\
+&=& \frac{1}{n}\sum_{i=1}^n\left(|x_i\rangle\langle x_i|-|\mu\rangle\langle x_i|-|x_i\rangle\langle\mu|+|\mu\rangle\langle\mu|\right) \\
+&=& \frac{1}{n}\sum_{i=1}^n|x_i\rangle\langle x_i|-\frac{1}{n}\sum_{i=1}^n|\mu\rangle\langle x_i|-\frac{1}{n}\sum_{i=1}^n|x_i\rangle\langle\mu|+\frac{1}{n}\sum_{i=1}^n|\mu\rangle\langle\mu| \\
+&=& \frac{1}{n}\sum_{i=1}^n|x_i\rangle\langle x_i|-|\mu\rangle\langle \mu|-|\mu\rangle\langle \mu|+|\mu\rangle\langle \mu| \\
+&=&\frac{1}{n}\sum_{i=1}^n|x_i\rangle\langle x_i|-|\mu\rangle\langle \mu| \\
+&=& \operatorname{E}\left(|x\rangle\langle x|\right) - \operatorname{E}\left(|x\rangle\right)\operatorname{E}\left(\langle x|\right)
+\end{array}
+$$
+
+This is a rather quick treatment of variance.  See Section \ref{Section-Covariance} for more on this topic.
+
+\begin{theorem}\label{Thm-OLS-var}
+$|\beta\rangle$ is a normal random variable with center $\left(X^TX\right)^{-1}X^T\operatorname{E}\left(|y\rangle\right)$ and variance $\left(X^TX\right)^{-1}\sigma^2$, where $\sigma^2I=\operatorname{E}\left(|\hat y\rangle-|y\rangle\right)$.  (Recall that the assumptions of OLS allow us to write covariance of residuals as a multiple of $I$.)
+\end{theorem}
+
+\begin{proof}
+We start with $|\hat\beta\rangle=\left(X^TX\right)^{-1}X^T|y\rangle$.  On the right-hand side, only $|y\rangle$ is random (being a function of $\varepsilon$, so that $\operatorname{E}\left(|\hat\beta\rangle\right)=\left(X^TX\right)^{-1}X^T\operatorname{E}\left(|y\rangle\right)$.  (See Exercise \ref{random-constant-2}.)
+  
+Now using the identy above we do some serious math here:
+
+$$
+\begin{array}{rcl}
+\Sigma &=& \left[\operatorname{E}\left(|\hat\beta\rangle\langle\hat\beta|\right)\right] - \left[\operatorname{E}\left(|\hat\beta\rangle\right)\operatorname{E}\left(\langle\hat\beta|\right)\right] \\
+&=& \left[\operatorname{E}\left(\left(X^TX\right)^{-1}X^T|y\rangle\langle y|X\left(X^TX\right)^{-1}\right)\right]-\left[\operatorname{E}\left(\left(X^TX\right)^{-1}X^T|y\rangle\right)\operatorname{E}\left(\langle y|X\left(X^TX\right)^{-1}\right)\right] \\
+&=& \left[\left(X^TX\right)^{-1}X^T\operatorname{E}\left(|y\rangle\langle y|\right)X\left(X^TX\right)^{-1}\right]-\left[\left(X^TX\right)^{-1}X^T|\operatorname{E}\left(y\rangle\right)\operatorname{E}\left(\langle y|\right)X\left(X^TX\right)^{-1}\right] \\
+&=& \left(X^TX\right)^{-1}X^T\left[\operatorname{E}\left(|y\rangle\langle y|\right)-\operatorname{E}\left(|y\rangle\right)\operatorname{E}\left(\langle y|\right)\right]X\left(X^TX\right)^{-1} \\
+&=& \left(X^TX\right)^{-1}X^T\left[\operatorname{E}\left(|\hat y\rangle-|y\rangle\right)\right]X\left(X^TX\right)^{-1} \\
+&=& \left(X^TX\right)^{-1}X^T\left[\sigma^2I\right]X\left(X^TX\right)^{-1} \\
+&=& \left(X^TX\right)^{-1}\sigma^2
+\end{array}
+$$
+
+The last equality follows from that the fact that scalars and $I$ commute with all matrices, so that the penultimate equation is $\sigma^2\left(X^TX\right)^{-1}X^TX\left(X^TX\right)^{-1}$, allowing for some cancellations.
+\end{proof}
+
+The standard deviations given in Table \ref{sm_readout} are given by the diagonal elements $\left(\left(X^TX\right)^{-1}\right)_{i,i}$.  The idea is that if you start with the coefficient estimate $|\hat\beta\rangle$ and vary one dimension, $|\beta'\rangle=|\hat\beta\rangle+\varepsilon|e_i\rangle$, then the Mahalanobis distance becomes 
+
+$$
+\begin{array}{rcl}
+\sqrt{\langle \varepsilon e_i|\Sigma^{-1}|\varepsilon e_i\rangle}&=&\varepsilon\sqrt{\left(\Sigma^{-1}\right)_{i,i}} \\
+&\approx& \varepsilon\sqrt{\left(\Sigma_{i,i}\right)^{-1}} \\
+&=& \frac{\varepsilon}{\sqrt{\Sigma_{i,i}}} \\
+&=& \frac{\left\| |\beta'\rangle-|\hat\beta\rangle\right|}{\sqrt{\left(\left(X^TX\right)^{-1}\right)_{i,i}}}
+\end{array}
+$$
+
+At the end, this looks like an ordinary z score in one dimension, which justifies the confidence intervals reported by the regression program.  The approximation in this calculation is doing some heavy lifting.  The approximation is exact when $X^TX$ is diagonal (which is the case that the input variables are independent).  In practice this is often close enough to correct, but there are real cases where this isn't true.  Imagine the same problem setup, but there are some "mega-event" weekends that we sell ten thousand tickets, instead of the usual hundred or so.  We'd expect mega-event weekends to have large numbers for both VIP and regular weekends, introducing a strong correlation.  When variables are correlated, our prediction of coefficients is also correlated.  That is if we lowered the predicted spend from VIP customers, we'd increase the predicted spend from regular customers to make up the difference.  But in these cases, a single-dimension confidence interval is less meaningful:  It may actually be likely that VIP spend will be predicted significantly higher, but only in tandem with a lower regular spend.  We talk about this more in the next subsection.
+
+So far we've discussed variance on the coefficients themselves.  And this is useful.  One thing you may want to do with linear regressions is report the coefficient.  In our example, it gives the relative "worth" of each type of customer, which can help with some business decisions.  But another use of linear regression is "inference" or making out-of-sample predictions.  This, for example, would be answering a question like, "If we sell $100$ regular tickets and $10$ VIP tickets, how much revenue should we expect to make?  Given the numbers above, we model this as $\hat y=113(100)+930.9(10)$, or $y=113(100)+930.9(10)+\varepsilon$ to express the randomness.  Or written in matrix form $y=\left(\begin{array}{cc}100&10\end{array}\right)\left(\begin{array}{c}113\\930.9\end{array}\right)+\varepsilon=\langle x|\hat\beta\rangle+\varepsilon$.  As a point estimate, we'd expect revenue of \$$20,609$, but what kind of range can we give on this estimate?
+
+Given that $|y\rangle=\langle x|\hat\beta\rangle+\varepsilon$, and both $|\hat\beta\rangle$ and $\varepsilon$ are random, we have
+
+$$
+\begin{array}{rcl}
+\operatorname{Var}\left(|y\rangle\right) &=& \operatorname{Var}\left(\langle x|\hat\beta\rangle\right) + \operatorname{Var}(\varepsilon) \\
+&=& \langle x|\Sigma^2|x\rangle + \sigma^2 \\
+&=& \langle x|\left(X^TX\right)^{-1}\sigma^2|x\rangle + \sigma^2 \\
+&=& \sigma^2\left(\langle x|\left(X^TX\right)^{-1}|x\rangle + 1\right)
+\end{array}
+$$
+
+Where $\Sigma^2$ is taken from Theorem \ref{Thm-OLS-var}.  Some of the details here are covered in Exercise \ref{random-constant}, but this calculation can also be revisited after reading Section \ref{Section-Covariance}.  The interesting thing about this calculation is the common $\sigma^2$, the variance of the residuals.  In the first case factors into the uncertainity in the coefficients, $|\hat\beta\rangle$, but in the second case, it adds constant variance into this single new prediction.  The range given on coefficients is sometimes called "confidence interval," while an equivalent interval given on a new prediction using $\sigma^2\left(\langle x|\left(X^TX\right)^{-1}|x\rangle + 1\right)$ is called "prediction interval."
+
+We look at some measures of variance, given a training set.  So far, we've talked about residual sum of squares (RSS) $=\sum_i\left(y_i-\hat y_i\right)^2$.  This measures how far off our predictions are.  But when we talk about variance of $y$, we usually mean $\sum_i\left(y_i-\bar y\right)^2$, where $\bar y=\frac{1}{n}\sum_i y_i$, the average.  We call this variance, the total sum of squares (TSS).  Finally, we have a explained sum of squares (ESS) $=\sum_i\left(\hat y_i-\bar y\right)^2$.  This name is justified by the next theorem.
+
+\begin{theorem}
+With $\text{ESS}$, $\text{RSS}$, and $\text{TSS}$ as defined above,
+
+$$
+\text{ESS}+\text{RSS}=\text{TSS}.
+$$
+\end{theorem}
+
+\begin{proof}
+Throughout, it will be useful to write any sum of squares, $\sum_i x_i^2$, as an inner product $\langle x|x\rangle$.  When needed, $|\bar y\rangle$ will be a vector with every entry equal to $\bar y$.  Other vectors will match names but without the subscripts.
+
+$$
+\begin{array}{rcl}
+\text{TSS} &=& \langle y-\bar y|y-\bar y\rangle \\
+&=& \langle y-\hat y+\hat y -\bar y|y-\hat y+\hat y -\bar y\rangle \\
+&=& \langle y-\hat y|y-\hat y\rangle + \langle \hat y - \bar y|\hat y-\bar y\rangle + 2\left(\langle y|\hat y\rangle -\langle\hat y|\hat y\rangle\right) -2\left(\langle y-\hat y|\bar y\rangle\right) \\
+&=& \text{RSS} + \text{ESS} + (0) + \left(\bar y\sum_i\left(y_i-\bar y_i\right)\right) \\
+&=& \text{RSS} + \text{ESS} + (0) + (0) \\
+\end{array}
+$$
+
+The zeroing of the first parenthetical follows from Exercise \ref{y-hat-ex-1}, and the second follows from the fact that $\langle y-\hat y|$, the residuals, average to zero, and therefore sum to zero.
+\end{proof}
+
+Notice that both ESS and RSS must be positive.  In the case that $y_i=\hat y_i$ for all $i$, this is a perfect prediction; here ESS=TSS and RSS=$0$.  In the case that $y_i=\bar y$ for all $i$, then the model is totally informationless; here ESS=$0$ and RSS=TSS.  We see that as the prediction gets better TSS gradually falls more into the ESS bucket, rather than the RSS bucket.  ESS/TSS is a number between $0$ and $1$ that measures goodness of fit; this is called the {\em coefficient of determination}, or more commonly just $R^2$.  ($\sqrt{R^2}$ also has a meaning, which justifies the exponent, but we don't discuss that here.)  This is also reported in Figure \ref{sm_readout}.
+
 \subsection{Multicolinearity}
+
+If you ask a computer to do a linear regression, the computer will set off on calculating $|\hat y\rangle=X|\hat\beta\rangle=X\left(X^TX\right)^{-1}X^T|y\rangle$.  But this exists only if $X^TX$ is invertible.  As mentioned earlier, this is invertible if and only if the columns of $X$ span the domain.  The columns of $X$ fail to span the domain if there's some linear relationship among the columns (by Theorem \ref{LinearRelationship}).  For example, let's say that you're pricing insurance policies.  You have a matrix $X$ where each row is a data point (customer) and the first column is a constant $1$, added to many models; the second columns is an indicator for male, $1$ if the customer is a man, and $0$ if the customer is a woman; and the third column is an indicator for female.  Call these columns "const", "is\_male", and "is\_female".  Imagine that the dataset has every customer recorded as either male or female (due to software limitations or some policy), then we'd have the relationship const = is\_male + is\_female.  In this case $X^TX$ is not invertible.  This is called {\em aliasing} or {\em multicollinearity}.
+
+There's a plain English problem here.  If you removed the const column and run a regression against the insurance cost of the customers, then you'd find that the coefficient for is\_male would be the average cost for men, and is\_female's coefficient would be the average cost for women.  Let's say for this example, it's \$$600$ and \$$400$ respectively.  If instead we dropped the is\_male column and kept the other two.  Then we'd see that const has coefficient $600$ and is\_female $-200$, so that men still get a prediction of $600$ and women still get $400$.  But what happens if we include all three variables?  We may see that we get const $0$, is\_male $600$, and is\_female $400$.  But we could just as validly get const $1000$, is\_male $-400$, and is\_female $-600$.  Or we could get const $99999$, is\_male $-99399$, and is\_female $-99599$.  Any of these are equally valid, so the linear regression doesn't know which to pick.  There is still a pseudoinverse even for low-rank $X$, but without the formula $X\left(X^TX\right)^{-1}X^T$.  However, we don't want to jump to using that in this case, because in this case there's not a perfect answer.  It's true that we may get a decent overall model, but imagine a model reporting that being male saves you $99,399$ dollars from your insurance; it doesn't make sense!  It's better to force the modeler to resolve the alias, usually by dropping an unneeded column.
+
+Perhaps a more pernicious issue is the issue of near-aliasing.  Imagine the same aliasing issue as above, but this time there's a single data point with both is\_male and is\_female equal to $0$.  This is no longer technically aliasing, but the problem persists.  Imagine that the single non-binary data point had a cost of $10,000$ dollars, then our coefficients will be const $10000$, is\_male $-9400$, and is\_female $-9600$.  Again this presents a problem with explanability.  As well there's a problem of variance; all the confidence intervals will be wide.  There's a problem of over-leveraged points; the single non-binary point has too much influence on predictions.  There's a stability problem; that is, if we run the same model next year, predictions could be widely different.  Instability and lack of explanability are unaaceptable for insurance, but also many other applications.
+
+\begin{tcolorbox}[title=Example,colback=blue!5]
+  {\bfseries\Large Near Aliasing Example}
+Let's think about what's happening mathematically.  Let $X$ be an $(2n+1)\times2$ matrix with every entry equal to $0$ or $1$, we'll assume that for the first $2n$ rows, the two columns match, and that exactly half of these will $1$.  The last row will differ.  So for example this may look like this:
+
+$$
+\left(\begin{array}{cc}
+  0&0\\1&1\\1&1\\0&0\\0&0\\
+  \vdots &\vdots\\1&1\\
+  1&0
+\end{array}\right)
+$$
+
+Assume that $n$ is large.  This matrix is almost-aliased because there's nearly a linear relationship between the two columns:  Specifically the first column minus the second column is nearly $0$.
+
+Say that $X$ has the SVD $\sum_i\lambda_i|u_i\rangle\langle v_i|$.  Then $X^TX=\sum_i\lambda_i^2|v_i\rangle\langle v_i|$.  Meanwhile $X^TX$ is
+
+$$
+\left(\begin{array}{cc}n+1&n\\n&n\end{array}\right)
+$$
+
+Using the arguments from Section \ref{Section-How to Calculate}, we know that we can calculate eigenvalues and eigenvectors from here.  We don't cover calculations much in this book, because when $n$ isn't a variable, this can be done with a computer.  But the reader may recall that it looks like:
+
+$$
+0=\left\|\begin{array}{cc}n+1-\lambda&n\\n&n-\lambda\end{array}\right\|=(n+1-\lambda)(n-\lambda)-n^2=\lambda^2-(2n+1)\lambda+n
+$$
+
+Solving this for $\lambda$ using the quadratic equation, we get $\lambda=\frac{(2n+1)\pm\sqrt{4n^2+1}}{2}$.  $\sqrt{4n^2+1}$ is between $2n=\sqrt{4n^2}$ and $2n+1=\sqrt{4n^2+4n+1}$.  So the two eigenvalues are $a$ and $2n+b$, with both $a$ and $b$ between $0$ and $1$.  Associated with $a$ is a singular matrix 
+
+$$
+\left(\begin{array}{cc}n+1-a&n\\n&n-a\end{array}\right)
+$$
+
+with an eigenvector pretty close to $\langle1/sqrt2, -1/sqrt2\rangle$.  Associated with $2n+b$ is a singular matrix
+
+$$
+\left(\begin{array}{cc}-n+1-b&n\\n&-n-b\end{array}\right)
+$$
+
+with an eigenvector close to $\langle1/sqrt2, 1/sqrt2\rangle$.  These two eigenvectors are $|v_1\rangle$ and $|v_2\rangle$.  To get $\langle u_1|$ out of the equation $X=\lambda_1|u_1\rangle\langle v_1|+\lambda_2|u_2\rangle\langle v_2|$, we can compute $\frac{1}{\lambda_1}X|v_1\rangle$.  If $\vec v_1=\langle1/sqrt2, -1/sqrt2\rangle$, then $\frac{1}{\lambda_1}X|v_1\rangle=|e_{2n+1}\rangle$.  Rather than worrying too much about constants, we know that $\vec u_1$ must be a unit vector in the direction of $\vec e_{2n+1}$ (because all other vector entries cancel.  Because $\langle1/sqrt2, -1/sqrt2\rangle$ is only approximately $\vec v_1$, $|e_{2n+1}\rangle$ is only approximately $|u_1\rangle$.  Similarly, $|u_2\rangle$ is approximately a unit vector point in the direction of the average of the two columns; the average of the two columns is $1/2$ for the last entry, and the value from either column for the rest of the entries.  We call this vector $|\bar u\rangle$.  Let's also call $\vec v_{\text{sum}}=\langle1/sqrt2, 1/sqrt2\rangle$ and $\vec v_{\text{diff}}=\langle1/sqrt2, -1/sqrt2\rangle$
+
+Recalling that the eigenvalues we calculated earlier are $\lambda_i^2$, we have that $X$ has the SVD $X\approx\sqrt{2n+b}|\bar u\rangle\langle v_{\text{sum}}|+\sqrt{a}|e_{2n+1}\rangle\langle v_{\text{diff}}|$.  This tells us not surprisingly that the principal axis looks very close to either of the two columns, and the second principal axis is the just the difference between these two columns.  Then $X$ maps these two axis to some perpendicular axes in the range, but with the first principal axis weighted much higher.  And this makes sense:  The first principal axis takes into account all $2n+1$ entries, so it's weight should be much higher than the second axis, which only looks at the last row.
+
+But now observe what happens to the pseudoinverse:  $X^+\approx\frac{1}{\sqrt{a}}|v_{\text{diff}}\rangle\langle e_{2n+1}|+\frac{1}{\sqrt{2n+b}}|v_{text{sum}}\rangle\langle\bar u|$.  When applied to observed values $\vec y$, the first term takes the last element and the first terms takes the correlation of $y$ to the $\bar u$.  The odd thing though is that this time, the first terms is much larger.  What's happening is that the linear regression needs to determine an entire coefficient using only the last data point; it does this by scaling up.  This demonstrates that the less influence a principal axis has on a matrix, the larger its influence on the pseudoinverse.  Mathematically this explains how the non-binary customer described above was able to single-handly dramatically shift all the coefficients.
+\end{tcolorbox}
+
+OLS works best when the input variables are independent, and fails completely when there's a linaer relationship (perfect correlation).  But there's a spectrum of correlation.  Small categories, like non-binary, are usually grouped with larger buckets to avoid near-aliasing.  But near-aliasing can also be the consequence of over-zealous feature engineering.  Imagine you find that historical insurance cost is a good predictor of future cost.  As such you make two variables, number of accidents, and size category of last accident (1-3).  A coworker says that you should instead do average size category of all accidents.  Another coworker says that you should total all losses and bucket (1-9).  Another coworker prefers a lighter touch, and creates a variable called "is loss" which is $1$ or $0$ based on history.  If you include all of these variables, you won't get a perfect alias, but you will get a ton of correlation.  For example "is loss" will be correlated with number accidents and total losses, since most customers have no accidents.  Average size category will equal last size category most of the time, since most people with accidents had only one accident.  You may even find that total losses (1-9) is usually close to 3 x (number of accidents - 1) + (last accident size).  Long story short here is that lots of correlation produces weaker models.
+
+The lack of stability here is a big deal.  Unlike the non-binary example above, it's not clear where the instability occurs.  What data points will get a different prediction if we update the model?  What happens to our model if we remove a few data points?  You don't want to be on-the-job and change your model dramatically when you remove a few data points.  You don't want to give a much different price to an important client than you did a week ago.  It would be better if you used fewer variables.  A priori, I don't know which ones are the best, but you could learn with a forward regression, for example.  There's also an art to building features that are likely to be close to independent.  For example, instead of including both average accident size and last accident size; you could do last accident size and "trend", which equals last accident size minus second-to-last accident size (or NULL if only one accident).  This would just as correlated, but it moves all the instability to the trend variable, which can be more clearly analyzed.  Today non-linear models (random forest or neural network) are common, and throwing in many highly-correlated variables is a standard operating here.  The "include everything" strategy is less artful, but scales better to many models, updating frequently.
+
 \subsection{VIF and Cook's D}
+
+This subsection will be light on proofs; the curious reader is encouraged to search.  We frame this subsection around understanding how variance depends on data points (rows of $X$) and input variables (columns of $X$).
+
+To begin with, we present a formula without proof.
+
+$$
+\operatorname{Var}\left(\hat\beta_j\right)=\frac{\sigma^2}{n\operatorname{Var}\left(X_j\right)}\cdot\frac{1}{1-R_j^2}
+$$
+
+The left-hand side is just the variance of the estimate for $\beta_j$.  On the right-hand side, $\sigma^2$ as usual is the variance of the residuals, $n$ is the number of data points, $\operatorname{Var}\left(X_j\right)$ is the variance of the $j$-th column of $X$ (viewed as $n$ observations of a random scalar variable), and $R_j^2$ is the coefficient of determination when we fit $X_j$ as a linear regression on the other columns of $X$.  (Note that we've again been careless about degrees of freedom, and this equation is only approximate.)
+
+This formula tells us that variance of a coefficient estimate varies directly with the variance of the residuals, and inversely with the number of observations and the variance of the input variable itself.  We already knew about the variance of residuals.  The $n$ in the denominator says that coefficients will become less variable with more data, which is expected.  (Notice that the residual part of the prediction interval does not shrink with $n$ though.)  The variance of the column in the denominator makes some sense:  Imagine, for example, I had an input variable representing length in feet, and I had a coefficient confidence interval of $(9, 15)$; if I replaced this with the same variable in yards, I should have a coefficient confidence interval of $(3, 5)$.  The only difference is the scale, and variance measures this scale.
+
+The second multiplicand, $\frac{1}{1-R_j^2}$, is the most surprising part of this formula.  It is called the {\em Variance Inflation Factor (VIF)}.  This inflation factor is minimized when $R_j^2=0$.  This is the case that the $X_j$ is independent from the other columns of $X$; that is, there's no relationship.  On the other end of the spectrum, if there was aliasing, then $X_j$ could be prefectly predicted by the other columns of $X$, and the variance would be something like infinite.  The VIF tells you how much the variance of the the $j$-th coefficient is inflated due to the correlation between the variables in $X$.  If you think you have multicollinearity problems, you can use the VIF of each variable (computed for you by a computer), to determine which variables you should be most concerned about.  Some practicianers will use rules of thumb, like "if VIF $>5$, then the variable is highly correlated to others."
+
+Sometimes high variance in $\vec\hat\beta$ are due to individual points, as in our example with a single non-binary data point.  Cook's Distance or {\em Cook's D} provides a very simple definition for how much a single point can change our prediction.  Call $\hat y_j$ the predicted value for the $j$-th data point, and $\hat y_{j(i)}$ the predicted value for the $j$-th data point when the $i$-th data point is removed from the data set.  The define
+
+$$
+D_i:=\frac{\sum_j\left(\hat y_j-\hat y_{j(i)}\right)^2}{r\sigma^2}
+$$
+
+Where $r$ is the number of input variables.  This is very intuitive; it just measures how much the predictions change by including the $i$-th data point.  The denominator is a sort of normalizing factor that gives comparable values of $D$ for different types of models.  When normalized, we can use rules of thumb, like "remove any data point with $D_i>4$."  Generally, we can look at data points with the highest $D_i$ as the most influential, and consider removing them.  Or we can just use this as an additional piece of information.  Imagine you were building a model to predict outcomes of American football games.  If the most influential data point was a large upset that occurred because the quarterback was injured, then this may tell you that injuries need to be a variable in your model.
+
+The nice thing about Cook's D is that there's this identity that I won't prove:
+
+$$
+D_i = \frac{\varepsilon_i^2}{r\sigma^2}\left(\frac{h_ii}{(1-h_ii)^2}\right)
+$$
+
+Where $h_ii$ is the $i$-th diagonal entry of the hat matrix that we have to compute to solve for $\hat\beta$ anyway.  This allows us to get all the values of Cook's D fairly inexpensively.
+
 \subsection{Closing remarks}
 
 One note is that the least squares regression is among many models.  But whereas many complex or weak-assumption models, like neural networks, ARIMA, or MCMC, generally solve an optimization via some variation of gradient descent, least squares regression uses a matrix solution.  Solving this is fast for computers, even with large datasets.
 
 Finally, it should be mentioned that this book is meant to motivate and explore the mathematics that go into a regression.  But this does not make you a modeling expert.  There are many considerations that go into modeling, like model choice, data collection, data quality, outlier modeling, train/test splits, hyperparameter optimization, over-fitting, winner's curse, model stability, explanability, acceptability, and model matainence.  These things are outside the scope of this book.  And although many of these topics are less mathematically complex than the formula itself, these topics can take years to master.  For the practicianer, this book should be supplemented with modeling books and practice.
+
+{\bfseries\scshape\Large Exercises}
+
+\begin{enumerate}[\thechapter.\thesection .1]
+\item\label{random-constant} Let $|u\rangle$ be a random vector, the expected value of $|u\rangle$ is itself a vector, $\left|\operatorname{E}(u)\right\rangle$, obtained by taking the expected value of each component, and the variance is a matrix, call $\Sigma^2$.  (See section \ref{Section-Covariance} for details.)  Let $|v\rangle$ be a non-random (constant) vector.  Then $\langle u|v\rangle$ is a scalar, and so expected value and variance of this are also scalars.  Show the following:
+\begin{enumerate}[a]
+  \item $\operatorname{E}\left(|u\rangle+|v\rangle\right)=\left|\operatorname{E}(u)\right\rangle+|v\rangle$.
+  \item $\operatorname{E}\left(\langle u|v\rangle\right)=\left\langle\operatorname{E}(u)|v\right\rangle$.
+  \item $\operatorname{Var}\left(\langle u|v\rangle\right)=\langle v|\Sigma^2|v\rangle$.
+  \item $\operatorname{Var}\left(|u\rangle+|u'\rangle\right)=\operatorname{Var}(|u\rangle)+\operatorname{Var}(|u'\rangle)$.  And in particular if $|u'\rangle$ is constant (non-random), then $\operatorname{Var}\left(|u\rangle+|u'\rangle\right)=\operatorname{Var}(|u\rangle)$.
+\end{enumerate}
+\item\label{random-constant-2} For a non-random matrix $X$, prove that $\operatorname{E}\left(X|v\rangle\right)=X\operatorname{E}\left(|v\rangle\right)$.
+\item\label{y-hat-ex-1} Prove that $\langle y|\hat y\rangle=\langle \hat y|\hat y\rangle$, using the definition $|\hat y\rangle=X|\hat\beta\rangle=X\left(X^TX\right)^{-1}X^T|y\rangle$.
+\item We will explore inverses for almost diagonal matrices in a very special case:  Given an $n\times n$ matrix, $M$ with $\left|M_{i,j}\right|=\left\{\begin{array}{rcl} 0&;&i<j\\1&;&i=j\\\leq\varepsilon/m &;&i>j\end{array}\right.$  Prove that $\left|\left(M^{-1}\right)_{i,j}\right|=\left\{\begin{array}{rcl} 0&;&i<j\\1&;&i=j\\\leq\varepsilon/\left(1-\varepsilon\right) &;&i>j\end{array}\right.$.  (Hint: Write $M=I+E$, then $M^{-1}=I+E+E^2+\cdots$.  Argue that $E^m=0$.)
+\item Figure \ref{sm_readout} reports AIC, which takes into account parsimony of the models.  Look this up.  How is this defined, and how those that relate to $R^2$ for ordinary least squares?
+\end{enumerate}
 
 \section{Gram-Schmidt and QR factorizations}
 \subsection{Gram-Schmidt Algorithm}
@@ -1748,6 +1980,8 @@ Finally, it should be mentioned that this book is meant to motivate and explore 
 
 \section{Computer Programming, Regression}
 TODO: Mention iterative approach here.
+TODO: Mention bootstrapping
+
 \section{Legendre polynomials}
 
 \chapter{[WIP] Generalized Regression}
@@ -1770,7 +2004,7 @@ TODO: Mention iterative approach here.
 \section{Functions on Non-symmetric matrices}
 
 \chapter{[WIP] Stats}
-\section{Covariance matrix}
+\section{Covariance matrix}\label{Section-Covariance}
 \section{Multi-dimensional normal}
 \section{Moment generating function}
 \section{Markov Chain}
@@ -1796,6 +2030,10 @@ The inverse of a orthogonal matrix is its transpose.  $Q^{-1}=Q^T$.
 \section{Spans and Bases}\label{Spans and Bases}
 
 This section is under construction.  In the meantime, \url{https://math.libretexts.org/Bookshelves/Linear_Algebra/Book%3A_Linear_Algebra_(Schilling_Nachtergaele_and_Lankham)/05%3A_Span_and_Bases} is a good source.
+
+\begin{theorem}\label{LinearRelationship}
+If $n$ vectors, $\left\{|v_i\rangle\right\}_i$ in $\mathbb R^n$ do not span $\mathbb R^n$, then there is some linear relationship among the vectors.  That is $\sum_i\lambda_i|v_i\rangle=0$, where not all $\lambda_i=0$.  Similarly, if $m$ vectors belong to a $m$-dimensional subspace, then there's a linear relationship.
+\end{theorem}
 
 \section{Change of Basis}\label{Change of Basis}
 
