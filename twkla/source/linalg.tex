@@ -1971,6 +1971,7 @@ Finally, it should be mentioned that this book is meant to motivate and explore 
 \item\label{y-hat-ex-1} Prove that $\langle y|\hat y\rangle=\langle \hat y|\hat y\rangle$, using the definition $|\hat y\rangle=X|\hat\beta\rangle=X\left(X^TX\right)^{-1}X^T|y\rangle$.
 \item We will explore inverses for almost diagonal matrices in a very special case:  Given an $n\times n$ matrix, $M$ with $\left|M_{i,j}\right|=\left\{\begin{array}{rcl} 0&;&i<j\\1&;&i=j\\\leq\varepsilon/m &;&i>j\end{array}\right.$  Prove that $\left|\left(M^{-1}\right)_{i,j}\right|=\left\{\begin{array}{rcl} 0&;&i<j\\1&;&i=j\\\leq\varepsilon/\left(1-\varepsilon\right) &;&i>j\end{array}\right.$.  (Hint: Write $M=I+E$, then $M^{-1}=I+E+E^2+\cdots$.  Argue that $E^m=0$.)
 \item Figure \ref{sm_readout} reports AIC, which takes into account parsimony of the models.  Look this up.  How is this defined, and how those that relate to $R^2$ for ordinary least squares?
+\item Return to the example of VIP tickets.  Imagine that the venue has some days where they sell tens of tickets and other days where they sell thousands of tickets.  As a result the number of VIP tickets they sell is highly correlated with the number of regular tickets they sell.  How can you model this to account for the correlation?
 \end{enumerate}
 
 \section{Gram-Schmidt and QR factorizations}
@@ -1979,8 +1980,51 @@ Finally, it should be mentioned that this book is meant to motivate and explore 
 \subsection{Least Squares Regression as Projection}
 
 \section{Computer Programming, Regression}
-TODO: Mention iterative approach here.
-TODO: Mention bootstrapping
+
+This section contains some questions to run with a computer.  Some of the problems will require the reader to lookup commands.  Examples will be given in Python, but feel free to use the language of your choice.
+
+Python has two common packages for linear regression, sklearn (sklearn.linear\_model.LinearRegression) and statsmodels.  sklearn is far more widely used, and better supports more modern modeling best practices.  But this author prefers statsmodels for simple use cases, primarily due to its friendly readouts.
+
+\begin{lstlisting}
+import pandas as pd
+import statsmodels.api as sm
+
+df = pd.DataFrame(
+    data = {
+        "revenue": [14.1, 14.8, 15.1, 18.0, 20.0, 11.8],
+        "regular_tickets": [100, 90, 94, 163, 119, 78],
+        "vip_tickets": [3, 6, 5, 0, 5, 4],
+    }
+)
+
+model = sm.OLS(df["revenue"], df[["regular_tickets", "vip_tickets"]])
+results = model.fit()
+
+print(results.summary())
+\end{lstlisting}
+
+This chapter's contents are discussed entirely through exercises.  These exercises use the diabetes dataset, which can be loaded with sklearn.
+
+\begin{lstlisting}
+from sklearn import datasets
+X, y = datasets.load_diabetes(return_X_y = True , as_frame = True)
+\end{lstlisting}
+
+If you're using another language:  This is a small dataset so you can copy as a CSV or literals, after finding it online or executing the above code in a Python environment.
+
+{\bfseries\scshape\Large Exercises}
+
+\begin{enumerate}[\thechapter.\thesection .1]
+\item Using the diabetes data, fit a logistic regression.  What is the 95 percent confidence interval for each coefficient?  What is $R^2$?
+\item Build a {\em forward regression}:  Using the diabetes dataset, first build $10$ single-variable regressions, one for each variable.  Determine which of these models has the best $R^2$.  Keep the variable used for that model, call it $X$.  Then build $9$ two-variable regressions, with inputs of $X$ and each of the other variables.  Determine which of these pairs of variables produces the best $R^2$.  Then repeat to find the best three variable model that includes these two variables.  Continue until you've included all $10$ variables.  Graph the best $R^2$ for each of $10$ stages.
+
+Forward regression is a greedy algorithm for deciding which variables are the most predictive.  Here we use $R^2$, but we could also have used some other metric, like AIC.  For the diabetes dataset, the best $R^2$ is achieved when all variables are included.  But this usually isn't the case in practice.  Forward regression tries to find the optimal subset of variables to include.  However, what it finds isn't optimal, just close.  I've found that usually one forward regression followed by one backwards regression on the result does a good job.
+\item Perform {\em bootstrapping} by choosing a random $70\%$ of diabetes data, and running a regression.  Do this $10,000$ times and record the coefficients.  For each coefficient give a confidence interval by reporting the range that the coefficient falls into $90\%$ of the time.  Compare these to the confidence intervals given by the regression.  Note:  You can use a similar technique to get a range on $R^2$.
+\item Using the diabetes dataset, model a regression as $y=\beta_{age}X_{age}$ to get $\hat y_1$.  Then model $y-\hat y_1=\beta_{bmi}X_{bmi}$, setting $\hat y_2=\hat y_1+\hat\beta_{bmi}x_{bmi}$.  Then model $y-\hat y_2=\beta_{age}X_{age}$, setting $\hat y_3=\hat y_2+\hat\beta_{age}X_{age}$.  Then repeat modeling the residuals on BMI to get $\hat y_4$.  Then get $\hat y_4$ using age, $\hat y_5$ on BMI, etc.  Do this until you get convergence.  Compare the final values of $\beta_{age}$ and $\beta_{bmi}$ to the coefficients you get when you regress $y=\beta_{age}X_{age}+\beta_{bmi}X_{bmi}$.
+\item Fit $\beta_{age}$ on the diabetes dataset using Gram-Schmidt, as described in the previous section.  Verify that this is the same as what you get when you perform a regression.
+\item Make a table with covariances between all the variables.  Comment on the results.  (Seaborn is my preferred package for this.)
+\item Search Kaggle for the diabetes dataset to see how others are using this.
+\end{enumerate}
 
 \section{Legendre polynomials}
 
