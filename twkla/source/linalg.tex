@@ -1976,8 +1976,167 @@ Finally, it should be mentioned that this book is meant to motivate and explore 
 
 \section{Gram-Schmidt and QR factorizations}
 \subsection{Gram-Schmidt Algorithm}
+The {\em Gram-Schmidt Algorithm} provides a way to transform a set of vectors to a set of orthonormal vectors that span the same subspace.  It does this through two basic operations, normalizing and orthogonal projecting.  (The latter is a term I made up for this chapter that can probably be understood from context.)  Normalizing means to transform a vector $|v\rangle\to\frac{|v\rangle}{\sqrt{\langle v|v\rangle}}$.  The resulting vector is normal (unit length), because $\left(\frac{\langle v|}{\sqrt{\langle v|v\rangle}}\right)\left(\frac{|v\rangle}{\sqrt{\langle v|v\rangle}}\right)=\frac{\langle v|v\rangle}{\langle v|v\rangle}=1$.  Orthogonal projecting means to subtract off the components of a vector that live in a given subspace; to orthogonally project a vector against the span of an orthonormal set $\left\{|v_i\rangle\right\}_i$, we do $|v\rangle\to|v\rangle-\sum_i|v_i\rangle\langle v_i|v\rangle$.  The resulting vector is orthogonal to all the $|v_i\rangle$ (and therefore the span of $\left\{|v_i\rangle\right\}_i$, because
+
+$$
+\langle v_j|\left(|v\rangle\to|v\rangle-\sum_i|v_i\rangle\langle v_i|v\rangle\right)=\langle v_j|v\rangle - \langle v_j|v_j\rangle\langle v_j|v\rangle = 0
+$$
+
+Notice how we used orthonormality of the $\left\{|v_i\rangle\right\}_i$ for this calculation.  This arithmetic may seem magic, but it's a natural consequence of how we chose the transformation.
+
+Gram-Schmidt works by building up a set of orthonormal vectors as follows:
+
+\begin{tcolorbox}[title=Algorithm 2: Gram-Schmidt,colback=blue!5]
+  {\bfseries\Large Algorithm 2: Gram-Schmidt}\label{Algorithm1}
+  
+Given: A set of independent vectors $\left\{|v_i\rangle\right\}_{i=1}^n$.
+
+Set $|v_1'\rangle:=\frac{|v_1\rangle}{\sqrt{\langle v_1|v_1\rangle}}$
+
+For $i=2..n$
+
+\begin{enumerate}
+  \item Orhogonally project:  $|v_i^\bot\rangle:=|v_i\rangle-\sum_{j=1}^{i-1}|v_j'\rangle\langle v_j'|v_i\rangle$.
+  \item Normalize:  $|v_i'\rangle:=\frac{|v_i^\bot\rangle}{\sqrt{\langle v_i^\bot|v_i^\bot}}$
+\end{enumerate}
+
+The resulting set $\left\{|v_i'\rangle\right\}_i$ spans the same set as $\left\{|v_i\rangle\right\}_i$ and is orthonormal.
+\end{tcolorbox}
+
+Note that $\sum_{j=1}^{i-1}|v_j'\rangle\langle v_j'|$ is just projection onto the first $i-1$ vectors, and $I-\sum_{j=1}^{i-1}|v_j'\rangle\langle v_j'|$ is projection onto the orthogonal space.
+
+By now you may appreciate how useful orthonormal vectors are.  But to demonstrate the usefulness, we'll look at an example.
+
+\begin{tcolorbox}[title=Example,colback=blue!5]
+  {\bfseries\Large Equation of a plane}
+Call the four axes of $\mathbb R^4$, $v$, $x$, $y$, and $z$.  Find the equation of the hyperplane that's spanned by $\langle 1,2,2,0\rangle$, $\langle 0,3,3,0\rangle$ and $\langle 0,0,0,2\rangle$.
+
+We perform Gram-Schmidt to orthonormalize these vectors.
+
+$$
+|v_1'\rangle=\langle 1/3, 2/3, 2/3, 0\rangle
+$$
+
+$$
+|v_2^\bot\rangle=\langle 0,3,3,0\rangle-\left(\langle 0,3,3,0\rangle\cdot\langle 1/3, 2/3, 2/3,0\rangle\right)\langle 1/3, 2/3, 2/3,0\rangle=\langle -4/3, 1/3, 1/3, 0\rangle
+$$
+
+$$
+|v_2'\rangle=\langle -4/3\sqrt2, 1/3\sqrt2, 1/3\sqrt2, 0\rangle
+$$
+
+$\langle 0,0,0,2\rangle$ is already seen to be orthogonal to $|v_1'\rangle$ and $|v_2'\rangle$.  If we do the projection, we'll see that this is untouched.  The normalization then is $|v_3'\rangle=|e_4\rangle$.
+
+We can then use these vectors to get an orthogonal vector.  We want to project something into the orthogonal space $I-\sum_{i=1}^3|v_i'\rangle\langle v_i'|$, but what?  Any ole vector will work, so long as it's not in the plane, and almost no vectors are.  Let's try $|w\rangle=\langle 1,0,0,0\rangle$.
+
+$$
+|w_\bot\rangle=|w\rangle-\frac{1}{3}|v_1'\rangle+\frac{4}{3\sqrt2}|v_2'\rangle-0|v_3'\rangle=\langle 16/9, -4/9, -4/9, 0\rangle
+$$
+
+Though it's common to normal $|x_\bot\rangle$, it's not needed.  Any vector orthogonal to $|w_\bot\rangle$ is in the plane.  So $\frac{16}{9}v-\frac{4}{9}x-\frac{4}{9}y=0$ is an equation for the plane.
+\end{tcolorbox}
+
 \subsection{QR factorization}
+One application of Gram-Schmidt is QR factorization.
+
+\begin{theorem}
+Any square matrix, $A$, can be written as $A=QR$ where $Q$ is orthogonal and $R$ is upper-triangle (all elements below the diagonal are zero).  This is called the {\em QR factorization} of $A$.
+\end{theorem}
+
+\begin{proof}
+  TODO
+\end{proof}
+
+The QR factorization makes some calculations easier; especially if you're solving by hand.  If you were solving a system of equations $|y\rangle=A|x\rangle$ for $|x\rangle$ (with $A$ an $n\times n$), $|y\rangle=QR|x\rangle$ is easier to solve because we could write as $Q^T|y\rangle=R|x\rangle$, then $n$-th element of $Q^T|y\rangle$ must equal $R_{n,n}x_n$ (all other elements equal $0$), so we can solve for $x_n$.  The $(n-1)$-th element of $Q^T|y\rangle$ equals $R_{n-1,n-1}x_{n-1}+r_{n-1,n}x_n$; we can plug in $x_n$ and solve for $x_{n-1}$ and so on.  Similarly we can easily calculate determinant.  Because determinant distributes over matrix multiplication and the determinant of orthogonal matrices is $1$, we need only compute determinant of $R$, but for an upper triangular matrix, this is just the product of the diagonal elements.  (See Exercise \ref{determinant-ex}.)
+
+QR factorization is key in the {\em QR algorithm}, which Society for Industrial and Applied Mathematics once called one of the ten most important algorithms of the 21st centuries.
+
+\begin{tcolorbox}[title=Algorithm 3: QR Algorithm,colback=blue!5]
+  {\bfseries\Large Algorithm 3 QR Algorithm}\label{Algorithm1}
+
+Given a square matrix $A$.
+
+Set $A_0=A$
+
+For $i=1...$
+\begin{enumerate}
+  \item Factor $A_{i-1}=Q_{i-1}R_{i-1}$.
+  \item Set $A_i=R_{i-1}Q_{i-1}$.
+\end{enumerate}
+
+Under certain conditions, $A_i$ converges to an upper triangular matrix.
+\end{tcolorbox}
+
+In the algorithm, $A_i=Q_{i-1}^TA_{i-1}Q_{i-1}$.  By concatenating all the $Q_i$ and calling it $Q$, we get the relationship that $A_n=Q^{-1}AQ$.  This is called {\em similarity}.  We don't spend enough time on similarity, but it preserves lots of nice properties, for example:
+
+\begin{lemma}
+If $A=P^{-1}BP$, then $A$ and $B$ have all the same eigenvalues.
+\end{lemma}
+
+This is true because if $A-\lambda I=0$, then $P^{-1}AP-\lambda P^{-1}P=0$.  For an upper triangular, eigenvalues are simply the elements of the diagonal.  So if you found a matrix $A_n$ that was upper-triangular and similar to $A$, you could easily read off the eigenvalues.  The QR algorithm computes quickly, and so is useful for many computer applications.
+
 \subsection{Least Squares Regression as Projection}
+
+{\bfseries\scshape\Large Exercises}
+
+\begin{enumerate}[\thechapter.\thesection .1]
+\item Explain how Gram-Schmidt can be used to determine the dimension of span given by a set of (not necessarily independent) vectors.
+\item For an orthonormal set, $\left\{|v_i\rangle\right\}_i$, prove that $|v\rangle-\sum_i|v_i\rangle\langle v_i|v\rangle=0$ when $|v\rangle$ is in the span of $\left\{|v_i\rangle\right\}_i$.
+\item Find an orthonormal basis for subspace of $\mathbb R^4$ spanned by $|e_1\rangle+|e_2\rangle+|e_3\rangle+|e_4\rangle$ and $|e_1\rangle+|e_2\rangle+|e_3\rangle-|e_4\rangle$.
+\item Prove that similarity is an equivalence relationship.  That is show reflexion, symmetry, and transitivity of similarity.
+\item If an $n\times n$ matrix $A$ is called {\em nilpotent} if $A^n=0$.  Prove that $A$ is nilpotent if and only if all eigenvalues are $0$.
+\item\label{determinant-ex} Prove that the determinant of an upper triangular matrix is the product of the diagonal terms.  You will probably need to use an algorithm or theorem that is not presented in this book.
+\item Read about LU decompositions.
+\end{enumerate}
+
+\section{Legendre polynomials}
+This is a fun section.  Instead of $\mathbb R^n$, we look at the vector space of polynomials.  This is a well defined vector space, because it's closed under addition and scalar multiplication.  We define an inner product as:
+
+$$
+\langle f(x)|g(x)\rangle = \int_{-1}^1f(x)g(x)dx
+$$
+
+We know that $\left\{x^n\right\}_{n=0}^\infty$ spans the infinite-dimensional space of polynomials.  Here we will use Gram-Schmidt to make an orthonormal basis for polynomials.  The results are called {\em Legendre polynomials}.
+
+The norm of $p_0(x)=1$ is $\sqrt{\int_{-1}^1dx}=\sqrt2$, so the first Legendre polynomial is $P_0(x)=\frac{1}{\sqrt2}$.
+
+Next, we look at $p_1(x)=x$.  Now $\langle p_0|p_1\rangle=\int_{-1}^1\frac{1}{\sqrt2}xdx=0$.  And $\langle p_1|p_1\rangle = \int x^2dx=\frac{2}{3}$.  So that $P_1(x)=\sqrt{\frac{3}{2}}x$.
+
+Now $p_2(x)=x^2$.  $\langle p_1|p_2\rangle=0$, since the coefficients are all odd.  $\langle p_0|p_2\rangle=\frac{1}{\sqrt2}\int x^2=\frac{2}{3\sqrt2}$.  So $p_2^\bot(x)=x^2-\frac{2}{3\sqrt2}\cdot\frac{1}{\sqrt2}=x^2-\frac{1}{3}$.  $\langle p_2^\bot|p_2^\bot\rangle=\frac{8}{45}$.  So $P_2(x)=\sqrt{\frac{45}{8}}\left(x^2-\frac{1}{3}\right)$.
+
+We'll list the next couple without details.
+
+$$
+\begin{array}{rcl}
+P_3(x)&=&\sqrt{\frac{175}{8}}\left(x^3-\frac{3}{5}x\right) \\
+P_4(x)&=&\sqrt{\frac{11025}{128}}\left(x^4-\frac{30}{35}x^2+\frac{3}{35}\right)
+\end{array}
+$$
+
+Any polynomial can be written as a linear combination of Legendre polynomials.  For example $x^2=\sqrt{\frac{8}{15}}P_2(x)+\frac{\sqrt2}{3}P_0(x)$.  We got this by doing some rearranging, but more algorithmically, we could write any polynomial as $p(x)=\sum_i\lambda_iP_i(x)$.  Then we solve for $\lambda_j$ by applying an inner product to both sides:
+
+$$
+\langle p(x)|p_j(x)\rangle=\left\langle\left(\sum_i\lambda_iP_i(x)\right)|P_j\right\rangle=\sum_i\lambda_i\langle P_i(x)|P_j(x)\rangle=\lambda_j
+$$
+
+Once we have the Legendre representation, $x^2=\sqrt{\frac{8}{15}}P_2(x)+\frac{\sqrt2}{3}P_0(x)$, we can do cool math with it like
+
+$$
+\int_{-1}^1x^4dx=\langle x^2|x^2\rangle = \left\langle \sqrt{\frac{8}{15}}P_2(x)+\frac{\sqrt2}{3}P_0(x)|\sqrt{\frac{8}{15}}P_2(x)+\frac{\sqrt2}{3}P_0(x)\right\rangle=\frac{8}{15}+\frac{2}{9}=\frac{2}{5}
+$$
+
+Generally if want to integrate any product, you can dot product the coefficients for an easier calculation.  It may not be worth it to convert a polynomial to a linear combination of Legendre polynomials just to integrate.  But in theory, you could live in a world where your polynomial is already a linear combinations.  $\sqrt{\frac{8}{15}}P_2(x)+\frac{\sqrt2}{3}P_0(x)$ is an equally valid representation of $x^2$.  What if we taught school children Legendre polynomials instead of regular polynomials.  Then in Physics class instead of learning that kenetic energy is $\frac{1}{2}mv^2$, we'd learn that it's $\frac{\sqrt{3}}{2\sqrt2}P_1(m)\left(\sqrt{\frac{8}{15}}P_2(v)+\frac{\sqrt2}{3}P_0(v)\right)$.
+
+Note that there are some variants to Legendre polynomials, and this is not the most common one.  These variants might use a different definition of inner product or a scaling factor.
+
+\begin{enumerate}[\thechapter.\thesection .1]
+  \item Validate the formulas for $P_3(x)$ and $P_4(x)$ by performing the calculation.
+  \item Validate that $P_1$ and $P_3$ are orthogonal.
+  \item Apply the projection matrix $|P_0\rangle\langle P_0|+|P_1\rangle\langle P_1|$ to $x^5$.  How should you interpret this projection?
+  \item Argue that $x^n$ can be written as a linear combination of $\left\{P_i(x)\right\}_{i=0}^n$, the first $n$ Legendre polynomials.
+  \item Consider the space of all polynomials in two variables, $x$ and $y$.  Find an orthonormal basis for the subspace spanned by all polynomials of degree up to $2$.
+  \item $e^x=\sum_{i=0}^\infty \frac{x^i}{i!}$ is a linear combination of basis elements, but it's not a polynomial.  Think about this.
+\end{enumerate}
 
 \section{Computer Programming, Regression}
 
@@ -2022,11 +2181,10 @@ Forward regression is a greedy algorithm for deciding which variables are the mo
 \item Perform {\em bootstrapping} by choosing a random $70\%$ of diabetes data, and running a regression.  Do this $10,000$ times and record the coefficients.  For each coefficient give a confidence interval by reporting the range that the coefficient falls into $90\%$ of the time.  Compare these to the confidence intervals given by the regression.  Note:  You can use a similar technique to get a range on $R^2$.
 \item Using the diabetes dataset, model a regression as $y=\beta_{age}X_{age}$ to get $\hat y_1$.  Then model $y-\hat y_1=\beta_{bmi}X_{bmi}$, setting $\hat y_2=\hat y_1+\hat\beta_{bmi}x_{bmi}$.  Then model $y-\hat y_2=\beta_{age}X_{age}$, setting $\hat y_3=\hat y_2+\hat\beta_{age}X_{age}$.  Then repeat modeling the residuals on BMI to get $\hat y_4$.  Then get $\hat y_4$ using age, $\hat y_5$ on BMI, etc.  Do this until you get convergence.  Compare the final values of $\beta_{age}$ and $\beta_{bmi}$ to the coefficients you get when you regress $y=\beta_{age}X_{age}+\beta_{bmi}X_{bmi}$.
 \item Fit $\beta_{age}$ on the diabetes dataset using Gram-Schmidt, as described in the previous section.  Verify that this is the same as what you get when you perform a regression.
+\item Implement the QR algorithm.
 \item Make a table with covariances between all the variables.  Comment on the results.  (Seaborn is my preferred package for this.)
 \item Search Kaggle for the diabetes dataset to see how others are using this.
 \end{enumerate}
-
-\section{Legendre polynomials}
 
 \chapter{[WIP] Generalized Regression}
 \section{Polynomial Regression}
@@ -2042,6 +2200,7 @@ Forward regression is a greedy algorithm for deciding which variables are the mo
 
 \chapter{[WIP] Symmetric Matrices}
 \section{Symmetric Matrices}\label{SymmetricMatrices}
+\section{Normal matrices and simultaneous diagonalizability}
 \section{Inner products}
 \section{Spectral Theorem}
 \section{Taylor series and smooth functions}\label{section_taylor_series}
